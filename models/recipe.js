@@ -47,12 +47,17 @@ module.exports = class Recipe{
         console.log(this);
     }
 
+    
+
     //!TODO AÚN NO SÉ SI ESTÁ BIEN
-    static findOne(id){
-        recipes = getRecipesFromFile(callback);
-        recipes.forEach(rect.id === id)
-        console.log(id);
-    }
+    static findOne(id, callback){
+        console.log("Id: ", id);
+        getRecipesFromFile(recetas => {
+            const receta = recetas.find(rec => rec.id === id);
+            callback(receta)
+        });
+    };
+
 
     static findAll(callback){
         getRecipesFromFile(callback);

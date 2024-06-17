@@ -6,11 +6,11 @@
     <%- include('includes/nav.ejs') %>
 
     <div class="container">
-        <h1>Detalle de la Receta <%= nombreReceta %></h1>
+        <h1>Detalle de la Receta <%= receta.nombre %></h1>
         <div class="recipe-details">
             <h2>Tarta de Chocolate</h2>
             <div class="recipe-image">
-                <img src="/img/carrot.png" alt="alt de la imagen?">
+                <img src="<%= receta.image %>" alt="alt de la imagen?">
             </div>
             <h3>Ingredientes:</h3>
             <ul>

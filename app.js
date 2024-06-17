@@ -2,7 +2,7 @@
 const path = require('path');
 const bodyParser = require('body-parser');
 
-const recetasJSON = require('./data/recipes.json')
+const RecetaClass = require('./models/recipe');
 
 const express = require('express');
 const app = express();
@@ -20,10 +20,12 @@ app.use('/recipes', recipeRoutes);
 app.use('/admin', adminRoutes);
 
 app.get('/', (req, res, next) => {
-    console.log(recetasJSON)
-    res.render('index', {
-        recetas: recetasJSON
-    });
+    RecetaClass.findAll(recetasCallback => {
+        res.render('index', {
+            recetas: recetasCallback
+        });
+    })
+    
 })
 
 app.listen(3000);

@@ -11,6 +11,17 @@ router.get('/add-recipe', (req, res, next) =>{
     })
 })
 
+router.get('/recipe-details/:recetaId', (req, res, next) => {
+    const recetaId = req.params.recetaId; //req.params: Captura los parámetros de ruta de la URL... vamos el :recetaId de la ruta que le he metido.
+
+    Recipe.findOne(recetaId, recetaCallback => {
+        console.log('ENCONTRADA: ', recetaCallback);
+        res.render('recipe-details' , {
+            receta : recetaCallback
+        });
+    });   
+});
+
 router.post('/add', (req, res, next) =>{
     const nombre = req.body.nombre;
     const image = req.body.image;
@@ -20,6 +31,7 @@ router.post('/add', (req, res, next) =>{
     recipe.addRecipe();
     res.redirect('/')
 })
+
 
 
 module.exports = router;

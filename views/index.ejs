@@ -11,7 +11,7 @@
                 <p>Tiempo: <%= receta.tiempo %></p>
                 <p>Dificultad: <%= receta.dificultad %></p>
                 <p>Descripción: <%= receta.descripcion %></p>
-                <a href="#">Leer más</a>
+                <a href="/recipes/recipe-details/<%= receta.id %>">Leer más</a>
             </div>
         <% } %>
 
