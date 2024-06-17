@@ -1,0 +1,31 @@
+[
+    {
+        "id" : "1",
+        "nombre" : "Tarta de queso",
+        "descripcion" : "Deliciosa tarta con base de queso mascarpone",
+        "ingredientes" : "ingredientes",
+        "tiempo": "30 minutos",
+        "dificultad" : "5/5",
+        "image" : "/img/carrot.png"
+    },
+
+    {
+        "id" : "2",
+        "nombre" : "Tarta de chocolate",
+        "descripcion" : "Deliciosa tarta con base de queso mascarpone",
+        "ingredientes" : "ingredientes",
+        "tiempo": "30 minutos",
+        "dificultad" : "3/5",
+        "image" : "/img/cheese.jpg"
+    },
+
+    {
+        "id" : "3",
+        "nombre" : "Muffin de arándanos",
+        "descripcion" : "Deliciosos muffins de arándanos",
+        "ingredientes" : "ingredientes",
+        "tiempo": "40 minutos",
+        "dificultad" : "2/5",
+        "image" : "/img/muffin.jpg"
+    }
+]

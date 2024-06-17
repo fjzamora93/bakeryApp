@@ -1,0 +1,42 @@
+<link rel="stylesheet" href="/style/recipe-details.css">
+<body>
+
+    <body>
+
+    <%- include('includes/nav.ejs') %>
+
+    <div class="container">
+        <h1>Detalle de la Receta <%= nombreReceta %></h1>
+        <div class="recipe-details">
+            <h2>Tarta de Chocolate</h2>
+            <div class="recipe-image">
+                <img src="/img/carrot.png" alt="alt de la imagen?">
+            </div>
+            <h3>Ingredientes:</h3>
+            <ul>
+                <li>200g de chocolate negro</li>
+                <li>150g de mantequilla</li>
+                <li>200g de azúcar</li>
+                <li>4 huevos</li>
+                <li>100g de harina</li>
+                <li>1 cucharadita de levadura en polvo</li>
+                <li>1 pizca de sal</li>
+            </ul>
+            <h3>Instrucciones:</h3>
+            <ol>
+                <li>Precalentar el horno a 180°C.</li>
+                <li>Derretir el chocolate y la mantequilla juntos.</li>
+                <li>Batir los huevos con el azúcar hasta que estén espumosos.</li>
+                <li>Agregar la mezcla de chocolate y mantequilla a los huevos batidos.</li>
+                <li>Mezclar la harina, la levadura y la sal, y añadir a la mezcla anterior.</li>
+                <li>Verter la mezcla en un molde engrasado y hornear durante 25-30 minutos.</li>
+                <li>Dejar enfriar antes de desmoldar y servir.</li>
+            </ol>
+        </div>
+    </div>
+
+    
+</body>
+<%- include('includes/footer') %>
+
+</html>

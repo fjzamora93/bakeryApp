@@ -1,0 +1,26 @@
+<link rel="stylesheet" href="/style/form.css">
+
+<%- include('includes/nav.ejs') %>
+
+<body>
+    <div class="container">
+        <h2>Añadir Nueva Receta</h2>
+        <form action="/admin/add" method="post">
+            <label for="nombre">Título de la Receta:</label>
+            <input type="text" id="nombre" name="nombre" required>
+
+            <label for="image">URL de la Imagen:</label>
+            <input type="text" id="image" name="image" required>
+
+            <label for="descripcion">Descripción:</label>
+            <textarea id="descripcion" name="descripcion" rows="5" required></textarea>
+
+            <label for="ingredientes">Instrucciones:</label>
+            <textarea id="ingredientes" name="ingredientes" rows="10" required></textarea>
+
+            <input type="submit" value="Añadir Receta">
+        </form>
+    </div>
+
+    <%- include('includes/footer') %>
+</body>
