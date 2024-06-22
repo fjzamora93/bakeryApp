@@ -1,8 +1,25 @@
 body {
     font-family: Arial, sans-serif;
     margin: 0;
-    padding: 0;
 }
+
+.bakery-button {
+    display: inline-block;
+    padding: 10px 20px;
+    color: #fff;
+    background-color: #f78f1e;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    margin: auto;
+}
+
+.bakery-button:hover {
+    background-color: #c6711d;
+}
+
 header {
     background-color: #f8b400;
     color: white;
@@ -32,6 +49,7 @@ nav ul li a:hover {
     background-color: #575757;
 }
 .container {
+    margin-bottom: 200px;
     padding: 20px;
 }
 .recipe-summary {

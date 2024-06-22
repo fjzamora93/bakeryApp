@@ -6,7 +6,9 @@
     <div class="container">
         <% for (let receta of recetas) { %>
             <div class="recipe-summary">
-                <img src="<%= receta.image %>">
+                <a href="/recipes/recipe-details/<%= receta.id %>">
+                    <img src="<%= receta.image %>">
+                </a>
                 <h2>Nombre: <%= receta.nombre %></h2>
                 <p>Tiempo: <%= receta.tiempo %></p>
                 <p>Dificultad: <%= receta.dificultad %></p>

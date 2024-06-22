@@ -14,7 +14,6 @@ const getRecipesFromFile = callback => {
             console.log('error')
             callback([]);
         } else {
-            console.log('archivo leido con éxito')
             const contenido = JSON.parse(data)
             callback(contenido);
         };
@@ -22,7 +21,8 @@ const getRecipesFromFile = callback => {
 };
 
 module.exports = class Recipe{
-    constructor(nombre, image, descripcion, ingredientes){
+    constructor(id, nombre, image, descripcion, ingredientes){
+        this.id = id;
         this.nombre = nombre;
         this.image = image;
         this.descripcion = descripcion;
@@ -39,19 +39,35 @@ module.exports = class Recipe{
         });
     }
 
+
+    //TODO: FUNCIONES PENDIENTES DE IMPLEMENTAR. ¿USAR BOTONES?
     editRecipe(){
-        console.log(this);
+        getRecipesFromFile(recetas => {
+            let indice = recetas.findIndex(rect => rect.id === this.id);
+            if (indice !== -1) {
+                recetas[indice] = this;
+                console.log(recetas[indice])
+                fs.writeFile(rutaRecetas, JSON.stringify(recetas, null, 2), err => { 
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        console.log('File written successfully');
+                    }
+                });
+            } else {
+                console.log(`Objeto con id ${this.id} no encontrado en la lista.`);
+            }
+        })
     }
 
-    deleteRecipe(){
+    deleteRecipe(id, callback){
         console.log(this);
     }
 
     
 
-    //!TODO AÚN NO SÉ SI ESTÁ BIEN
     static findOne(id, callback){
-        console.log("Id: ", id);
+        console.log("Id encontrada: ", id);
         getRecipesFromFile(recetas => {
             const receta = recetas.find(rec => rec.id === id);
             callback(receta)

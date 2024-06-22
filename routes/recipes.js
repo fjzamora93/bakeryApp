@@ -6,7 +6,7 @@ const RecetaClass = require('../models/recipe');
 
 router.get('/', (req, res, next) =>{
     RecetaClass.findAll(listaRecetasCallback => {
-        console.log(listaRecetasCallback)
+        //console.log(listaRecetasCallback)
         res.render('index', {
             recetas: listaRecetasCallback
         });
@@ -21,7 +21,6 @@ router.get('/recipe-details', (req, res, next) => {
 router.get('/recipe-details/:recetaId', (req, res, next) => {
     const recetaId = req.params.recetaId; //req.params: Captura los parámetros de ruta de la URL... vamos el :recetaId de la ruta que le he metido.
     RecetaClass.findOne(recetaId, recetaCallback => {
-        console.log('ENCONTRADA: ', recetaCallback);
         res.render('recipe-details' , {
             receta : recetaCallback
         });

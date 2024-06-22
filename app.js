@@ -25,7 +25,6 @@ app.get('/', (req, res, next) => {
             recetas: recetasCallback
         });
     })
-    
 })
 
 app.listen(3000);
