@@ -7,22 +7,26 @@
 
     <div class="container">
         
-        <h1>Detalle de la Receta <%= receta.nombre %></h1>
         <div class="recipe-details">
-            <h2>Tarta de Chocolate</h2>
+            <h2><%= receta.nombre %></h2>
+            
             <div class="recipe-image">
-                
                 <img src="<%= receta.image %>" alt="alt de la imagen?">
-      
             </div>
-            <h3>Ingredientes:</h3>
+
+            <p>
+                <%= receta.descripcion %>
+            </p>
+
+
+            <h3>Ingredientes</h3>
             <ul>
                 <% for (let ingrediente of receta.ingredientes) { %>
                     <li> <%= ingrediente %> </li>
                 <% } %>
             </ul>
 
-            <h3>Instrucciones:</h3>
+            <h3>Instrucciones</h3>
             <ol>
                 <li>Precalentar el horno a 180°C.</li>
                 <li>Derretir el chocolate y la mantequilla juntos.</li>
@@ -32,6 +36,17 @@
                 <li>Verter la mezcla en un molde engrasado y hornear durante 25-30 minutos.</li>
                 <li>Dejar enfriar antes de desmoldar y servir.</li>
             </ol>
+
+            <h3>Tiempo de elaboración</h3>
+            <p>
+                <%= receta.tiempo %>
+            </p>
+
+            <h3>Dificultad</h3>
+            <p>
+                <%= receta.dificultad %>
+            </p>
+
             <a href="/admin/edit/<%= receta.id %>" class="bakery-button">Modificar receta</a>
            
         </div>   

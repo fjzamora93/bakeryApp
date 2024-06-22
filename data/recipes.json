@@ -2,23 +2,24 @@
   {
     "id": "1",
     "nombre": "Tarta de queso",
-    "image": "/img/carrot.png",
-    "descripcion": "                                                Deliciosa tarta con base de queso mascarpone\r\n            \r\n            \r\n            ",
+    "image": "/img/cheese-cake.png",
+    "descripcion": "Deliciosa tarta con base de queso mascarpone.\r\n            \r\n            ",
     "ingredientes": [
-      "nada"
+      "Queso Mascarpone",
+      "Maicena"
     ]
   },
   {
+    "dificultad": "Requiere controlar bien tiempos y temperatura",
     "id": "2",
-    "nombre": "Tarta de chocolate",
-    "descripcion": "Deliciosa tarta con base de queso mascarpone",
+    "nombre": "Muffin de Chocolate",
+    "descripcion": "Muffins de chocolate negro veganos.\r\n            ",
     "ingredientes": [
-      "ingrediente1",
-      "ingrediente2"
+      "Chocolate negro",
+      "Harina de trigo"
     ],
-    "tiempo": "30 minutos",
-    "dificultad": "3/5",
-    "image": "/img/cheese-cake.png"
+    "tiempo": "40 minutos",
+    "image": "/img/choco-muffin.png"
   },
   {
     "id": "3",

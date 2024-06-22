@@ -38,13 +38,19 @@ router.get('/edit/:recetaId', (req, res, next) => {
 router.post('/replace', (req, res, next) => {
     const id = req.body.id;
     const nombre = req.body.nombre;
-    const image = req.body.image;
     const descripcion = req.body.descripcion;
-    const ingredientes = ["nada"];
+    const ingredientes = req.body.ingredientes;
+    const tiempo = req.body.tiempo;
+    const dificultad = req.body.dificultad;
+    const image = req.body.image;
 
-    // Aquí puedes validar los datos si es necesario
-
-    const recipe = new RecetaClass(id, nombre, image, descripcion, ingredientes);
+    const recipe =  new RecetaClass(
+        id, nombre,  
+        descripcion, 
+        ingredientes, 
+        tiempo, 
+        dificultad, 
+        image);
     recipe.editRecipe();
     res.redirect('/'); // Redirigir a la página principal después de editar
   

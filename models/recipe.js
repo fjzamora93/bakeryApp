@@ -21,13 +21,34 @@ const getRecipesFromFile = callback => {
 };
 
 module.exports = class Recipe{
-    constructor(id, nombre, image, descripcion, ingredientes){
-        this.id = id;
-        this.nombre = nombre;
-        this.image = image;
-        this.descripcion = descripcion;
-        this.ingredientes = ingredientes;
-    }
+    constructor(id, nombre="tarta", 
+        descripcion="Descripción", 
+        ingredientes = [""],
+        tiempo = "30min",
+        dificultad = "1",
+        image="nueces.png", 
+        ){
+            switch(dificultad) {
+                case "2":
+                    this.dificultad = "Requiere controlar bien tiempos y temperatura";
+                    break;
+                case "3":
+                    this.dificultad = "Requiere controlar bien las cantidades";
+                    break;
+                case "3":
+                    this.dificultad = "Requiere precisión en cantidades y tiempos, no admite muchas variaciones";
+                    break;
+                default:
+                    this.dificultad = "Es una receta fácil y adaptable, acepta modificaciones";
+                    break;
+              }
+            this.id = id;
+            this.nombre = nombre;
+            this.descripcion = descripcion;
+            this.ingredientes = ingredientes;
+            this.tiempo = tiempo, 
+            this.image = image;
+        }
 
     addRecipe(){
         getRecipesFromFile(recetas => {
