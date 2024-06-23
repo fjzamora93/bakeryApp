@@ -28,13 +28,9 @@
 
             <h3>Instrucciones</h3>
             <ol>
-                <li>Precalentar el horno a 180°C.</li>
-                <li>Derretir el chocolate y la mantequilla juntos.</li>
-                <li>Batir los huevos con el azúcar hasta que estén espumosos.</li>
-                <li>Agregar la mezcla de chocolate y mantequilla a los huevos batidos.</li>
-                <li>Mezclar la harina, la levadura y la sal, y añadir a la mezcla anterior.</li>
-                <li>Verter la mezcla en un molde engrasado y hornear durante 25-30 minutos.</li>
-                <li>Dejar enfriar antes de desmoldar y servir.</li>
+                <% for (let instruccion of receta.instrucciones) { %>
+                    <li> <%= instruccion %> </li>
+                <% } %>
             </ol>
 
             <h3>Tiempo de elaboración</h3>

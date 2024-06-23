@@ -11,26 +11,23 @@
             <input type="hidden" id="id" name="id" value="<%= receta.id %>">
 
 
-
             <label for="nombre">Título de la Receta:</label>
             <input type="text" id="nombre" name="nombre" value="<%= receta.nombre %>" required >
 
 
             <label for="descripcion">Descripción:</label>
-            <textarea id="descripcion" name="descripcion" rows="5"  required>
-                <%= receta.descripcion %>
-            </textarea>
+            <textarea id="descripcion" name="descripcion" rows="5"  required><%= receta.descripcion.trim() %></textarea>
 
 
             <label for="ingrediente">Ingredientes:</label> 
             
-            <div id="bloque-ingredientes">
-                <button type="button" onclick="agregarIngrediente()" class="button-add" id="ingr-button">+</button>
+            <div id="bloque-lista">
+                <button type="button" onclick="addClick(this, 'ingredientes')" class="button-add" id="ingr-button">+</button>
             <% for (let ingr of receta.ingredientes) { %>
                 <input type="text" name="ingredientes[]" value="<%= ingr %>" >
+                <button type="button" onclick="removeClick(this)" class="button-delete" id="ingr-button">-</button>
             <% } %>
                 
-                <button type="button" onclick="removeIngrediente(this)" class="button-delete" id="ingr-button">-</button>
             </div>
 
             <label for="tiempo">Tiempo de preparación: </label>
@@ -42,7 +39,18 @@
                 <option value="2">Requiere controlar bien tiempos y temperatura</option>
                 <option value="3">Requiere controlar bien las cantidades</option>
                 <option value="4">Requiere precisión en cantidades y tiempos, no admite muchas variaciones</option>
-              </select> <br><br>
+            </select> <br><br><br><br>
+
+            <div class="bloque-lista">
+                <label for="instrucciones">Instrucciones:</label> 
+                <p> Aquí puedes detallar cómo es la elaboración paso a paso. </p>
+                <div id="bloque-lista">
+                    <button type="button" onclick="addClick(this, 'instrucciones')" class="button-add" id="ingr-button">+</button>
+                <% for (let instr of receta.instrucciones) { %>
+                    <input type="text" name="instrucciones[]" value="<%= instr %>" >
+                    <button type="button" onclick="removeClick(this)" class="button-delete" id="ingr-button">-</button>
+                <% } %>
+            </div>
 
             <label for="image">URL de la Imagen:</label>
             <input type="text" id="image" name="image" value="<%= receta.image %>" required>

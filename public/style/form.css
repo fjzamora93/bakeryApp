@@ -20,17 +20,18 @@ form {
     flex-direction: column;
 }
 label {
-    margin-bottom: 10px;
+    margin-top: 20px;
     font-weight: bold;
 }
 input[type="text"], input[type="url"], textarea {
     padding: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
     font-size: 16px;
     width: 100%;
 }
+
 input[type="submit"] {
     background-color: #f8b400;
     color: white;
@@ -42,4 +43,17 @@ input[type="submit"] {
 }
 input[type="submit"]:hover {
     background-color: #e0a800;
+}
+
+
+select, option {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    width: 100%;
+}
+
+select{
+    margin-bottom: 40px;
 }

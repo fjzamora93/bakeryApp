@@ -6,8 +6,13 @@ const RecetaClass = require('../models/recipe')
 
 const router = express.Router();
 
-router.get('/add-recipe', (req, res, next) =>{
+router.get('/add-recipe', async (req, res, next) =>{
+    const recipe = new RecetaClass();
+    if (!recipe.id){
+        recipe.id = await recipe.generateId(); 
+    }
     res.render('add-recipe', {
+        receta : recipe
     })
 })
 
@@ -16,12 +21,22 @@ router.get('/add-recipe', (req, res, next) =>{
 router.post('/add', (req, res, next) =>{
     const id = req.body.id;
     const nombre = req.body.nombre;
-    const image = req.body.image;
     const descripcion = req.body.descripcion;
     const ingredientes = req.body.ingredientes;
-    console.log(ingredientes)
-    const recipe = new RecetaClass(id, nombre, image, descripcion, ingredientes);
-    //recipe.addRecipe();
+    const instrucciones = req.body.instrucciones;
+    const tiempo = req.body.tiempo;
+    const dificultad = req.body.dificultad;
+    const image = req.body.image;
+
+    const recipe =  new RecetaClass(
+        id, nombre,  
+        descripcion, 
+        ingredientes,
+        instrucciones, 
+        tiempo, 
+        dificultad, 
+        image);
+    recipe.addRecipe();
     res.redirect('/')
 })
 
@@ -36,10 +51,11 @@ router.get('/edit/:recetaId', (req, res, next) => {
 
 // Ruta POST para manejar la edición de recetas
 router.post('/replace', (req, res, next) => {
-    const id = req.body.id;
+    const id = null;
     const nombre = req.body.nombre;
     const descripcion = req.body.descripcion;
     const ingredientes = req.body.ingredientes;
+    const instrucciones = req.body.instrucciones;
     const tiempo = req.body.tiempo;
     const dificultad = req.body.dificultad;
     const image = req.body.image;
@@ -47,12 +63,13 @@ router.post('/replace', (req, res, next) => {
     const recipe =  new RecetaClass(
         id, nombre,  
         descripcion, 
-        ingredientes, 
+        ingredientes,
+        instrucciones, 
         tiempo, 
         dificultad, 
         image);
     recipe.editRecipe();
-    res.redirect('/'); // Redirigir a la página principal después de editar
+    res.redirect(`/recipes/recipe-details/${recipe.id}`); // Redirigir a la página principal después de editar
   
 });
 

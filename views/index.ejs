@@ -1,23 +1,25 @@
 <%- include('includes/nav.ejs') %>
 <body>
-    
-   
-
     <div class="container">
         <% for (let receta of recetas) { %>
             <div class="recipe-summary">
                 <a href="/recipes/recipe-details/<%= receta.id %>">
-                    <img src="<%= receta.image %>">
+                    <img src="<%= receta.image %>" alt="Imagen de <%= receta.nombre %>">
                 </a>
-                <h2>Nombre: <%= receta.nombre %></h2>
-                <p>Tiempo: <%= receta.tiempo %></p>
-                <p>Dificultad: <%= receta.dificultad %></p>
-                <p>Descripción: <%= receta.descripcion %></p>
-                <a href="/recipes/recipe-details/<%= receta.id %>">Leer más</a>
+                <h2>
+                    <a href="/recipes/recipe-details/<%= receta.id %>">
+                        <%= receta.nombre %>
+                    </a>
+                </h2>
+                <p><b>Descripción:</b> <%= receta.descripcion %></p>
+                <p><b>Tiempo:</b> <%= receta.tiempo %></p>
+                <p><b>Dificultad:</b> <%= receta.dificultad %></p>
+                
             </div>
         <% } %>
-
-</body>
+    </div>
 
 <%- include('includes/footer') %>
+</body>
 </html>
+

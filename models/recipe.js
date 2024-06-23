@@ -21,33 +21,21 @@ const getRecipesFromFile = callback => {
 };
 
 module.exports = class Recipe{
-    constructor(id, nombre="tarta", 
-        descripcion="Descripción", 
-        ingredientes = [""],
-        tiempo = "30min",
-        dificultad = "1",
-        image="nueces.png", 
+    constructor(id=null, nombre="", descripcion="",  ingredientes = [""], instrucciones= [""],
+        tiempo = "", dificultad = "", image="", 
         ){
-            switch(dificultad) {
-                case "2":
-                    this.dificultad = "Requiere controlar bien tiempos y temperatura";
-                    break;
-                case "3":
-                    this.dificultad = "Requiere controlar bien las cantidades";
-                    break;
-                case "3":
-                    this.dificultad = "Requiere precisión en cantidades y tiempos, no admite muchas variaciones";
-                    break;
-                default:
-                    this.dificultad = "Es una receta fácil y adaptable, acepta modificaciones";
-                    break;
-              }
             this.id = id;
             this.nombre = nombre;
             this.descripcion = descripcion;
             this.ingredientes = ingredientes;
+            this.instrucciones = instrucciones;
             this.tiempo = tiempo, 
+            this.dificultad = this.generateDificultad(dificultad),
             this.image = image;
+            
+            if (id === null){
+                this.id = this.generateId(); 
+            }
         }
 
     addRecipe(){
@@ -71,9 +59,7 @@ module.exports = class Recipe{
                 fs.writeFile(rutaRecetas, JSON.stringify(recetas, null, 2), err => { 
                     if (err) {
                         console.log(err);
-                    } else {
-                        console.log('File written successfully');
-                    }
+                    }; 
                 });
             } else {
                 console.log(`Objeto con id ${this.id} no encontrado en la lista.`);
@@ -85,10 +71,8 @@ module.exports = class Recipe{
         console.log(this);
     }
 
-    
-
+ 
     static findOne(id, callback){
-        console.log("Id encontrada: ", id);
         getRecipesFromFile(recetas => {
             const receta = recetas.find(rec => rec.id === id);
             callback(receta)
@@ -100,6 +84,30 @@ module.exports = class Recipe{
         getRecipesFromFile(callback);
     }
     
+    generateId(){
+        // Generate a random number between 1 and 1000000
+        let id = Math.floor(Math.random() * 1000000) + 1;
+        id = this.nombre.replace(/\s/g, '-') + "-" +id.toString();
+        console.log('Generated Id', id)
+        return id;
+    };
+
+    generateDificultad(dificultad){
+        switch(dificultad) {
+            case "2":
+                dificultad = "Requiere controlar bien tiempos y temperatura";
+                break;
+            case "3":
+                dificultad = "Requiere controlar bien las cantidades";
+                break;
+            case "4":
+                dificultad = "Requiere precisión en cantidades y tiempos, no admite muchas variaciones";
+                break;
+            default:
+                dificultad = "Es una receta fácil y adaptable, acepta modificaciones";
+                break;
+        }
+        return dificultad;
+    };
 
 }
-
