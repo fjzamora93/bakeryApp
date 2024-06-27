@@ -2,7 +2,7 @@
   {
     "id": "1",
     "nombre": "Tarta de queso",
-    "descripcion": "Deliciosa tarta con base de queso mascarpone hecha al horno.",
+    "descripcion": "Deliciosaaa tarta con base de queso mascarpone hecha al horno.",
     "ingredientes": [
       "Queso Mascarpone",
       "Maicena",
@@ -94,5 +94,47 @@
     "tiempo": "fads",
     "dificultad": "Requiere controlar bien tiempos y temperatura",
     "image": "fadsf"
+  },
+  {
+    "id": "daf-142843",
+    "nombre": "daf",
+    "descripcion": "fads",
+    "ingredientes": [
+      ""
+    ],
+    "instrucciones": [
+      ""
+    ],
+    "tiempo": "fda",
+    "dificultad": "Es una receta fácil y adaptable, acepta modificaciones",
+    "image": "gfads"
+  },
+  {
+    "id": "segunda-prueba-mongodb-640063",
+    "nombre": "segunda prueba mongodb",
+    "descripcion": "fadsf",
+    "ingredientes": [
+      "fad"
+    ],
+    "instrucciones": [
+      "fsda"
+    ],
+    "tiempo": "fdas",
+    "dificultad": "Es una receta fácil y adaptable, acepta modificaciones",
+    "image": "fasd"
+  },
+  {
+    "id": "faefafeaf-194296",
+    "nombre": "faefafeaf",
+    "descripcion": "fads",
+    "ingredientes": [
+      ""
+    ],
+    "instrucciones": [
+      "feaf"
+    ],
+    "tiempo": "fadsf",
+    "dificultad": "Es una receta fácil y adaptable, acepta modificaciones",
+    "image": "fadsef"
   }
 ]

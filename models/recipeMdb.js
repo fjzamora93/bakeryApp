@@ -3,7 +3,7 @@ const getDb = require('../util/database').getDb;
 module.exports = class RecipeMdb {
     constructor(nombre, descripcion){
         this.nombre = nombre;
-        this. descripcion = descripcion
+        this.descripcion = descripcion
     }
 
     save() {

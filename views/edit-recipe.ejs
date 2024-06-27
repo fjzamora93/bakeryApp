@@ -5,7 +5,7 @@
 <body>
     <div class="container">
         <h2>Añadir Nueva Receta</h2>
-        <form action="/admin/replace" method="post">
+        <form action="/admin/onEdit/<%= receta.id %>" method="post">
             <!--- Ocultamos la id para después usarla-->
             <label for="id" hidden>Id:</label>
             <input type="hidden" id="id" name="id" value="<%= receta.id %>">
