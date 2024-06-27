@@ -1,6 +1,7 @@
 const path = require('path');
 const express = require('express');
 const RecetaClass = require('../models/recipe')
+const RecetaMdb = require('../models/recipeMdb'); //TODO EL MODELO DE MONGODB, QUITAR EL JSON INTERNO?
 
 
 
@@ -28,16 +29,22 @@ router.post('/add', (req, res, next) =>{
     const dificultad = req.body.dificultad;
     const image = req.body.image;
 
-    const recipe =  new RecetaClass(
-        id, nombre,  
-        descripcion, 
-        ingredientes,
-        instrucciones, 
-        tiempo, 
-        dificultad, 
-        image);
+    //! ANTIGUO: GUARDADO EN JSON
+    const recipe =  new RecetaClass(id, nombre, descripcion, ingredientes,instrucciones, tiempo, dificultad, image);
     recipe.addRecipe();
-    res.redirect('/')
+
+    //TODO MODELO BASADO EN MONGODB
+    const recipeMg = new RecetaMdb(nombre, descripcion);
+    recipeMg.save()
+        .then(result => {
+            console.log('Created Product');
+            res.redirect('/')
+        }).catch(err => {
+            console.log(err);
+        })
+
+    
+
 })
 
 router.get('/edit/:recetaId', (req, res, next) => {

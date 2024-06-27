@@ -79,5 +79,20 @@
     "tiempo": "245",
     "dificultad": "Es una receta fácil y adaptable, acepta modificaciones",
     "image": "/img/nueces.png"
+  },
+  {
+    "id": "mongodb-753971",
+    "nombre": "mongodb",
+    "descripcion": "receta de mongo",
+    "ingredientes": [
+      "fad"
+    ],
+    "instrucciones": [
+      "fadf",
+      "fdasf"
+    ],
+    "tiempo": "fads",
+    "dificultad": "Requiere controlar bien tiempos y temperatura",
+    "image": "fadsf"
   }
 ]

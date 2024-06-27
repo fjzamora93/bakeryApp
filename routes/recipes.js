@@ -4,9 +4,9 @@ const recetasJSON = require('../data/recipes.json');
 const RecetaClass = require('../models/recipe');
 
 
+
 router.get('/', (req, res, next) =>{
     RecetaClass.findAll(listaRecetasCallback => {
-        //console.log(listaRecetasCallback)
         res.render('index', {
             recetas: listaRecetasCallback
         });

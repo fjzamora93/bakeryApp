@@ -1,4 +1,4 @@
-
+const mongoConnect = require('./util/database').mongoConnect;
 const path = require('path');
 const bodyParser = require('body-parser');
 
@@ -27,4 +27,7 @@ app.get('/', (req, res, next) => {
     })
 })
 
-app.listen(3000);
+//Conexión a la base de datos
+mongoConnect(() => {
+    app.listen(3000);
+  });
