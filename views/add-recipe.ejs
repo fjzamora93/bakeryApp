@@ -11,26 +11,26 @@
 
 
             <label for="nombre">Título de la Receta:</label>
-            <input type="text" id="nombre" name="nombre" value="<%= receta.nombre %>" required >
+            <input type="text" id="nombre" name="nombre" value="" required >
 
 
             <label for="descripcion">Descripción:</label>
-            <textarea id="descripcion" name="descripcion" rows="5"  required><%= receta.descripcion.trim() %></textarea>
+            <textarea id="descripcion" name="descripcion" rows="5"  required></textarea>
 
 
             <label for="ingrediente">Ingredientes:</label> 
             
             <div id="bloque-lista">
                 <button type="button" onclick="addClick(this, 'ingredientes')" class="button-add" id="ingr-button">+</button>
-            <% for (let ingr of receta.ingredientes) { %>
-                <input type="text" name="ingredientes[]" value="<%= ingr %>" >
+          
+                <input type="text" name="ingredientes[]" value="" >
                 <button type="button" onclick="removeClick(this)" class="button-delete" id="ingr-button">-</button>
-            <% } %>
+          
                 
             </div>
 
             <label for="tiempo">Tiempo de preparación: </label>
-            <input type="text" name="tiempo" value="<%= receta.tiempo %>" required>
+            <input type="text" name="tiempo" value="" required>
 
             <label for="dificultad">Dificultad:</label>
             <select name="dificultad" id="dificultad">
@@ -45,14 +45,14 @@
                 <p> Aquí puedes detallar cómo es la elaboración paso a paso. </p>
                 <div id="bloque-lista">
                     <button type="button" onclick="addClick(this, 'instrucciones')" class="button-add" id="ingr-button">+</button>
-                <% for (let instr of receta.instrucciones) { %>
-                    <input type="text" name="instrucciones[]" value="<%= instr %>" >
+           
+                    <input type="text" name="instrucciones[]" value="" >
                     <button type="button" onclick="removeClick(this)" class="button-delete" id="ingr-button">-</button>
-                <% } %>
+       
             </div>
 
             <label for="image">URL de la Imagen:</label>
-            <input type="text" id="image" name="image" value="<%= receta.image %>" required>
+            <input type="text" id="image" name="image" value="" required>
 
             <input type="submit" value="Añadir Receta">
         </form>

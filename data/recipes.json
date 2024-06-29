@@ -136,5 +136,56 @@
     "tiempo": "fadsf",
     "dificultad": "Es una receta fácil y adaptable, acepta modificaciones",
     "image": "fadsef"
+  },
+  {
+    "id": "Prueba-770520",
+    "nombre": "Prueba",
+    "descripcion": "Esto es una pruebas",
+    "ingredientes": [
+      "Ingre",
+      "fadsffd",
+      "Otro ingrediente"
+    ],
+    "instrucciones": [
+      "POaso 1",
+      "Paso 2"
+    ],
+    "tiempo": "20 minutos",
+    "dificultad": "Es una receta fácil y adaptable, acepta modificaciones",
+    "image": "url"
+  },
+  {
+    "id": "daf-722971",
+    "nombre": "daf",
+    "descripcion": "fads",
+    "ingredientes": [
+      "fads",
+      "fasdf",
+      "fadsf"
+    ],
+    "instrucciones": [
+      "fads"
+    ],
+    "tiempo": "fads",
+    "dificultad": "Es una receta fácil y adaptable, acepta modificaciones",
+    "image": "fadsf"
+  },
+  {
+    "id": "Tarta-de-queso-746818",
+    "nombre": "Tarta de queso",
+    "descripcion": "Deliciosaaa tarta con base de queso mascarpone hecha al horno.",
+    "ingredientes": [
+      "Queso Mascarpone",
+      "Maicena",
+      "Azúcar"
+    ],
+    "instrucciones": [
+      "Paso 1",
+      "Paso 2",
+      "Paso 3"
+    ],
+    "tiempo": "20 minutos",
+    "dificultad": "Es una receta fácil y adaptable, acepta modificaciones",
+    "image": "/img/cheese-cake.png"
   }
 ]

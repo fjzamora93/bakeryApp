@@ -5,10 +5,10 @@
 <body>
     <div class="container">
         <h2>Añadir Nueva Receta</h2>
-        <form action="/admin/onEdit/<%= receta.id %>" method="post">
+        <form action="/admin/onEdit/<%= receta._id %>" method="post">
             <!--- Ocultamos la id para después usarla-->
             <label for="id" hidden>Id:</label>
-            <input type="hidden" id="id" name="id" value="<%= receta.id %>">
+            <input type="hidden" id="id" name="id" value="<%= receta._id %>">
 
 
             <label for="nombre">Título de la Receta:</label>
@@ -58,6 +58,10 @@
             <input type="submit" value="Añadir Receta">
         </form>
     </div>
+
+    <form action="/admin/onDelete/<%= receta._id %>" method="post">
+        <input type="submit" value="Borrar receta">
+    </form>
 
     <%- include('includes/footer') %>
 </body>

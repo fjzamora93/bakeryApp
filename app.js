@@ -1,8 +1,8 @@
-const mongoConnect = require('./util/database').mongoConnect;
+const mongoose = require('mongoose');
+const User = require('./models/user');
+
 const path = require('path');
 const bodyParser = require('body-parser');
-
-const RecetaClass = require('./models/recipe');
 
 const express = require('express');
 const app = express();
@@ -16,18 +16,38 @@ app.use(bodyParser.urlencoded({ extended:true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-app.use('/recipes', recipeRoutes);
+app.use('/', recipeRoutes);
 app.use('/admin', adminRoutes);
 
-app.get('/', (req, res, next) => {
-    RecetaClass.findAll(recetasCallback => {
-        res.render('index', {
-            recetas: recetasCallback
-        });
-    })
-})
+
+app.use((req, res, next) => {
+    User.findById('667ff0ba6c45b2d2da014a56')
+      .then(user => {
+        req.user = user;
+        next();
+      })
+      .catch(err => console.log(err));
+  });
 
 //Conexión a la base de datos
-mongoConnect(() => {
-    app.listen(3000);
-  });
+mongoose.connect(
+            'mongodb+srv://elgatobarista:megamanx5@rolgamesandstone.tqgnl5u.mongodb.net/bakery_app?retryWrites=true&w=majority&appName=RolgameSandstone'
+        )
+        .then(result => {
+            User.findOne().then(user => {
+            if (!user) {
+                const user = new User({
+                name: 'Gato',
+                email: 'elgatobarista@test.com',
+                cart: {
+                    items: []
+                }
+                });
+                user.save();
+            }
+            });
+            app.listen(3000);
+        })
+        .catch(err => {
+            console.log(err);
+        });

@@ -1,18 +1,12 @@
-const Recipe = require('../models/recipe.js');
+
 const RecetaMdb = require('../models/recipeMdb'); //TODO EL MODELO DE MONGODB, QUITAR EL JSON INTERNO?
 
 exports.getAddRecipe = async (req, res, next) =>{
-    const recipe = new Recipe();
-    if (!recipe.id){
-        recipe.id = await recipe.generateId(); 
-    }
     res.render('add-recipe', {
-        receta : recipe
     })
 }
 
 exports.postAddRecipe = (req, res, next) =>{
-    const id = req.body.id;
     const nombre = req.body.nombre;
     const descripcion = req.body.descripcion;
     const ingredientes = req.body.ingredientes;
@@ -21,15 +15,19 @@ exports.postAddRecipe = (req, res, next) =>{
     const dificultad = req.body.dificultad;
     const image = req.body.image;
 
-    //! ANTIGUO: GUARDADO EN JSON
-    const recipe =  new Recipe(id, nombre, descripcion, ingredientes,instrucciones, tiempo, dificultad, image);
-    recipe.addRecipe();
-
     //TODO MODELO BASADO EN MONGODB
-    const recipeMg = new RecetaMdb(nombre, descripcion);
+    const recipeMg = new RecetaMdb({
+        nombre : nombre, 
+        descripcion : descripcion,
+        ingredientes : ingredientes,
+        instrucciones : instrucciones,
+        tiempo : tiempo,
+        dificultad : dificultad,
+        image : image
+    });
     recipeMg.save()
         .then(result => {
-            console.log('Created Product');
+            console.log(result);
             res.redirect('/')
         }).catch(err => {
             console.log(err);
@@ -38,12 +36,25 @@ exports.postAddRecipe = (req, res, next) =>{
 
 exports.getEditRecipe = (req, res, next) => {
     const recetaId = req.params.recetaId; 
-    Recipe.findOne(recetaId, recetaCallback => {
+    RecetaMdb.findById(recetaId)
+    .then(receta => {
         res.render('edit-recipe' , {
-            receta : recetaCallback
+            receta : receta
         });
-    });   
+        }
+    )
+    .catch(err => console.log(err))
 };
+
+exports.postDeleteRecipe = (req,res,next) => {
+    const recetaId = req.params.recetaId;
+    RecetaMdb.findByIdAndDelete(recetaId)
+        .then( result => {
+            console.log(result)
+            res.redirect('/')
+        })
+        .catch(err => console.log(err))
+}
 
 exports.postEditRecipe = (req, res, next) => {
     const id = req.params.recetaId;
@@ -55,15 +66,27 @@ exports.postEditRecipe = (req, res, next) => {
     const dificultad = req.body.dificultad;
     const image = req.body.image;
 
-    const recipe =  new Recipe(
-        id, nombre,  
-        descripcion, 
-        ingredientes,
-        instrucciones, 
-        tiempo, 
-        dificultad, 
-        image);
-    recipe.editRecipe();
-    res.redirect(`/recipes/recipe-details/${recipe.id}`); // Redirigir a la página principal después de editar
-  
+    RecetaMdb.findById(id)
+        .then(recipe => {
+            if (!recipe) {
+                // No document found with the provided id
+                // Send a response with an error message
+                return res.status(404).send('No recipe found with the provided id');
+            }
+            recipe.nombre = nombre;
+            recipe.descripcion = descripcion;
+            recipe.ingredientes = ingredientes;
+            recipe.instrucciones = instrucciones;
+            recipe.tiempo = tiempo;
+            recipe.dificultad = dificultad;
+            recipe.image = image;
+            return recipe.save();
+        })
+        .then(result => {
+            console.log('actulización', result);
+            res.redirect('/');
+        })
+        .catch(err => {
+            console.log(err);
+        });
 }

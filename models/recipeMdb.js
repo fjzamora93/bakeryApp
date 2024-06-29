@@ -1,21 +1,35 @@
-const getDb = require('../util/database').getDb;
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-module.exports = class RecipeMdb {
-    constructor(nombre, descripcion){
-        this.nombre = nombre;
-        this.descripcion = descripcion
+const recipeSchema = mongoose.Schema({
+    nombre: {
+        type: String,
+        required: true,
+    },
+    descripcion : {
+        type: String,
+        required: true,
+    },
+    ingredientes: {
+        type: [String],
+        required: true,
+    },
+    instrucciones: {
+        type: [String],
+        required:true,
+    },
+    tiempo:{
+        type: String,
+        required: true,
+    },
+    dificultad:{
+        type:String,
+        required: true,
+    },
+    image:{
+        type: String,
+        required:true,
     }
+});
 
-    save() {
-        const db = getDb();
-        return db
-          .collection('recipes')
-          .insertOne(this)
-          .then(result => {
-            console.log(result);
-          })
-          .catch(err => {
-            console.log(err);
-          });
-      }
-}
+module.exports = mongoose.model('Recipe', recipeSchema);

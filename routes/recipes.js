@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const recetasJSON = require('../data/recipes.json');
-const RecetaClass = require('../models/recipe');
 
 const userController = require('../controllers/user');
 
