@@ -1,0 +1,24 @@
+#main{
+    margin : 0px 20% 100px;
+}
+
+@media (max-width: 800px) {
+     #main{
+        margin: 0px 10px 100px;
+     }
+
+     .recipe-summary img:hover {
+        transform: scale(0.8);
+    }
+
+     .recipe-summary img{
+        float:none;
+        max-width: 80%;
+     }
+
+     .recipe-summary a, img, p, h2{
+        display: block;
+     }
+
+    
+}

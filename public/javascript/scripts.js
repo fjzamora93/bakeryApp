@@ -22,15 +22,11 @@ function addClick(button, name) {
         parentDiv.removeChild(addButton);
     };
 
-    // Set up the add button
-    addButton.innerText = '+';
-    addButton.className = 'button-add';
-    addButton.onclick = addClick;
 
     // Add the new input field and the buttons to the div
     parentDiv.appendChild(nuevoInput);
     parentDiv.appendChild(deleteButton);
-    parentDiv.appendChild(addButton);
+
 }
 
 function removeClick(button) {

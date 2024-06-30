@@ -10,10 +10,9 @@ const router = express.Router();
 
 router.get('/add-recipe', adminController.getAddRecipe);
 router.post('/add', adminController.postAddRecipe );
-router.get('/edit/:recetaId', adminController.getEditRecipe);
-router.post('/onEdit/:recetaId', adminController.postEditRecipe );
-router.post('/onDelete/:recetaId', adminController.postDeleteRecipe);
-
+router.get('/edit-recipe/:recetaId', adminController.getEditRecipe);
+router.post('/edit/', adminController.postEditRecipe );
+router.post('/delete/:recetaId', adminController.postDeleteRecipe);
 
 
 module.exports = router;

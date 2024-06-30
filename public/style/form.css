@@ -1,7 +1,11 @@
-body {
+body div{
     font-family: Arial, sans-serif;
-    margin: 0;
+    margin: auto;
     padding: 0;
+}
+
+.button-delete{
+    background-color: red;
 }
 .container {
     max-width: 600px;
@@ -33,16 +37,17 @@ input[type="text"], input[type="url"], textarea {
 }
 
 input[type="submit"] {
-    background-color: #f8b400;
+    background-color: #3a940d8e;
     color: white;
     border: none;
     padding: 10px;
     font-size: 16px;
     cursor: pointer;
     border-radius: 5px;
+    width: 100%;
 }
 input[type="submit"]:hover {
-    background-color: #e0a800;
+    background-color: #1fc62a;
 }
 
 

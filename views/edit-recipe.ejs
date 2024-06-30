@@ -5,33 +5,35 @@
 <body>
     <div class="container">
         <h2>Añadir Nueva Receta</h2>
-        <form action="/admin/onEdit/<%= receta._id %>" method="post">
+        <form action="/admin/<% if (editing){ %>edit<% } else { %>add<% }%>"" method="post">
+
             <!--- Ocultamos la id para después usarla-->
-            <label for="id" hidden>Id:</label>
-            <input type="hidden" id="id" name="id" value="<%= receta._id %>">
+            <label for="idReceta" hidden>Id:</label>
+            <input type="hidden" id="idReceta" name="idReceta" value="<% if (editing) { %> <%= receta._id %><% } %> ">
 
 
             <label for="nombre">Título de la Receta:</label>
-            <input type="text" id="nombre" name="nombre" value="<%= receta.nombre %>" required >
+            <input type="text" id="nombre" name="nombre" value="<% if (editing) { %> <%= receta.nombre %> <% } %>" required >
 
 
             <label for="descripcion">Descripción:</label>
-            <textarea id="descripcion" name="descripcion" rows="5"  required><%= receta.descripcion.trim() %></textarea>
+            <textarea id="descripcion" name="descripcion" rows="5"  required><% if (editing) { %><%= receta.descripcion.trim() %><% } %></textarea>
 
 
             <label for="ingrediente">Ingredientes:</label> 
             
             <div id="bloque-lista">
                 <button type="button" onclick="addClick(this, 'ingredientes')" class="button-add" id="ingr-button">+</button>
-            <% for (let ingr of receta.ingredientes) { %>
-                <input type="text" name="ingredientes[]" value="<%= ingr %>" >
-                <button type="button" onclick="removeClick(this)" class="button-delete" id="ingr-button">-</button>
+            <% if (editing) { %>
+                <% for (let ingr of receta.ingredientes) { %>
+                    <input type="text" name="ingredientes[]" value="<%= ingr %>" >
+                    <button type="button" onclick="removeClick(this)" class="button-delete" id="ingr-button">-</button>
+                <% } %>
             <% } %>
-                
             </div>
 
             <label for="tiempo">Tiempo de preparación: </label>
-            <input type="text" name="tiempo" value="<%= receta.tiempo %>" required>
+            <input type="text" name="tiempo" value="<% if (editing) { %><%= receta.tiempo %> <% } %>" required>
 
             <label for="dificultad">Dificultad:</label>
             <select name="dificultad" id="dificultad">
@@ -46,22 +48,30 @@
                 <p> Aquí puedes detallar cómo es la elaboración paso a paso. </p>
                 <div id="bloque-lista">
                     <button type="button" onclick="addClick(this, 'instrucciones')" class="button-add" id="ingr-button">+</button>
+            <% if (editing) { %>
                 <% for (let instr of receta.instrucciones) { %>
                     <input type="text" name="instrucciones[]" value="<%= instr %>" >
                     <button type="button" onclick="removeClick(this)" class="button-delete" id="ingr-button">-</button>
                 <% } %>
+            <% } %>
             </div>
 
             <label for="image">URL de la Imagen:</label>
-            <input type="text" id="image" name="image" value="<%= receta.image %>" required>
+            <input type="text" id="image" name="image" value="<% if (editing) { %> <%= receta.image %><% } %>" required>
 
-            <input type="submit" value="Añadir Receta">
+            <% if (editing) { %>
+                <input type="submit" value="Actualizar receta">
+            <% }else{ %>
+                <input type="submit" value="Añadir Receta">
+            <% } %>
         </form>
     </div>
-
-    <form action="/admin/onDelete/<%= receta._id %>" method="post">
-        <input type="submit" value="Borrar receta">
-    </form>
+    
+    <% if (editing) { %>
+        <form action="/admin/delete/<%= receta._id %>" method="post">
+            <input type="submit" value="Borrar receta" class="button-delete">
+        </form>
+    <% } %>
 
     <%- include('includes/footer') %>
 </body>

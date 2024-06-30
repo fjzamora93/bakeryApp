@@ -1,6 +1,7 @@
 <%- include('includes/nav.ejs') %>
+<link rel="stylesheet" href="/style/index.css">
 <body>
-    <div class="container">
+    <div class="container" id="main">
         <% for (let receta of recetas) { %>
             <div class="recipe-summary">
                 <a href="/recipe-details/<%= receta._id %>">
@@ -14,6 +15,11 @@
                 <p><b>Descripción:</b> <%= receta.descripcion %></p>
                 <p><b>Tiempo:</b> <%= receta.tiempo %></p>
                 <p><b>Dificultad:</b> <%= receta.dificultad %></p>
+
+                <form method="post" action="/add-bookmark">
+                    <input type="hidden" name="idReceta" value = "<%= receta._id %>">
+                    <input type="submit" value="Guardar en favoritos">
+                </form>
                 
             </div>
         <% } %>

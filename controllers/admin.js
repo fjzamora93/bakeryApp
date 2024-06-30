@@ -2,7 +2,8 @@
 const RecetaMdb = require('../models/recipeMdb'); //TODO EL MODELO DE MONGODB, QUITAR EL JSON INTERNO?
 
 exports.getAddRecipe = async (req, res, next) =>{
-    res.render('add-recipe', {
+    res.render('edit-recipe', {
+        editing : false,
     })
 }
 
@@ -35,11 +36,13 @@ exports.postAddRecipe = (req, res, next) =>{
 }
 
 exports.getEditRecipe = (req, res, next) => {
-    const recetaId = req.params.recetaId; 
+    const recetaId = req.params.recetaId;
+    const editing = true;
     RecetaMdb.findById(recetaId)
     .then(receta => {
         res.render('edit-recipe' , {
-            receta : receta
+            receta : receta,
+            editing : editing
         });
         }
     )
@@ -57,7 +60,7 @@ exports.postDeleteRecipe = (req,res,next) => {
 }
 
 exports.postEditRecipe = (req, res, next) => {
-    const id = req.params.recetaId;
+    const id = req.body.idReceta.trim(); //RECUERDA TRIMEAR LA ID PARA QUE NO HAYA PROBLEMAS CON MONGODB, QUE ESPERA UN FORMATO MUY CONCRETO
     const nombre = req.body.nombre;
     const descripcion = req.body.descripcion;
     const ingredientes = req.body.ingredientes;
@@ -71,7 +74,9 @@ exports.postEditRecipe = (req, res, next) => {
             if (!recipe) {
                 // No document found with the provided id
                 // Send a response with an error message
+                console.log("RECETAAAAAAAAAAAA:   ", id)
                 return res.status(404).send('No recipe found with the provided id');
+                
             }
             recipe.nombre = nombre;
             recipe.descripcion = descripcion;
