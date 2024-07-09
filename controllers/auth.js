@@ -46,17 +46,22 @@ exports.postLogin = (req, res, next) => {
             req.session.isLoggedIn = true;
             req.session.user = user;
             return req.session.save(err => {
-              console.log(err);
-              res.redirect('/');
-            });
+                if (err) {
+                  console.log(err);
+                  req.flash('error', 'ERROR EN EL .save().');
+                  return res.redirect('/login');
+                }
+                res.redirect('/');
+              });
           }
           req.flash('error', 'Invalid email or password.');
           res.redirect('/login');
         })
         .catch(err => {
-          console.log(err);
-          res.redirect('/login');
-        });
+            console.log(err);
+            req.flash('error', 'Error en el .findOne(), no se ha encontrado ninguna coincidencia.');
+            res.redirect('/login');
+          });
     })
     .catch(err => console.log(err));
 };

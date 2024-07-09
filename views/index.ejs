@@ -1,6 +1,15 @@
 <%- include('includes/navigation.ejs') %>
 <link rel="stylesheet" href="/style/index.css">
 <body>
+
+    
+    <% if (!isAuthenticated) { %> <!--- Recuerda que esto lo creamos como una variable local en app.js res.locals-->
+        <div style="background-color: red; margin:auto"> NO REGISTRADO </div>
+    <% } else { %>
+        <div style="background-color: green; margin:auto"> REGISTRADO </div>
+    <% } %>
+
+
     <div class="container" id="main">
         <% for (let receta of recetas) { %>
             <div class="recipe-summary">
@@ -16,10 +25,11 @@
                 <p><b>Tiempo:</b> <%= receta.tiempo %></p>
                 <p><b>Dificultad:</b> <%= receta.dificultad %></p>
 
-                <form method="post" action="/add-bookmark">
-                    <input type="hidden" name="idReceta" value = "<%= receta._id %>">
-                    <input type="submit" value="Guardar en favoritos">
-                </form>
+                    <form method="post" action="/add-bookmark">
+                        <input type="hidden" name="idReceta" value = "<%= receta._id %>">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        <input type="submit" value="Guardar en favoritos">
+                    </form>
                 
             </div>
         <% } %>

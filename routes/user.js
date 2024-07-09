@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-
+const isAuth = require('../middleware/is-auth');
 const userController = require('../controllers/user');
 
 
@@ -8,7 +8,9 @@ const userController = require('../controllers/user');
 
 router.get('/', userController.getIndex);
 router.get('/recipe-details/:recetaId', userController.getRecipeDetails);
-router.get('/bookmark', userController.getBookmark);
+
+//Los controllers se ejecutarán en orden. Si el primero da el NEXT (porque está autentificado el usuario), pasará al siguiente
+router.get('/bookmark', isAuth, userController.getBookmark);
 router.post('/add-bookmark', userController.postSaveBookmark);
 
 

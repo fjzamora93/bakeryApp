@@ -59,6 +59,7 @@
             <label for="image">URL de la Imagen:</label>
             <input type="text" id="image" name="image" value="<% if (editing) { %> <%= receta.image %><% } %>" required>
 
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
             <% if (editing) { %>
                 <input type="submit" value="Actualizar receta">
             <% }else{ %>

@@ -3,7 +3,7 @@ const express = require('express');
 const RecetaClass = require('../models/recipe')
 const RecetaMdb = require('../models/recipeMdb'); //TODO EL MODELO DE MONGODB, QUITAR EL JSON INTERNO?
 const adminController = require('../controllers/admin');
-
+const authController = require('../controllers/auth');
 
 
 const router = express.Router();
