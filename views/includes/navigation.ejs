@@ -18,26 +18,28 @@
 
     <ul>
         <li><a href="/">Inicio</a></li>
-        <li><a href="/bookmark">Recetas archivadas</a></li>
-        <li><a href="/admin/add-recipe">Añadir receta</a></li>
-        <li><a href="#">Contacto</a></li>
-    </ul>
+        <!--- Esta variable está definida en App.js y vinculada al middleware de login-->
+        <% if (isAuthenticated) { %>
+            <li><a href="/admin/add-recipe">Añadir receta</a></li>
+        <% } %>
 
-    <ul class="main-header__item-list">
-        
-            <li class="main-header__item">
-                <a href="/login">Login</a>
-            </li>
-            <li class="main-header__item">
-                <a href="/signup">Signup</a>
-            </li>
-   
-            <li class="main-header__item">
-                <form action="/logout" method="post">
-                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                    <button type="submit">Logout</button>
-                </form>
-            </li>
+        <li><a href="/bookmark">Recetas archivadas</a></li>
+        <li><a href="#">Contacto</a></li>
+    
+ 
+        <li class="main-header__item">
+            <a href="/login">Login</a>
+        </li>
+        <li class="main-header__item">
+            <a href="/signup">Signup</a>
+        </li>
+
+        <li class="main-header__item">
+            <form action="/logout" method="post">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <button type="submit">Logout</button>
+            </form>
+        </li>
  
     </ul>
 

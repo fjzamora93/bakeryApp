@@ -1,3 +1,5 @@
+//! DEPRECATED NO UTILIZAR!!! Esto es para funcionar con JSON, no con MongoDB
+
 const fs = require('fs');
 const recipes = require('../data/recipes.json');
 const path = require('path');

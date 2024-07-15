@@ -1,9 +1,13 @@
 
-const RecetaMdb = require('../models/recipeMdb'); //TODO EL MODELO DE MONGODB, QUITAR EL JSON INTERNO?
+const RecetaMdb = require('../models/recipeMdb'); 
+const { validationResult } = require('express-validator');
 
 exports.getAddRecipe = async (req, res, next) =>{
     res.render('edit-recipe', {
         editing : false,
+        hasError: false,
+        errorMessage: null,
+        validationErrors: []
     })
 }
 
@@ -14,9 +18,30 @@ exports.postAddRecipe = (req, res, next) =>{
     const instrucciones = req.body.instrucciones;
     const tiempo = req.body.tiempo;
     const dificultad = req.body.dificultad;
+    const categoria = req.body.categoria;
     const image = req.body.image;
+    const errors = validationResult(req);
 
-    //TODO MODELO BASADO EN MONGODB
+    //En caso de que falle la validación
+    if (!errors.isEmpty()) {
+        console.log(errors.array());
+        return res.status(422).render('edit-recipe', {
+          editing: false,
+          hasError: true,
+          receta: {
+            nombre: nombre,
+            descripcion: descripcion,
+            ingredientes: ingredientes,
+            instrucciones: instrucciones,
+            tiempo: tiempo,
+            dificultad: dificultad,
+            categoria: categoria,
+            image: image
+          },
+          errorMessage: errors.array().map(error => ({ field: error.param, msg: error.msg })),
+        });
+      }
+    //MODELO BASADO EN MONGODB
     const recipeMg = new RecetaMdb({
         nombre : nombre, 
         descripcion : descripcion,
@@ -24,6 +49,7 @@ exports.postAddRecipe = (req, res, next) =>{
         instrucciones : instrucciones,
         tiempo : tiempo,
         dificultad : dificultad,
+        categoria : categoria,
         image : image
     });
     recipeMg.save()
@@ -42,7 +68,10 @@ exports.getEditRecipe = (req, res, next) => {
     .then(receta => {
         res.render('edit-recipe' , {
             receta : receta,
-            editing : editing
+            editing : editing,
+            hasError: false,
+            errorMessage: null,
+            validationErrors: []
         });
         }
     )
@@ -67,8 +96,29 @@ exports.postEditRecipe = (req, res, next) => {
     const instrucciones = req.body.instrucciones;
     const tiempo = req.body.tiempo;
     const dificultad = req.body.dificultad;
+    const categoria = req.body.categoria;
     const image = req.body.image;
+    const errors = validationResult(req);
 
+    console.log("ID RECETA:", id)
+    if (!errors.isEmpty()) {
+        return res.status(422).render('edit-recipe', {
+            editing: true,
+            hasError: true,
+            receta: {
+                _id: id,
+                nombre: nombre,
+                descripcion: descripcion,
+                ingredientes: ingredientes,
+                instrucciones: instrucciones,
+                tiempo: tiempo,
+                dificultad: dificultad,
+                categoria: categoria,
+                image: image
+            },
+            errorMessage: errors.array().map(error => ({ field: error.param, msg: error.msg })),
+          });
+        }
     RecetaMdb.findById(id)
         .then(recipe => {
             if (!recipe) {
@@ -84,6 +134,7 @@ exports.postEditRecipe = (req, res, next) => {
             recipe.instrucciones = instrucciones;
             recipe.tiempo = tiempo;
             recipe.dificultad = dificultad;
+            recipe.categoria = categoria;
             recipe.image = image;
             return recipe.save();
         })

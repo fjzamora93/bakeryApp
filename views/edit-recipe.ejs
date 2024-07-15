@@ -4,27 +4,33 @@
 
 <body>
     <div class="container">
+        <% if (errorMessage) { %>
+            <% errorMessage.forEach(function(error) { %>
+              <div class="user-message user-message--error"><%= error.msg %></div>
+            <% }); %>
+          <% } %>
+
         <h2>Añadir Nueva Receta</h2>
         <form action="/admin/<% if (editing){ %>edit<% } else { %>add<% }%>"" method="post">
 
             <!--- Ocultamos la id para después usarla-->
             <label for="idReceta" hidden>Id:</label>
-            <input type="hidden" id="idReceta" name="idReceta" value="<% if (editing) { %> <%= receta._id %><% } %> ">
+            <input type="hidden" id="idReceta" name="idReceta" value="<% if (editing ) { %> <%= receta._id %><% } %> ">
 
 
             <label for="nombre">Título de la Receta:</label>
-            <input type="text" id="nombre" name="nombre" value="<% if (editing) { %> <%= receta.nombre %> <% } %>" required >
+            <input type="text" id="nombre" name="nombre" value="<% if (editing || hasError) { %><%= receta.nombre %> <% } %>" required >
 
 
             <label for="descripcion">Descripción:</label>
-            <textarea id="descripcion" name="descripcion" rows="5"  required><% if (editing) { %><%= receta.descripcion.trim() %><% } %></textarea>
+            <textarea id="descripcion" name="descripcion" rows="5"  required><% if (editing || hasError) { %><%= receta.descripcion.trim() %><% } %></textarea>
 
 
             <label for="ingrediente">Ingredientes:</label> 
             
             <div id="bloque-lista">
                 <button type="button" onclick="addClick(this, 'ingredientes')" class="button-add" id="ingr-button">+</button>
-            <% if (editing) { %>
+            <% if (editing || hasError) { %>
                 <% for (let ingr of receta.ingredientes) { %>
                     <input type="text" name="ingredientes[]" value="<%= ingr %>" >
                     <button type="button" onclick="removeClick(this)" class="button-delete" id="ingr-button">-</button>
@@ -33,7 +39,7 @@
             </div>
 
             <label for="tiempo">Tiempo de preparación: </label>
-            <input type="text" name="tiempo" value="<% if (editing) { %><%= receta.tiempo %> <% } %>" required>
+            <input type="text" name="tiempo" value="<% if (editing || hasError) { %><%= receta.tiempo %> <% } %>" required>
 
             <label for="dificultad">Dificultad:</label>
             <select name="dificultad" id="dificultad">
@@ -41,14 +47,22 @@
                 <option value="2">Requiere controlar bien tiempos y temperatura</option>
                 <option value="3">Requiere controlar bien las cantidades</option>
                 <option value="4">Requiere precisión en cantidades y tiempos, no admite muchas variaciones</option>
-            </select> <br><br><br><br>
+            </select> <br><br>
+
+            <label for="categoria">Categoria:</label>
+            <select name="categoria" id="categoria">
+                <option value="reposteria">Repostería</option>
+                <option value="verano">Recetas de verano</option>
+                <option value="invierno">Recetas de invierno</option>
+                <option value="no-estacional">Recetas para todo el año</option>
+            </select> <br><br>
 
             <div class="bloque-lista">
                 <label for="instrucciones">Instrucciones:</label> 
                 <p> Aquí puedes detallar cómo es la elaboración paso a paso. </p>
                 <div id="bloque-lista">
                     <button type="button" onclick="addClick(this, 'instrucciones')" class="button-add" id="ingr-button">+</button>
-            <% if (editing) { %>
+            <% if (editing || hasError) { %>
                 <% for (let instr of receta.instrucciones) { %>
                     <input type="text" name="instrucciones[]" value="<%= instr %>" >
                     <button type="button" onclick="removeClick(this)" class="button-delete" id="ingr-button">-</button>
@@ -57,7 +71,7 @@
             </div>
 
             <label for="image">URL de la Imagen:</label>
-            <input type="text" id="image" name="image" value="<% if (editing) { %> <%= receta.image %><% } %>" required>
+            <input type="text" id="image" name="image" value="<% if (editing || hasError) { %> <%= receta.image %><% } %>" required>
 
             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
             <% if (editing) { %>
@@ -70,6 +84,7 @@
     
     <% if (editing) { %>
         <form action="/admin/delete/<%= receta._id %>" method="post">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
             <input type="submit" value="Borrar receta" class="button-delete">
         </form>
     <% } %>
