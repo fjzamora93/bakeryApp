@@ -39,6 +39,7 @@ exports.postAddRecipe = (req, res, next) =>{
             image: image
           },
           errorMessage: errors.array().map(error => ({ field: error.param, msg: error.msg })),
+          validationErrors: errors.array()
         });
       }
     //MODELO BASADO EN MONGODB
@@ -100,8 +101,9 @@ exports.postEditRecipe = (req, res, next) => {
     const image = req.body.image;
     const errors = validationResult(req);
 
-    console.log("ID RECETA:", id)
+
     if (!errors.isEmpty()) {
+        console.log(errors.array());
         return res.status(422).render('edit-recipe', {
             editing: true,
             hasError: true,
@@ -116,7 +118,8 @@ exports.postEditRecipe = (req, res, next) => {
                 categoria: categoria,
                 image: image
             },
-            errorMessage: errors.array().map(error => ({ field: error.param, msg: error.msg })),
+            errorMessage: errors.array(), //Código duplicado...
+            validationErrors: errors.array()
           });
         }
     RecetaMdb.findById(id)

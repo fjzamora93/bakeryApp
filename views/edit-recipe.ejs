@@ -6,9 +6,12 @@
     <div class="container">
         <% if (errorMessage) { %>
             <% errorMessage.forEach(function(error) { %>
-              <div class="user-message user-message--error"><%= error.msg %></div>
+                <div class="user-message user-message--error">
+                    <%= error.msg %> on <%= error.path %> with value:
+                    <%= error.value %> 
+                </div>
             <% }); %>
-          <% } %>
+        <% } %>
 
         <h2>Añadir Nueva Receta</h2>
         <form action="/admin/<% if (editing){ %>edit<% } else { %>add<% }%>"" method="post">
@@ -19,7 +22,11 @@
 
 
             <label for="nombre">Título de la Receta:</label>
-            <input type="text" id="nombre" name="nombre" value="<% if (editing || hasError) { %><%= receta.nombre %> <% } %>" required >
+            <input type="text" 
+                    id="nombre" name="nombre"
+                    value="<% if (editing || hasError) { %><%= receta.nombre %> <% } %>" 
+                    class="<%= validationErrors.find(e => e.path === 'nombre') ? 'invalid' : '' %>"
+                    required >
 
 
             <label for="descripcion">Descripción:</label>
