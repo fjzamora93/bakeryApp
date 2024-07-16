@@ -5,12 +5,7 @@
 <body>
     <div class="container">
         <% if (errorMessage) { %>
-            <% errorMessage.forEach(function(error) { %>
-                <div class="user-message user-message--error">
-                    <%= error.msg %> on <%= error.path %> with value:
-                    <%= error.value %> 
-                </div>
-            <% }); %>
+            <div class="user-message user-message--error"><%= errorMessage %></div>
         <% } %>
 
         <h2>Añadir Nueva Receta</h2>

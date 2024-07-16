@@ -24,7 +24,7 @@ exports.postAddRecipe = (req, res, next) =>{
     const image = req.file;
    
     if (!image) {
-        return res.status(422).render('admin/add-recipe', {
+        return res.status(422).render('edit-recipe', {
           editing: false,
           hasError: true,
           receta: {
@@ -37,7 +37,7 @@ exports.postAddRecipe = (req, res, next) =>{
             categoria: categoria,
       
           },
-          errorMessage: 'Attached file is not an image.',
+          errorMessage: 'No se ha introducido una imagen',
           validationErrors: []
         });
       }
@@ -63,7 +63,7 @@ exports.postAddRecipe = (req, res, next) =>{
         });
       }
     //MODELO BASADO EN MONGODB
-    const imageUrl = image.path;
+    
     const recipeMg = new RecetaMdb({
         nombre : nombre, 
         descripcion : descripcion,
