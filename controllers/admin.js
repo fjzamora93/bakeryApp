@@ -1,6 +1,7 @@
 
 const RecetaMdb = require('../models/recipeMdb'); 
 const { validationResult } = require('express-validator');
+const fileHelper = require('../util/file');
 
 exports.getAddRecipe = async (req, res, next) =>{
     res.render('edit-recipe', {
@@ -19,9 +20,28 @@ exports.postAddRecipe = (req, res, next) =>{
     const tiempo = req.body.tiempo;
     const dificultad = req.body.dificultad;
     const categoria = req.body.categoria;
-    const image = req.body.image;
-    const errors = validationResult(req);
 
+    const image = req.file;
+   
+    if (!image) {
+        return res.status(422).render('admin/add-recipe', {
+          editing: false,
+          hasError: true,
+          receta: {
+            nombre: nombre,
+            descripcion: descripcion,
+            ingredientes: ingredientes,
+            instrucciones: instrucciones,
+            tiempo: tiempo,
+            dificultad: dificultad,
+            categoria: categoria,
+      
+          },
+          errorMessage: 'Attached file is not an image.',
+          validationErrors: []
+        });
+      }
+    const errors = validationResult(req);
     //En caso de que falle la validación
     if (!errors.isEmpty()) {
         console.log(errors.array());
@@ -36,13 +56,14 @@ exports.postAddRecipe = (req, res, next) =>{
             tiempo: tiempo,
             dificultad: dificultad,
             categoria: categoria,
-            image: image
+            image: image.path
           },
           errorMessage: errors.array().map(error => ({ field: error.param, msg: error.msg })),
           validationErrors: errors.array()
         });
       }
     //MODELO BASADO EN MONGODB
+    const imageUrl = image.path;
     const recipeMg = new RecetaMdb({
         nombre : nombre, 
         descripcion : descripcion,
@@ -51,7 +72,7 @@ exports.postAddRecipe = (req, res, next) =>{
         tiempo : tiempo,
         dificultad : dificultad,
         categoria : categoria,
-        image : image
+        image : image.path
     });
     recipeMg.save()
         .then(result => {
@@ -98,7 +119,8 @@ exports.postEditRecipe = (req, res, next) => {
     const tiempo = req.body.tiempo;
     const dificultad = req.body.dificultad;
     const categoria = req.body.categoria;
-    const image = req.body.image;
+    const image = req.file;
+   
     const errors = validationResult(req);
 
 
@@ -116,7 +138,6 @@ exports.postEditRecipe = (req, res, next) => {
                 tiempo: tiempo,
                 dificultad: dificultad,
                 categoria: categoria,
-                image: image
             },
             errorMessage: errors.array(), //Código duplicado...
             validationErrors: errors.array()
@@ -125,11 +146,8 @@ exports.postEditRecipe = (req, res, next) => {
     RecetaMdb.findById(id)
         .then(recipe => {
             if (!recipe) {
-                // No document found with the provided id
-                // Send a response with an error message
                 console.log("RECETAAAAAAAAAAAA:   ", id)
                 return res.status(404).send('No recipe found with the provided id');
-                
             }
             recipe.nombre = nombre;
             recipe.descripcion = descripcion;
@@ -138,14 +156,22 @@ exports.postEditRecipe = (req, res, next) => {
             recipe.tiempo = tiempo;
             recipe.dificultad = dificultad;
             recipe.categoria = categoria;
-            recipe.image = image;
-            return recipe.save();
-        })
-        .then(result => {
-            console.log('actulización', result);
-            res.redirect('/');
+            
+            console.log(image.path);
+            if (image) {
+                if (recipe.image) {
+                    fileHelper.deleteFile(recipe.image);
+                }
+                recipe.image = image.path;
+            }
+            return recipe.save().then(result => {
+                console.log('actulización', result);
+                res.redirect('/');
+            });
         })
         .catch(err => {
-            console.log(err);
-        });
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
+    });
 }

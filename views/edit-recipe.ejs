@@ -14,7 +14,7 @@
         <% } %>
 
         <h2>Añadir Nueva Receta</h2>
-        <form action="/admin/<% if (editing){ %>edit<% } else { %>add<% }%>"" method="post">
+        <form action="/admin/<% if (editing){ %>edit<% } else { %>add<% }%>"" method="post" enctype="multipart/form-data">
 
             <!--- Ocultamos la id para después usarla-->
             <label for="idReceta" hidden>Id:</label>
@@ -77,8 +77,11 @@
             <% } %>
             </div>
 
-            <label for="image">URL de la Imagen:</label>
-            <input type="text" id="image" name="image" value="<% if (editing || hasError) { %> <%= receta.image %><% } %>" required>
+            <label for="image">Image</label>
+            <input 
+                type="file" 
+                name="image" 
+                id="image" >
 
             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
             <% if (editing) { %>

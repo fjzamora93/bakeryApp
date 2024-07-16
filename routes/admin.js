@@ -10,7 +10,7 @@ const { body } = require('express-validator');
 const router = express.Router();
 
 router.get('/add-recipe', isAuth, adminController.getAddRecipe);
-
+router.get('/edit-recipe/:recetaId', adminController.getEditRecipe);
 
 router.post('/add', 
     [
@@ -18,18 +18,20 @@ router.post('/add',
             .isString()
             .isLength({min: 5})
             .trim(),
-        body('image').isURL(),
+        body('descripcion').trim(),
     ], 
+    isAuth,
     adminController.postAddRecipe );
-router.get('/edit-recipe/:recetaId', adminController.getEditRecipe);
+
 router.post('/edit/',
     [
         body('nombre')
             .isString()
             .isLength({min: 5})
             .trim(),
-        body('image').trim(),
+        body('descripcion').trim(),
     ], 
+    isAuth,
     adminController.postEditRecipe );
     
 router.post('/delete/:recetaId', adminController.postDeleteRecipe);
