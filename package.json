@@ -7,7 +7,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "cross-env NODE_ENV=production MONGO_URI=\"mongodb+srv://elgatobarista:megamanx5@rolgamesandstone.tqgnl5u.mongodb.net/bakery_app?retryWrites=true&w=majority&appName=RolgameSandstone\" node app.js",
+    "start": "node app.js",
     "start:dev": "nodemon -e js,ejs app.js"
   },
   "keywords": [],
