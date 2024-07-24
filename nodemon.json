@@ -1,0 +1,6 @@
+
+{
+    "env": {
+        "MONGO_URI": "mongodb+srv://elgatobarista:megamanx5@rolgamesandstone.tqgnl5u.mongodb.net/bakery_app?retryWrites=true&w=majority&appName=RolgameSandstone"
+    }
+}
