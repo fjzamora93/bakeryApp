@@ -6,6 +6,9 @@ const multer = require('multer');
 const path = require('path');
 const bodyParser = require('body-parser');
 
+require('dotenv').config();
+
+
 const express = require('express');
 
 //MANEJO DE SESIONES (express-session + MongoDBsTORE + csrf + flash)
@@ -14,7 +17,12 @@ const MongoDBStore = require('connect-mongodb-session')(session);
 const csrf = require('csurf');
 const flash = require('connect-flash');
 
-const MONGODB_URI = process.env.MONGO_URI;
+// const MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${
+//   process.env.MONGO_PASSWORD
+// }@rolgamesandstone.tqgnl5u.mongodb.net/bakery-app?retryWrites=true&w=majority&appName=RolgameSandstone`;
+
+const MONGODB_URI = process.env.MONGO_URI
+
 
 const app = express();
 const store = new MongoDBStore({
