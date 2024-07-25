@@ -12,10 +12,10 @@
         <% } %>
         <form class="login-form" action="/login" method="POST">
             <div class="form-control">
-                <label for="email">E-Mail</label>
+                <label for="email">E-Mail / Nombre de usuario</label>
                 <input 
                     class="<%= validationErrors.find(e => e.param === 'email') ? 'invalid' : '' %>"
-                    type="email" 
+                    type="text" 
                     name="email" 
                     id="email" 
                     value="<%= oldInput.email %>">

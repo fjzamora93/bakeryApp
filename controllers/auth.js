@@ -46,7 +46,7 @@ exports.getSignup = (req, res, next) => {
   };
 
   exports.postLogin = (req, res, next) => {
-    const email = req.body.email;
+    const email = req.body.email.toLowerCase();
     const password = req.body.password;
   
     const errors = validationResult(req);
@@ -62,13 +62,13 @@ exports.getSignup = (req, res, next) => {
         validationErrors: errors.array()
       });
     }
-    User.findOne({ email: email })
+    User.findOne({ $or: [{ email: email }, { name: email }] })
     .then(user => {
       if (!user) {
         return res.status(422).render('auth/login', {
           path: '/login',
           pageTitle: 'Login',
-          errorMessage: 'Invalid email or password.',
+          errorMessage: 'Nombre de usuario, email o contraseñas incorrectas.',
           oldInput: {
             email: email,
             password: password
@@ -109,6 +109,7 @@ exports.getSignup = (req, res, next) => {
 exports.postSignup = (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
+    const name = req.body.name;
   
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -119,6 +120,7 @@ exports.postSignup = (req, res, next) => {
         errorMessage: errors.array()[0].msg,
         oldInput: {
           email: email,
+          name : name,
           password: password,
           confirmPassword: req.body.confirmPassword
         },
@@ -131,6 +133,7 @@ exports.postSignup = (req, res, next) => {
       .then(hashedPassword => {
         const user = new User({
           email: email,
+          name : name,
           password: hashedPassword,
           cart: { items: [] }
         });
@@ -152,6 +155,12 @@ exports.postLogout = (req, res, next) => {
 };
 
 
+
+
+
+
+//TODO: Implementación de recuperación de cuentas
+
 exports.getReset = (req, res, next) => {
   let message = req.flash('error');
   if (message.length > 0) {
@@ -165,7 +174,6 @@ exports.getReset = (req, res, next) => {
     errorMessage: message
   });
 };
-
 
 
 exports.postReset = (req, res, next) => {

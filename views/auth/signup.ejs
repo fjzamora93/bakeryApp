@@ -11,6 +11,8 @@
             <div class="user-message user-message--error"><%= errorMessage %></div>
         <% } %>
         <form class="login-form" action="/signup" method="POST" novalidate>
+
+        
             <div class="form-control">
                 <label for="email">E-Mail</label>
                 <input 
@@ -20,6 +22,18 @@
                     id="email" 
                     value="<%= oldInput.email %>">
             </div>
+
+            <div class="form-control">
+                <label for="name">Nombre de usuario</label>
+                <input required
+                    class="<%= validationErrors.find(e => e.param === 'name') ? 'invalid' : '' %>"
+                    type="text" 
+                    name="name" 
+                    id="name" 
+                    value="<%= oldInput.name %>">
+            </div>
+
+
             <div class="form-control">
                 <label for="password">Password</label>
                 <input 

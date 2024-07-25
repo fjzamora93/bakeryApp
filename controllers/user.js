@@ -6,7 +6,9 @@ const ITEMS_PER_PAGE = 5;
 exports.getIndex = (req, res, next) => {
     const page = +req.query.page || 1;
     let totalItems;
-  
+    usuario = req.user || null;
+    console.log("USUARIO", usuario);
+    
     RecetaMdb.find()
       .countDocuments()
       .then(numProducts => {
@@ -17,15 +19,16 @@ exports.getIndex = (req, res, next) => {
       })
       .then(products => {
         res.render('index', {
-          recetas: products,
-          pageTitle: 'Shop',
-          path: '/',
-          currentPage: page,
-          hasNextPage: ITEMS_PER_PAGE * page < totalItems,
-          hasPreviousPage: page > 1,
-          nextPage: page + 1,
-          previousPage: page - 1,
-          lastPage: Math.ceil(totalItems / ITEMS_PER_PAGE)
+            usuario: usuario,
+            recetas: products,
+            pageTitle: 'Shop',
+            path: '/',
+            currentPage: page,
+            hasNextPage: ITEMS_PER_PAGE * page < totalItems,
+            hasPreviousPage: page > 1,
+            nextPage: page + 1,
+            previousPage: page - 1,
+            lastPage: Math.ceil(totalItems / ITEMS_PER_PAGE)
         });
       })
       .catch(err => {

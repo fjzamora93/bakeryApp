@@ -1,13 +1,9 @@
 <%- include('includes/navigation.ejs') %>
 <link rel="stylesheet" href="/style/index.css">
+
 <body>
 
-    
-    <% if (!isAuthenticated) { %> <!--- Recuerda que esto lo creamos como una variable local en app.js res.locals-->
-        <div style="background-color: red; margin:auto"> NO REGISTRADO </div>
-    <% } else { %>
-        <div style="background-color: green; margin:auto"> REGISTRADO </div>
-    <% } %>
+
 
 
     <div class="container" id="main">

@@ -68,7 +68,8 @@ const authRoutes = require('./routes/auth');
 
 
 //Middleware para parsear el body de las peticiones
-app.use(bodyParser.urlencoded({ extended:true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 
 //! ISAUTHENTICATED DEBE IR ANTES DE QUE ENTRE EN JUEGO MULTER PARA EVITAR ERRORES

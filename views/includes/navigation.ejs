@@ -4,45 +4,51 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recetas de Repostería</title>
+    <link rel="stylesheet" href="/style/navigation.css">
     <link rel="stylesheet" href="/style/main.css">
+    <link rel="stylesheet" href="/style/auth.css">
+    
+
+ 
 
     <style>
         
     </style>
 </head>
 
-<nav>
+
     <header>
         <h1>Recetas</h1>
     </header>
 
-    <ul>
-        <li><a href="/">Inicio</a></li>
-        <!--- Esta variable está definida en App.js y vinculada al middleware de login-->
-        <% if (isAuthenticated) { %>
-            <li><a href="/admin/add-recipe">Añadir receta</a></li>
+    <nav>
+        <% if (!isAuthenticated) { %>
+            <div class="auth-message not-registered">
+                NO REGISTRADO
+            </div>
+        <% } else { %>
+            <div class="auth-message registered">
+                Hola, <%= usuario.name.charAt(0).toUpperCase() + usuario.name.slice(1) %>
+            </div>
         <% } %>
 
-        <li><a href="/bookmark">Recetas archivadas</a></li>
-        <li><a href="#">Contacto</a></li>
-    
- 
-        <li class="main-header__item">
-            <a href="/login">Login</a>
-        </li>
-        <li class="main-header__item">
-            <a href="/signup">Signup</a>
-        </li>
-
-        <li class="main-header__item">
-            <form action="/logout" method="post">
-                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                <button type="submit">Logout</button>
-            </form>
-        </li>
- 
-    </ul>
-
-
-
-</nav>
+        <ul>
+            <li><a href="/">Inicio</a></li>
+            <% if (isAuthenticated) { %>
+                <li><a href="/admin/add-recipe">Añadir receta</a></li>
+            <% } %>
+            <li><a href="/bookmark">Recetas archivadas</a></li>
+            <li><a href="#">Contacto</a></li>
+            <% if (!isAuthenticated) { %>
+                <li class="main-header__item"><a href="/login">Login</a></li>
+                <li class="main-header__item"><a href="/signup">Signup</a></li>
+            <% } else { %>
+                <li class="main-header__item">
+                    <form action="/logout" method="post">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        <button type="submit">Logout</button>
+                    </form>
+                </li>
+            <% } %>
+        </ul>
+    </nav>
