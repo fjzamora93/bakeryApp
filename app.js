@@ -5,11 +5,12 @@ const pdfRoutes = require('./routes/pdf');
 const multer = require('multer');
 const path = require('path');
 const bodyParser = require('body-parser');
-
+const imgur = require('imgur');
+const express = require('express');
 require('dotenv').config();
 
 
-const express = require('express');
+
 
 //MANEJO DE SESIONES (express-session + MongoDBsTORE + csrf + flash)
 const session = require('express-session');

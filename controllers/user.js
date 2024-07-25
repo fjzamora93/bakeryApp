@@ -1,6 +1,6 @@
 const RecetaMdb = require('../models/recipeMdb'); 
 
-const ITEMS_PER_PAGE = 2;
+const ITEMS_PER_PAGE = 5;
 
 
 exports.getIndex = (req, res, next) => {
@@ -43,7 +43,7 @@ exports.getRecipeDetails = (req, res, next) => {
     const recetaId = req.params.recetaId; //req.params: Captura los parámetros de ruta de la URL... vamos el :recetaId de la ruta que le he metido.
     RecetaMdb.findById(recetaId)
         .then(recipe => {
-            console.log("CASTING", recetaId);
+            console.log("CASTING", recipe);
             res.render('recipe-details',{
                 receta : recipe
             })

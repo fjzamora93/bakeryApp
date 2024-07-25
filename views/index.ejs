@@ -14,7 +14,7 @@
         <% for (let receta of recetas) { %>
             <div class="recipe-summary">
                 <a href="/recipe-details/<%= receta._id %>">
-                    <img src="/<%= receta.image %>" alt="Imagen de <%= receta.nombre %>">
+                    <img src="<%= receta.image %>" alt="<%= receta.image %>">
                 </a>
                 <h2>
                     <a href="/recipe-details/<%= receta._id %>">

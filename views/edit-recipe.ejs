@@ -37,6 +37,8 @@
                     <input type="text" name="ingredientes[]" value="<%= ingr %>" >
                     <button type="button" onclick="removeClick(this)" class="button-delete" id="ingr-button">-</button>
                 <% } %>
+            <% } else { %>
+                <input type="text" name="ingredientes[]" value="" placeholder="Introduce un ingrediente">
             <% } %>
             </div>
 
@@ -69,14 +71,17 @@
                     <input type="text" name="instrucciones[]" value="<%= instr %>" >
                     <button type="button" onclick="removeClick(this)" class="button-delete" id="ingr-button">-</button>
                 <% } %>
+            <% } else { %>
+                <input type="text" name="instrucciones[]" value="" placeholder="Introduce el primer paso">
             <% } %>
             </div>
 
-            <label for="image">Image</label>
+            <label for="image">Image</label> 
             <input 
                 type="file" 
                 name="image" 
                 id="image" >
+            <br><br><br>
 
             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
             <% if (editing) { %>
@@ -94,5 +99,7 @@
         </form>
     <% } %>
 
-    <%- include('includes/footer') %>
+   
 </body>
+
+<%- include('includes/footer') %>
