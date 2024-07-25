@@ -6,7 +6,7 @@ const { uploadImageToImgur } = require('../util/file');
 const axios = require('axios');
 const fs = require('fs');
 const path = require('path');  // Asegúrate de importar path
-
+const User = require('../models/user');
 
 
 
@@ -47,6 +47,9 @@ exports.postAddRecipe = async (req, res, next) => {
 
     try {
         const imgurLink = await uploadImageToImgur(image.path);
+        
+
+
         console.log('Imagen subida a Imgur:', imgurLink);
 
         const recipeMg = new RecetaMdb({
@@ -54,9 +57,17 @@ exports.postAddRecipe = async (req, res, next) => {
             tiempo, dificultad, categoria, image: imgurLink, creator
         });
 
-        await recipeMg.save();
-        console.log('Receta guardada con éxito:', recipeMg);
+        const savedRecipe = await recipeMg.save();
+        console.log('Receta guardada con éxito:', savedRecipe);
+
+        // Añadir la referencia de la receta al array de recetas del usuario
+        const user = await User.findById(creator);
+        user.recetas.push(savedRecipe._id);
+        await user.save();
+        console.log('Receta añadida al usuario:', user);
+
         res.redirect('/');
+
     } catch (error) {
         console.error('Error al cargar la imagen a Imgur:', error);
         renderError('Error al cargar la imagen a Imgur');
@@ -130,8 +141,15 @@ exports.postEditRecipe = async (req, res, next) => {
             recipe.image = imgurLink;
         }
 
-        await recipe.save();
+        const savedRecipe = await recipe.save();
+        console.log('Receta guardada con éxito:', savedRecipe);
+        const user = await User.findById(creator);
+        user.recipes.push(savedRecipe._id);
+        await user.save();
+        console.log('Receta añadida al usuario:', user);
+
         res.redirect('/');
+
     } catch (err) {
         console.error('Error en postEditRecipe:', err);
         res.status(500).render('edit-recipe', {
