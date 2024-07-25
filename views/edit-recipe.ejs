@@ -83,6 +83,8 @@
                 id="image" >
             <br><br><br>
 
+            <input type="hidden" name="creator" value="<%= usuario._id %>">
+
             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
             <% if (editing) { %>
                 <input type="submit" value="Actualizar receta">
