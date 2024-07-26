@@ -74,19 +74,30 @@
             <input type="file" name="image" id="image"><br><br><br>
 
             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-
+            
             <% if (editing) { %>
                 <input type="submit" value="Actualizar receta">
-                <form action="/admin/delete/<%= receta._id %>" method="post" style="display:inline">
-                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                    <input type="submit" value="Borrar receta" class="button-delete">
-                </form>
+                
             <% } else { %>
                 <input type="submit" value="Añadir Receta">
             <% } %>
-
         </form>
+
+        <% if (editing) { %>
+            <form action="/admin/delete/<%= receta._id %>" method="post" style="display:inline">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <input type="submit" value="Borrar receta" class="button-delete">
+            </form>
+        <% } %>
+    
+    
     </div>
+            
+
+       
+
+        
+        
 
     <%- include('includes/footer') %>
 
