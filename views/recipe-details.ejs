@@ -11,7 +11,7 @@
             <h2><%= receta.nombre %></h2>
             
             <div class="recipe-image">
-                <img src="<%= receta.image %>" alt="alt de la imagen?">
+                <img src="<%= receta.image %>" alt="<%= receta.image %>">
             </div>
 
             <p>
@@ -44,6 +44,7 @@
             </p>
 
             <a href="/admin/edit-recipe/<%= receta._id %>" class="bakery-button">Modificar receta</a>
+            <a href="/generate-pdf/<%= receta._id %>" class="bakery-button">Convertir a PDF</a>
            
         </div>   
     </div>

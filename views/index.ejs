@@ -1,20 +1,16 @@
 <%- include('includes/navigation.ejs') %>
 <link rel="stylesheet" href="/style/index.css">
+
 <body>
 
-    
-    <% if (!isAuthenticated) { %> <!--- Recuerda que esto lo creamos como una variable local en app.js res.locals-->
-        <div style="background-color: red; margin:auto"> NO REGISTRADO </div>
-    <% } else { %>
-        <div style="background-color: green; margin:auto"> REGISTRADO </div>
-    <% } %>
+
 
 
     <div class="container" id="main">
         <% for (let receta of recetas) { %>
             <div class="recipe-summary">
                 <a href="/recipe-details/<%= receta._id %>">
-                    <img src="<%= receta.image %>" alt="Imagen de <%= receta.nombre %>">
+                    <img src="<%= receta.image %>" alt="<%= receta.image %>">
                 </a>
                 <h2>
                     <a href="/recipe-details/<%= receta._id %>">
@@ -34,6 +30,8 @@
             </div>
         <% } %>
     </div>
+
+    <%- include('includes/pagination.ejs', {currentPage: currentPage, nextPage: nextPage, previousPage: previousPage, lastPage: lastPage, hasNextPage: hasNextPage, hasPreviousPage: hasPreviousPage}) %>
 
 <%- include('includes/footer') %>
 </body>

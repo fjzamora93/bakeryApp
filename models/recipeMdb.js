@@ -26,9 +26,16 @@ const recipeSchema = mongoose.Schema({
         type:String,
         required: true,
     },
+    categoria:{
+        type:String,
+    },
     image:{
         type: String,
-        required:true,
+    },
+    creator:{
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
     }
 });
 

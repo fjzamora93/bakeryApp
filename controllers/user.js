@@ -1,23 +1,52 @@
 const RecetaMdb = require('../models/recipeMdb'); 
 
-exports.getIndex = (req, res, next) =>{
-    const user = req.user;
+const ITEMS_PER_PAGE = 5;
+
+
+exports.getIndex = (req, res, next) => {
+    const page = +req.query.page || 1;
+    let totalItems;
+    usuario = req.user || null;
+    console.log("USUARIO", usuario);
+    
     RecetaMdb.find()
-        .then(recetas => {
-            res.render('index', {
-                recetas:recetas,
-                user: user
-            })
-        })
-        .catch(err => console.log(err))
-}
+      .countDocuments()
+      .then(numProducts => {
+        totalItems = numProducts;
+        return RecetaMdb.find()
+          .skip((page - 1) * ITEMS_PER_PAGE)
+          .limit(ITEMS_PER_PAGE);
+      })
+      .then(products => {
+        res.render('index', {
+            usuario: usuario,
+            recetas: products,
+            pageTitle: 'Shop',
+            path: '/',
+            currentPage: page,
+            hasNextPage: ITEMS_PER_PAGE * page < totalItems,
+            hasPreviousPage: page > 1,
+            nextPage: page + 1,
+            previousPage: page - 1,
+            lastPage: Math.ceil(totalItems / ITEMS_PER_PAGE)
+        });
+      })
+      .catch(err => {
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(error);
+      });
+  };
+
+
+
 
 
 exports.getRecipeDetails = (req, res, next) => {
     const recetaId = req.params.recetaId; //req.params: Captura los parámetros de ruta de la URL... vamos el :recetaId de la ruta que le he metido.
     RecetaMdb.findById(recetaId)
         .then(recipe => {
-            console.log("CASTING", recetaId);
+            console.log("CASTING", recipe);
             res.render('recipe-details',{
                 receta : recipe
             })

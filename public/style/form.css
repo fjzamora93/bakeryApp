@@ -50,6 +50,11 @@ input[type="submit"]:hover {
     background-color: #1fc62a;
 }
 
+.invalid {
+    border: 1px solid red;
+    background-color: #fdd;
+  }
+
 
 select, option {
     padding: 10px;
