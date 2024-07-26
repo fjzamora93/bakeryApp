@@ -44,7 +44,9 @@ input[type="submit"] {
     font-size: 16px;
     cursor: pointer;
     border-radius: 5px;
-    width: 100%;
+    width: 150px;
+    margin: 20px;
+    display: inline;
 }
 input[type="submit"]:hover {
     background-color: #1fc62a;

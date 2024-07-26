@@ -7,11 +7,11 @@ const axios = require('axios');
 const fs = require('fs');
 const path = require('path');  // Asegúrate de importar path
 const User = require('../models/user');
-
+const { ObjectId } = require('mongodb');
+const mongoose = require('mongoose');
 
 
 exports.getAddRecipe = async (req, res, next) =>{
-    console.log(req.session.user)
     res.render('edit-recipe', {
         usuario: req.session.user,
         editing : false,
@@ -22,14 +22,17 @@ exports.getAddRecipe = async (req, res, next) =>{
 }
 
 exports.postAddRecipe = async (req, res, next) => {
-    const { nombre, descripcion, ingredientes, instrucciones, tiempo, dificultad, categoria, creator } = req.body;
+    const { nombre, descripcion, ingredientes, instrucciones, tiempo, dificultad, categoria } = req.body;
     const image = req.file;
+
+    const creatorId = req.session.user._id;
+    console.log('creatorId:', creatorId, typeof creatorId);
 
     const renderError = (message, validationErrors = []) => {
         res.status(422).render('edit-recipe', {
             editing: false,
             hasError: true,
-            receta: { nombre, descripcion, ingredientes, instrucciones, tiempo, dificultad, categoria, creator },
+            receta: { nombre, descripcion, ingredientes, instrucciones, tiempo, dificultad, categoria, creatorId },
             errorMessage: message,
             validationErrors
         });
@@ -47,25 +50,23 @@ exports.postAddRecipe = async (req, res, next) => {
 
     try {
         const imgurLink = await uploadImageToImgur(image.path);
-        
-
-
+  
         console.log('Imagen subida a Imgur:', imgurLink);
 
         const recipeMg = new RecetaMdb({
-            nombre, descripcion, ingredientes, instrucciones,
-            tiempo, dificultad, categoria, image: imgurLink, creator
+            nombre, descripcion, ingredientes, instrucciones, tiempo, dificultad, categoria, 
+            image: imgurLink, 
+            creator:creatorId
         });
 
         const savedRecipe = await recipeMg.save();
         console.log('Receta guardada con éxito:', savedRecipe);
 
         // Añadir la referencia de la receta al array de recetas del usuario
-        const user = await User.findById(creator);
-        user.recetas.push(savedRecipe._id);
+        const user = await User.findById(creatorId);
+        console.log('ERROR DE USUARIO:', user)
+        user.recipes.push(savedRecipe._id);
         await user.save();
-        console.log('Receta añadida al usuario:', user);
-
         res.redirect('/');
 
     } catch (error) {
@@ -103,8 +104,9 @@ exports.postDeleteRecipe = (req,res,next) => {
 }
 
 exports.postEditRecipe = async (req, res, next) => {
-    const { nombre, descripcion, ingredientes, instrucciones, tiempo, dificultad, categoria, creator, idReceta } = req.body;
+    const { nombre, descripcion, ingredientes, instrucciones, tiempo, dificultad, categoria, idReceta } = req.body;
     const id = idReceta.trim();
+    const creator = req.session.user._id;
     const image = req.file;
 
     const errors = validationResult(req);
@@ -140,14 +142,16 @@ exports.postEditRecipe = async (req, res, next) => {
             }
             recipe.image = imgurLink;
         }
-
         const savedRecipe = await recipe.save();
-        console.log('Receta guardada con éxito:', savedRecipe);
-        const user = await User.findById(creator);
-        user.recipes.push(savedRecipe._id);
-        await user.save();
-        console.log('Receta añadida al usuario:', user);
 
+
+        const user = await User.findById(creator);
+        if(! user.recipes.includes(savedRecipe._id)){
+            user.recipes.push(savedRecipe._id);
+            await user.save();
+            console.log('Receta añadida al usuario:', user);
+        }
+        
         res.redirect('/');
 
     } catch (err) {

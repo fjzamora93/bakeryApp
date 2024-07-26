@@ -7,13 +7,7 @@
     <link rel="stylesheet" href="/style/navigation.css">
     <link rel="stylesheet" href="/style/main.css">
     <link rel="stylesheet" href="/style/auth.css">
-    
-
- 
-
-    <style>
-        
-    </style>
+    <link rel="icon" href="/images/favicon.png" type="image/png">
 </head>
 
 
@@ -28,33 +22,10 @@
             </div>
         <% } else { %>
             <div class="auth-message registered">
-                Hola, <%= usuario.name.charAt(0).toUpperCase() + usuario.name.slice(1) %>
+                Hola, <%= user.name.charAt(0).toUpperCase() + user.name.slice(1) %>
             </div>
         <% } %>
 
-<<<<<<< HEAD
-    <ul class="main-header__item-list">
-        
-            <li class="main-header__item">
-                <a href="/login">Login</a>
-            </li>
-            <li class="main-header__item">
-                <a href="/signup">Signup</a>
-            </li>
-   
-            <li class="main-header__item">
-                <form action="/logout" method="post">
-                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                    <button type="submit">Logout</button>
-                </form>
-            </li>
- 
-    </ul>
-
-
-
-</nav>
-=======
         <ul>
             <li><a href="/">Inicio</a></li>
             <% if (isAuthenticated) { %>
@@ -75,4 +46,3 @@
             <% } %>
         </ul>
     </nav>
->>>>>>> 2448dbd3db4f8145a467fb7099b75ad7a34b39b6

@@ -1,5 +1,6 @@
 const RecetaMdb = require('../models/recipeMdb'); 
-
+const User = require('../models/user');
+const { ObjectId } = require('mongodb');
 const ITEMS_PER_PAGE = 5;
 
 
@@ -42,17 +43,44 @@ exports.getIndex = (req, res, next) => {
 
 
 
-exports.getRecipeDetails = (req, res, next) => {
-    const recetaId = req.params.recetaId; //req.params: Captura los parámetros de ruta de la URL... vamos el :recetaId de la ruta que le he metido.
-    RecetaMdb.findById(recetaId)
-        .then(recipe => {
-            console.log("CASTING", recipe);
-            res.render('recipe-details',{
-                receta : recipe
-            })
+exports.getRecipeDetails = async (req, res, next) => {
+
+    const recetaId = req.params.recetaId;
+    const receta = await RecetaMdb.findById(recetaId);
+    console.log("receta CREATOR", receta.creator);
+
+    //! POTENCIAL ERROR EN CASO DE QUE NO HAYA CREATOR
+    let creator = await User.findById(receta.creator);
+    if (!creator) {
+        // Si no se encuentra el creator, establecer un ID predeterminado
+        receta.creator = new ObjectId("66a2745270aea4d3ed7fa2d5");
+        await receta.save();
+        creator = await User.findById(receta.creator);
+      }
+
+    //Verificamos si el que visita esta vista es el autor
+    let isCreator = false; 
+    if (req.user){
+        isCreator = req.user._id.toString() === receta.creator.toString() ? true : false;
+    } 
+
+    console.log("ISCREATOR", isCreator);
+    console.log("CREATOR", creator);
+
+    try {
+        console.log("CASTING", receta);
+        res.render('recipe-details',{
+            receta : receta,
+            isCreator : isCreator,
+            creator: creator
         })
-        .catch(err => console.log(err))
-}
+    } catch (error) {   
+        console.log(err);
+        res.status(500).render('500', {
+
+    });
+    }
+};
 
 
 exports.getBookmark = (req, res, next) => {

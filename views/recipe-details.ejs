@@ -1,14 +1,18 @@
 <link rel="stylesheet" href="/style/recipe-details.css">
 <body>
 
-    <body>
-
+   
     <%- include('includes/navigation.ejs') %>
 
     <div class="container">
         
         <div class="recipe-details">
             <h2><%= receta.nombre %></h2>
+
+            <h4>
+                Autor@ de la receta: 
+                <%= creator.name.charAt(0).toUpperCase() + creator.name.slice(1) %>
+            </h4>
             
             <div class="recipe-image">
                 <img src="<%= receta.image %>" alt="<%= receta.image %>">
@@ -20,14 +24,14 @@
 
 
             <h3>Ingredientes</h3>
-            <ul>
+            <ul class="listado-details">
                 <% for (let ingrediente of receta.ingredientes) { %>
                     <li> <%= ingrediente %> </li>
                 <% } %>
             </ul>
 
             <h3>Instrucciones</h3>
-            <ol>
+            <ol class="listado-details">
                 <% for (let instruccion of receta.instrucciones) { %>
                     <li> <%= instruccion %> </li>
                 <% } %>
@@ -43,8 +47,10 @@
                 <%= receta.dificultad %>
             </p>
 
-            <a href="/admin/edit-recipe/<%= receta._id %>" class="bakery-button">Modificar receta</a>
-            <a href="/generate-pdf/<%= receta._id %>" class="bakery-button">Convertir a PDF</a>
+            <% if(isCreator) { %>
+                <a href="/admin/edit-recipe/<%= receta._id %>" class="bakery-button">Modificar receta</a>
+                <a href="/generate-pdf/<%= receta._id %>" class="bakery-button">Convertir a PDF</a>
+            <% } %>
            
         </div>   
     </div>

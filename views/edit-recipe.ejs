@@ -1,49 +1,42 @@
 <link rel="stylesheet" href="/style/form.css">
 <script src="/javascript/scripts.js"></script>
-<%- include('includes/navigation.ejs') %>
 
 <body>
+    <%- include('includes/navigation.ejs') %>
+
     <div class="container">
         <% if (errorMessage) { %>
             <div class="user-message user-message--error"><%= errorMessage %></div>
         <% } %>
 
         <h2>Añadir Nueva Receta</h2>
-        <form action="/admin/<% if (editing){ %>edit<% } else { %>add<% }%>"" method="post" enctype="multipart/form-data">
+        <form action="/admin/<% if (editing) { %>edit<% } else { %>add<% } %>" method="post" enctype="multipart/form-data">
 
-            <!--- Ocultamos la id para después usarla-->
+            <!-- Ocultamos la id para después usarla -->
             <label for="idReceta" hidden>Id:</label>
-            <input type="hidden" id="idReceta" name="idReceta" value="<% if (editing ) { %> <%= receta._id %><% } %> ">
-
+            <input type="hidden" id="idReceta" name="idReceta" value="<% if (editing) { %><%= receta._id %><% } %>">
 
             <label for="nombre">Título de la Receta:</label>
-            <input type="text" 
-                    id="nombre" name="nombre"
-                    value="<% if (editing || hasError) { %><%= receta.nombre %> <% } %>" 
-                    class="<%= validationErrors.find(e => e.path === 'nombre') ? 'invalid' : '' %>"
-                    required >
-
+            <input type="text" id="nombre" name="nombre" value="<% if (editing || hasError) { %><%= receta.nombre %><% } %>" class="<%= validationErrors.find(e => e.path === 'nombre') ? 'invalid' : '' %>" required>
 
             <label for="descripcion">Descripción:</label>
-            <textarea id="descripcion" name="descripcion" rows="5"  required><% if (editing || hasError) { %><%= receta.descripcion.trim() %><% } %></textarea>
+            <textarea id="descripcion" name="descripcion" rows="5" required><% if (editing || hasError) { %><%= receta.descripcion.trim() %><% } %></textarea>
 
-
-            <label for="ingrediente">Ingredientes:</label> 
-            
+            <label for="ingrediente">Ingredientes:</label>
             <div id="bloque-lista">
                 <button type="button" onclick="addClick(this, 'ingredientes')" class="button-add" id="ingr-button">+</button>
-            <% if (editing || hasError) { %>
-                <% for (let ingr of receta.ingredientes) { %>
-                    <input type="text" name="ingredientes[]" value="<%= ingr %>" >
-                    <button type="button" onclick="removeClick(this)" class="button-delete" id="ingr-button">-</button>
+                <% if (editing || hasError) { %>
+                    <% for (let ingr of receta.ingredientes) { %>
+                        <input type="text" name="ingredientes[]" value="<%= ingr %>">
+                        <button type="button" onclick="removeClick(this)" class="button-delete" id="ingr-button">-</button>
+                    <% } %>
+                <% } else { %>
+                    <input type="text" name="ingredientes[]" value="" placeholder="Introduce un ingrediente">
                 <% } %>
-            <% } else { %>
-                <input type="text" name="ingredientes[]" value="" placeholder="Introduce un ingrediente">
-            <% } %>
             </div>
 
-            <label for="tiempo">Tiempo de preparación: </label>
-            <input type="text" name="tiempo" value="<% if (editing || hasError) { %><%= receta.tiempo %> <% } %>" required>
+            <label for="tiempo">Tiempo de preparación:</label>
+            <input type="text" name="tiempo" value="<% if (editing || hasError) { %><%= receta.tiempo %><% } %>" required>
 
             <label for="dificultad">Dificultad:</label>
             <select name="dificultad" id="dificultad">
@@ -53,7 +46,7 @@
                 <option value="4">Requiere precisión en cantidades y tiempos, no admite muchas variaciones</option>
             </select> <br><br>
 
-            <label for="categoria">Categoria:</label>
+            <label for="categoria">Categoría:</label>
             <select name="categoria" id="categoria">
                 <option value="reposteria">Repostería</option>
                 <option value="verano">Recetas de verano</option>
@@ -62,46 +55,40 @@
             </select> <br><br>
 
             <div class="bloque-lista">
-                <label for="instrucciones">Instrucciones:</label> 
-                <p> Aquí puedes detallar cómo es la elaboración paso a paso. </p>
+                <label for="instrucciones">Instrucciones:</label>
+                <p>Aquí puedes detallar cómo es la elaboración paso a paso.</p>
                 <div id="bloque-lista">
                     <button type="button" onclick="addClick(this, 'instrucciones')" class="button-add" id="ingr-button">+</button>
-            <% if (editing || hasError) { %>
-                <% for (let instr of receta.instrucciones) { %>
-                    <input type="text" name="instrucciones[]" value="<%= instr %>" >
-                    <button type="button" onclick="removeClick(this)" class="button-delete" id="ingr-button">-</button>
-                <% } %>
-            <% } else { %>
-                <input type="text" name="instrucciones[]" value="" placeholder="Introduce el primer paso">
-            <% } %>
+                    <% if (editing || hasError) { %>
+                        <% for (let instr of receta.instrucciones) { %>
+                            <input type="text" name="instrucciones[]" value="<%= instr %>">
+                            <button type="button" onclick="removeClick(this)" class="button-delete" id="ingr-button">-</button>
+                        <% } %>
+                    <% } else { %>
+                        <input type="text" name="instrucciones[]" value="" placeholder="Introduce el primer paso">
+                    <% } %>
+                </div>
             </div>
 
-            <label for="image">Image</label> 
-            <input 
-                type="file" 
-                name="image" 
-                id="image" >
-            <br><br><br>
-
-            <input type="hidden" name="creator" value="<%= usuario._id %>">
+            <label for="image">Imagen:</label>
+            <input type="file" name="image" id="image"><br><br><br>
 
             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
             <% if (editing) { %>
                 <input type="submit" value="Actualizar receta">
-            <% }else{ %>
+                <form action="/admin/delete/<%= receta._id %>" method="post" style="display:inline">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <input type="submit" value="Borrar receta" class="button-delete">
+                </form>
+            <% } else { %>
                 <input type="submit" value="Añadir Receta">
             <% } %>
+
         </form>
     </div>
-    
-    <% if (editing) { %>
-        <form action="/admin/delete/<%= receta._id %>" method="post">
-            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-            <input type="submit" value="Borrar receta" class="button-delete">
-        </form>
-    <% } %>
 
-   
+    <%- include('includes/footer') %>
+
 </body>
-
-<%- include('includes/footer') %>
+</html>

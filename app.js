@@ -107,32 +107,31 @@ app.use(
   app.use(flash());
 
 
-//PASO 2: Devolver al usuario AUTENTIFICADO EN NUESTRO REQ (si no lo está, se aplica el NEXT)
-app.use((req, res, next) => {
-    // throw new Error('Sync Dummy');
+// Paso 2: Devolver al usuario autenticado en nuestro req (si no lo está, se aplica el next)
+app.use(async (req, res, next) => {
     if (!req.session.user) {
       return next();
     }
-    User.findById(req.session.user._id)
-      .then(user => {
-        if (!user) {
-          return next();
-        }
-        req.user = user;
-        next();
-      })
-      .catch(err => {
-        next(new Error(err));
-      });
+    
+    try {
+      const user = await User.findById(req.session.user._id);
+      if (!user) {
+        return next();
+      }
+      req.user = user;
+      next();
+    } catch (err) {
+      next(new Error(err));
+    }
   });
-
-//PASO 3: Establecemos variables LOCALES que podrán ser accesibles desde las VISTAS
-app.use((req, res, next) => {
-    res.locals.isAuthenticated = req.session.isLoggedIn; //Ahora esta variable es accesible desde la vista (en el controller auth>login -> req.session.isLoogedIn se pondrá en TRUE)
-    //Por las misma razón en el controller auth>logout, se va aplica destroy() sobre cualquier dato de la sesión.
+  
+  // Paso 3: Establecemos variables locales que podrán ser accesibles desde las vistas
+  app.use((req, res, next) => {
+    res.locals.isAuthenticated = req.session.isLoggedIn;
+    res.locals.user = req.user; // Asegúrate de que solo se incluya la información necesaria y no sensible
     res.locals.csrfToken = req.csrfToken();
     next();
-});
+  });
 
 //RUTAS
 app.use('/', recipeRoutes);
