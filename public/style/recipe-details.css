@@ -1,32 +1,114 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+}
 
 .container {
+    max-width: 800px;
+    margin: 20px auto;
     padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.listado-details {
-    display: block;
+/* Recipe Details */
+.recipe-details h2 {
+    color: #f8b400;
+    margin-bottom: 10px;
+    text-align:center;
+    font-size:2em;
 }
 
+.recipe-details h4 {
+    color: #666;
+    margin-bottom: 20px;
+    text-align:center;
+}
 
 .recipe-image img {
     width: 100%;
-    max-width: 600px;
     height: auto;
     display: block;
-    margin: 0 auto;
+    margin: 20px auto;
 }
-.recipe-details {
-    max-width: 800px;
-    margin: 0 auto;
+
+.recipe-details p {
+    font-size: 16px;
+    color: #333;
+    line-height: 1.6;
+    margin-bottom: 20px;
 }
-.recipe-details h2 {
-    color: #f8b400;
+
+.recipe-details h3 {
+    color: #444;
+    margin-top: 30px;
+    margin-bottom: 10px;
 }
+
+/* List Styles */
+.listado-details {
+   
+    padding-left: 20px;
+    max-width: 600px;
+    display: block;
+}
+
+.listado-details li {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+/* Buttons */
+.bakery-button {
+    display: inline-block;
+    background-color: #f8b400;
+    color: #fff;
+    padding: 10px 20px;
+    margin: 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.bakery-button:hover {
+    background-color: #d19400;
+}
+
+/* Footer */
 footer {
     background-color: #333;
     color: white;
     text-align: center;
     padding: 10px 0;
     width: 100%;
+    position: fixed;
     bottom: 0;
+    left: 0;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+
+    .recipe-details h2 {
+        font-size: 24px;
+    }
+
+    .recipe-details p, .listado-details li {
+        font-size: 14px;
+    }
+
+    .bakery-button {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
 }
