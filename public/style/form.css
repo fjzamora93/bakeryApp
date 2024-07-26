@@ -1,12 +1,13 @@
-body div{
+body {
     font-family: Arial, sans-serif;
     margin: auto;
     padding: 0;
 }
 
-.button-delete{
+.button-delete {
     background-color: red;
 }
+
 .container {
     max-width: 600px;
     margin: 20px auto;
@@ -15,21 +16,27 @@ body div{
     border-radius: 5px;
     background-color: #f9f9f9;
 }
+
 h2 {
     text-align: center;
     color: #f8b400;
 }
+
 form {
     display: flex;
     flex-direction: column;
 }
+
 label {
     margin-top: 20px;
     font-weight: bold;
 }
-input[type="text"], input[type="url"], textarea {
+
+input[type="text"],
+input[type="url"],
+textarea {
     padding: 10px;
-    margin-bottom: 10px;
+    margin: 10px 0;
     border: 1px solid #ddd;
     border-radius: 5px;
     font-size: 16px;
@@ -45,9 +52,10 @@ input[type="submit"] {
     cursor: pointer;
     border-radius: 5px;
     width: 150px;
-    margin: 20px;
+    margin: 20px 0;
     display: inline;
 }
+
 input[type="submit"]:hover {
     background-color: #1fc62a;
 }
@@ -55,42 +63,38 @@ input[type="submit"]:hover {
 .invalid {
     border: 1px solid red;
     background-color: #fdd;
-  }
+}
 
-
-select, option {
+select,
+option {
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
     font-size: 16px;
     width: 100%;
-}
-
-select{
-    margin-bottom: 40px;
+    margin: 10px 0;
 }
 
 .form-control {
     margin: 1rem 0;
-  }
-  
-  .form-control label,
-  .form-control input,
-  .form-control textarea {
+}
+
+.form-control label,
+.form-control input,
+.form-control textarea {
     display: block;
     width: 100%;
-    margin-bottom: 0.25rem;
-  }
-  
-  .form-control input,
-  .form-control textarea {
+    margin-bottom: 0.5rem;
+}
+
+.form-control input,
+.form-control textarea {
     border: 1px solid #a1a1a1;
     font: inherit;
     border-radius: 2px;
-  }
-  
-  .form-control input:focus,
-  .form-control textarea:focus {
+}
+
+.form-control input:focus,
+.form-control textarea:focus {
     outline-color: #00695c;
-  }
-  
+}
