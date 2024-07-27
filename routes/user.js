@@ -13,5 +13,7 @@ router.get('/recipe-details/:recetaId', userController.getRecipeDetails);
 router.get('/bookmark', isAuth, userController.getBookmark);
 router.post('/add-bookmark', userController.postSaveBookmark);
 
+router.get('/search', userController.getSearch);
+
 
 module.exports = router;
