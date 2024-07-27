@@ -7,6 +7,8 @@ const { body } = require('express-validator');
 
 const router = express.Router();
 
+router.get('/profile', adminController.getProfile);
+
 router.get('/add-recipe', isAuth, adminController.getAddRecipe);
 router.get('/edit-recipe/:recetaId', adminController.getEditRecipe);
 

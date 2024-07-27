@@ -1,0 +1,35 @@
+
+
+<link rel="stylesheet" href="/style/index.css">
+<link rel="stylesheet" href="/style/profile.css">
+
+<body>
+    <%- include('../includes/navigation.ejs') %>
+    <div class="container">
+        <div class="profile-container">
+            <div class="profile-header">
+                <img src="profile-pic.jpg" alt="Profile Picture" class="profile-pic">
+                <h2>Username</h2>
+                <p class="user-email">user@example.com</p>
+                <a href="/edit-profile" class="bakery-button">Edit Profile</a>
+            </div>
+            <div class="profile-recipes">
+                <h3>My Recipes</h3>
+                <div class="recipe-summary">
+                    <img src="recipe1.jpg" alt="Recipe 1">
+                    <h2><a href="/recipe/1">Recipe Title 1</a></h2>
+                    <p>A short description of the recipe.</p>
+                </div>
+                <div class="recipe-summary">
+                    <img src="recipe2.jpg" alt="Recipe 2">
+                    <h2><a href="/recipe/2">Recipe Title 2</a></h2>
+                    <p>A short description of the recipe.</p>
+                </div>
+                <!-- Add more recipes as needed -->
+            </div>
+        </div>
+    </div>
+ 
+</body>
+
+<%- include('../includes/footer') %>

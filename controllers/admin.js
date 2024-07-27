@@ -11,6 +11,17 @@ const { ObjectId } = require('mongodb');
 const mongoose = require('mongoose');
 
 
+exports.getProfile = async (req, res, next) => {
+    try {
+        res.render('auth/profile', {
+
+        })
+    } catch(error) {
+        console.log(error)
+    }
+}
+
+
 exports.getAddRecipe = async (req, res, next) =>{
     res.render('edit-recipe', {
         usuario: req.session.user,

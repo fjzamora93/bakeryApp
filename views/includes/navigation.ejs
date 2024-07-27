@@ -21,9 +21,11 @@
                 NO REGISTRADO
             </div>
         <% } else { %>
-            <div class="auth-message registered">
-                Hola, <%= user.name.charAt(0).toUpperCase() + user.name.slice(1) %>
-            </div>
+            <a href="admin/profile">
+                <div class="auth-message registered">
+                    Hola, <%= user.name.charAt(0).toUpperCase() + user.name.slice(1) %>
+                </div>
+            </a>
         <% } %>
 
         <ul>
