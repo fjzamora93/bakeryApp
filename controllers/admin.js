@@ -13,11 +13,27 @@ const mongoose = require('mongoose');
 
 exports.getProfile = async (req, res, next) => {
     try {
-        res.render('auth/profile', {
+        const creator = await User.findById(req.params.idCreator).populate('recipes');
+        const recuentoRecetas = creator.recipes.length;
 
+        //Gracias a que hemos populado, no será necesario ahora buscar también las recetas y no es necesaria esta línea
+        // const recipes = await RecetaMdb.find({creator: usuario._id});
+        
+        let isOwner = false;
+        if (req.session.user) {
+            let isOwner = req.session.user._id.toString() === user._id.toString() ;
+        } 
+
+
+        res.render('auth/profile', {
+            creator:creator,
+            isOwner: isOwner,
+            recuentoRecetas: recuentoRecetas
         })
-    } catch(error) {
-        console.log(error)
+    } catch(err) {
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(error);
     }
 }
 
@@ -104,14 +120,26 @@ exports.getEditRecipe = (req, res, next) => {
     .catch(err => console.log(err))
 };
 
-exports.postDeleteRecipe = (req,res,next) => {
+exports.postDeleteRecipe = async (req, res, next) => {
     const recetaId = req.params.recetaId;
-    RecetaMdb.findByIdAndDelete(recetaId)
-        .then( result => {
-            console.log(result)
-            res.redirect('/')
-        })
-        .catch(err => console.log(err))
+    const user = req.session.user;
+
+    try {
+        // Delete the recipe
+        const result = await RecetaMdb.findByIdAndDelete(recetaId);
+        console.log(result);
+
+        // Remove the reference to the recipe from the user's recipes array
+        const userIndex = user.recipes.indexOf(recetaId);
+        if (userIndex > -1) {
+            user.recipes.splice(userIndex, 1);
+            await user.save();
+        }
+
+        res.redirect('/');
+    } catch (err) {
+        console.log(err);
+    }
 }
 
 exports.postEditRecipe = async (req, res, next) => {

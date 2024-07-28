@@ -9,10 +9,9 @@
         <div class="recipe-details">
             <h2><%= receta.nombre %></h2>
 
-            <h4>
-                Autor@ de la receta: 
-                <%= creator.name.charAt(0).toUpperCase() + creator.name.slice(1) %>
-            </h4>
+            <a href="/admin/profile/<%= creator._id %>">
+                <h4> Autor@ de la receta: <%= creator.name.charAt(0).toUpperCase() + creator.name.slice(1) %> </h4>
+            </a>
             
             <div class="recipe-image">
                 <img src="<%= receta.image %>" alt="<%= receta.image %>">

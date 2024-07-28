@@ -8,24 +8,51 @@
     <div class="container">
         <div class="profile-container">
             <div class="profile-header">
-                <img src="profile-pic.jpg" alt="Profile Picture" class="profile-pic">
-                <h2>Username</h2>
-                <p class="user-email">user@example.com</p>
-                <a href="/edit-profile" class="bakery-button">Edit Profile</a>
+                <img src="/images/favicon.png" alt="Profile Picture" class="profile-pic">
+                <h2><%= creator.name.charAt(0).toUpperCase() + creator.name.slice(1) %></h2>
+                <h4>Total de recetas: <%= recuentoRecetas %></h4>
+
+                <% if(isOwner) { %>
+                    <p class="creator-email"><%= creator.email %></p>
+                    <a href="/edit-profile" class="bakery-button">Editar perfil</a>
+                <% } %>
+
             </div>
             <div class="profile-recipes">
-                <h3>My Recipes</h3>
+                <h3>Mis recetas</h3>
                 <div class="recipe-summary">
-                    <img src="recipe1.jpg" alt="Recipe 1">
-                    <h2><a href="/recipe/1">Recipe Title 1</a></h2>
-                    <p>A short description of the recipe.</p>
+
+                    <% for (let receta of creator.recipes) { %>
+                        <div class="recipe-summary">
+                            <a href="/recipe-details/<%= receta._id %>">
+                                <img src="<%= receta.image %>" alt="<%= receta.image %>">
+                            </a>
+                            <h2>
+                                <a href="/recipe-details/<%= receta._id %>">
+                                    <%= receta.nombre %>
+                                </a>
+                            </h2>
+                            <p><b>Descripción:</b> <%= receta.descripcion %></p>
+                            <p><b>Tiempo:</b> <%= receta.tiempo %></p>
+                            <p><b>Dificultad:</b> <%= receta.dificultad %></p>
+            
+                            <form method="post" action="/admin/delete/<%= receta._id %>">
+                                <input type="hidden" name="idReceta" value = "<%= receta._id %>">
+                                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                <input type="submit" value="Eliminar" class="bakery-button">
+                            </form>
+
+                            <form method="get" action="/admin/edit-recipe/<%= receta._id %>">
+                                <input type="hidden" name="idReceta" value = "<%= receta._id %>">
+                                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                <input type="submit" value="Editar" class="bakery-button">
+                            </form>
+
+                        </div>
+                    <% } %>
+
                 </div>
-                <div class="recipe-summary">
-                    <img src="recipe2.jpg" alt="Recipe 2">
-                    <h2><a href="/recipe/2">Recipe Title 2</a></h2>
-                    <p>A short description of the recipe.</p>
-                </div>
-                <!-- Add more recipes as needed -->
+                
             </div>
         </div>
     </div>

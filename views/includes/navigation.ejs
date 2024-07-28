@@ -21,7 +21,7 @@
                 NO REGISTRADO
             </div>
         <% } else { %>
-            <a href="admin/profile">
+            <a href="/admin/profile/<%= user._id %>">
                 <div class="auth-message registered">
                     Hola, <%= user.name.charAt(0).toUpperCase() + user.name.slice(1) %>
                 </div>
