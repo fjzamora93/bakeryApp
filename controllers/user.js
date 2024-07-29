@@ -143,3 +143,24 @@ exports.postSaveBookmark = (req, res, next) =>{
             res.redirect('/bookmark')
         })
 }
+
+
+//! TEST PARA CONECTAR CON EL FRONTEND
+
+exports.getPosts = (req, res, next) => {
+    let posts = [
+        { title: 'First Post', content: 'This is the first post content' },
+        { title: 'Second Post', content: 'This is the second post content' },
+        { title: 'Third Post', content: 'This is the third post content' }
+      ];
+      
+    console.log(posts);
+    res.json({ message: 'Posts fetched successfully!', posts });
+      };
+
+exports.postPosts = (req, res, next) => {
+        const { title, content } = req.body;
+        const newPost = { title, content };
+        posts.push(newPost);
+        res.status(201).json({ message: 'Post added successfully!', post: newPost });
+      };

@@ -15,5 +15,9 @@ router.post('/add-bookmark', userController.postSaveBookmark);
 
 router.get('/search', userController.getSearch);
 
+//! TEST CONEXION FRONTEND
+
+router.get('/posts', userController.getPosts);
+router.post('/posts', userController.postPosts);
 
 module.exports = router;
