@@ -21,7 +21,8 @@ exports.getProfile = async (req, res, next) => {
         
         let isOwner = false;
         if (req.session.user) {
-            let isOwner = req.session.user._id.toString() === creator._id.toString() ;
+            console.log('req.session.user._id:', req.session.user._id);
+            isOwner = req.session.user._id.toString() === creator._id.toString() ; 
         }
 
         res.render('auth/profile', {

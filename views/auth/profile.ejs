@@ -36,18 +36,21 @@
                             <p><b>Tiempo:</b> <%= receta.tiempo %></p>
                             <p><b>Dificultad:</b> <%= receta.dificultad %></p>
             
-                            <form method="post" action="/admin/delete/<%= receta._id %>">
-                                <input type="hidden" name="idReceta" value = "<%= receta._id %>">
-                                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                                <input type="submit" value="Eliminar" class="bakery-button">
-                            </form>
 
-                            <form method="get" action="/admin/edit-recipe/<%= receta._id %>">
-                                <input type="hidden" name="idReceta" value = "<%= receta._id %>">
-                                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                                <input type="submit" value="Editar" class="bakery-button">
-                            </form>
+                            <% if(isOwner) { %>
+                                <form method="post" action="/admin/delete/<%= receta._id %>">
+                                    <input type="hidden" name="idReceta" value = "<%= receta._id %>">
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                    <input type="submit" value="Eliminar" class="bakery-button">
+                                </form>
 
+                                <form method="get" action="/admin/edit-recipe/<%= receta._id %>">
+                                    <input type="hidden" name="idReceta" value = "<%= receta._id %>">
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                    <input type="submit" value="Editar" class="bakery-button">
+                                </form>
+                            <% } %>
+                            
                         </div>
                     <% } %>
 
