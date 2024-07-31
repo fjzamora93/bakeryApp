@@ -19,11 +19,8 @@ exports.getProfile = async (req, res, next) => {
         //Gracias a que hemos populado, no será necesario ahora buscar también las recetas y no es necesaria esta línea
         // const recipes = await RecetaMdb.find({creator: usuario._id});
         
-        let isOwner = false;
-        if (req.session.user) {
-            let isOwner = req.session.user._id.toString() === user._id.toString() ;
-        } 
 
+        let isOwner = req.session.user._id.toString() === creator._id.toString();
 
         res.render('auth/profile', {
             creator:creator,

@@ -7,10 +7,11 @@ const csrfProtection = csrf({ cookie: true });
 router.use(csrfProtection);
 
 router.get('/csrf-token', (req, res) => {
-    console.log("CSRF TOKEN DESDE EL BACKEND", req.session.csrfToken); // Usa el token de la sesión
+     // Usa el token de la sesión
     res.json({ csrfToken: req.session.csrfToken }); // Usa el token de la sesión
 });
 
 module.exports = router;
+
 
 
