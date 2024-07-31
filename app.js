@@ -10,17 +10,13 @@ const express = require('express');
 require('dotenv').config();
 
 
-
-
 //MANEJO DE SESIONES (express-session + MongoDBsTORE + csrf + flash)
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const csrf = require('csurf');
 const flash = require('connect-flash');
-
-//! MANEJO DEL FRONTEND
-const cookieParser = require('cookie-parser');
-
+const cookieParser = require('cookie-parser'); //! Para Angular
+const csrfProtection = csrf(); //! Usa { cookie: true } si estás utilizando cookies para las sesiones
 
 const MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${
   process.env.MONGO_PASSWORD
@@ -34,8 +30,7 @@ const store = new MongoDBStore({
     collection: 'sessions'
 });
 
-//! Usa { cookie: true } si estás utilizando cookies para las sesiones
-const csrfProtection = csrf();
+
 
 //Determinamos el tipo de almacenamiento de archivos con MULTER. En este caso se guardarán en 'images' y el nombre del archivo será la fecha y el nombre original
 const fileStorage = multer.diskStorage({
@@ -79,10 +74,10 @@ app.use(express.urlencoded({ extended: true }));
 
 //! Middleware para CORS: MODIFICAR LOS HEADERS PARA PERMITIR OTROS DOMINIOS
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200'); // Permite solo el origen especificado
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200'); //! Permite SOLO el origen especificado
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, X-CSRF-Token');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE, OPTIONS');
-    res.setHeader('Access-Control-Allow-Credentials', 'true'); // Permite el uso de cookies y credenciales
+    res.setHeader('Access-Control-Allow-Credentials', 'true'); //! Permite el uso de cookies y credenciales
     next();
 });
 
@@ -123,7 +118,7 @@ app.use(session({
       cookie: {
         maxAge: 60000 , 
         secure: false,   //! Cambia a true si estás usando HTTPS
-        domain: 'localhost' // Configura esto si estás trabajando con subdominios
+        domain: 'localhost' 
       }
     })
   );
@@ -156,6 +151,7 @@ app.use(async (req, res, next) => {
   });
   
   // Paso 3: Establecemos variables locales que podrán ser accesibles desde las vistas
+  //! CONFIGURACIÓN DEL req.csrfToken() para proteger las rutas
   app.use((req, res, next) => {
     if (!req.session.csrfToken) {
         console.log('Ahora resulta que nunca hay token')
@@ -177,7 +173,7 @@ app.use(authRoutes);
 
 //! ruta para obtener el token CSRF
 app.get('/api/csrf-token', (req, res) => {
-    //Cada vez que llamemos a req.csrfToken() se generará un token único y más reciente
+    //Cada vez que llamemos a req.csrfToken() se generará un token único y más reciente, de ahí que usemos el de la sesión
     try {
         console.log("CSRF TOKEN ÚNICO DESDE api/CSRF-TOKEN", req.session.csrfToken);
         res.status(201).json({ csrfToken: req.session.csrfToken });

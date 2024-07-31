@@ -158,9 +158,12 @@ exports.getPosts = (req, res, next) => {
       };
 
 exports.postPosts = (req, res, next) => {
-        const { title, content } = req.body;
-        const newPost = { title, content };
-        posts.push(newPost);
-        console.log(posts);
-        res.status(201).json({ message: 'Post added successfully!', post: newPost });
-      };
+    console.log('Received CSRF Token:', req.headers['x-csrf-token']); // Mostrar el token recibido en el encabezado
+    console.log('Expected CSRF Token:', req.csrfToken()); // Mostrar el token esperado
+    console.log('Request Body:', req.body); // Verifica si el cuerpo de la solicitud está llegando
+    const { title, content } = req.body;
+    const newPost = { title, content };
+    posts.push(newPost);
+    console.log('Posts:', posts);
+    res.status(201).json({ message: 'Post added successfully!', post: newPost });
+}
