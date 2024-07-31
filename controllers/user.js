@@ -154,10 +154,7 @@ let posts = [
   ];
 
 exports.getPosts = (req, res, next) => {
-    
-      
-    console.log(posts);
-    res.json({ message: 'Posts fetched successfully!', posts });
+    res.json({ message: 'Posts fetched successfully con el GET del Servidor!', posts });
       };
 
 exports.postPosts = (req, res, next) => {

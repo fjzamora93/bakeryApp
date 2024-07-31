@@ -77,7 +77,7 @@ const authRoutes = require('./routes/auth');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Middleware para CORS
+//! Middleware para CORS: MODIFICAR LOS HEADERS PARA PERMITIR OTROS DOMINIOS
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200'); // Permite solo el origen especificado
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, X-CSRF-Token');
@@ -111,9 +111,9 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 
 
 
-//PASO 1: CONFIGURACIÓN DEL MIDDLEWARE DE SESIÓN
-app.use(
-    session({
+//PASO 1: CONFIGURACIÓN DEL MIDDLEWARE DE SESIÓN y COOKIES
+app.use(cookieParser()); // Asegúrate de usar cookie-parser para manejar cookies
+app.use(session({
       secret: 'my secret',
       resave: false,
       saveUninitialized: false,
@@ -121,8 +121,9 @@ app.use(
     
       //!POSIBLE GENERACIÓN DE CONFLICTO CUANDO DEJEMOS DE ESTAR CONFIGURANDO EN LOCAL
       cookie: {
-        secure: false,   // Cambia a true si estás usando HTTPS
-        sameSite: 'None' // Permite el uso de cookies en solicitudes entre dominios
+        maxAge: 60000 , 
+        secure: false,   //! Cambia a true si estás usando HTTPS
+        domain: 'localhost' // Configura esto si estás trabajando con subdominios
       }
     })
   );
@@ -156,11 +157,15 @@ app.use(async (req, res, next) => {
   
   // Paso 3: Establecemos variables locales que podrán ser accesibles desde las vistas
   app.use((req, res, next) => {
+    if (!req.session.csrfToken) {
+        console.log('Ahora resulta que nunca hay token')
+        req.session.csrfToken = req.csrfToken();
+    }
     res.locals.isAuthenticated = req.session.isLoggedIn;
     res.locals.user = req.user; // Asegúrate de que solo se incluya la información necesaria y no sensible
     //Este es el token que le pasamos a las vistas -por eso se guarda en local.
-    res.locals.csrfToken = req.csrfToken();
-    console.log("CSRF TOKEN DESDE EL BACKEND PASO 3", res.locals.csrfToken);
+    res.locals.csrfToken = req.session.csrfToken;
+    console.log("CSRF TOKEN DESDE EL BACKEND PASO 3", res.locals.csrfToken, req.session.csrfToken);
     next();
   });
 
@@ -174,8 +179,8 @@ app.use(authRoutes);
 app.get('/api/csrf-token', (req, res) => {
     //Cada vez que llamemos a req.csrfToken() se generará un token único y más reciente
     try {
-        console.log("CSRF TOKEN ÚNICO DESDE api/CSRF-TOKEN", req.csrfToken());
-        res.status(201).json({ csrfToken: req.csrfToken() });
+        console.log("CSRF TOKEN ÚNICO DESDE api/CSRF-TOKEN", req.session.csrfToken);
+        res.status(201).json({ csrfToken: req.session.csrfToken });
     } catch (error) {
         console.error('Error fetching CSRF token desde el backend:', error);
         res.status(500).json({ error: 'Error fetching CSRF token desde el backend' });
