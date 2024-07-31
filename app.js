@@ -35,7 +35,7 @@ const store = new MongoDBStore({
 });
 
 //! Usa { cookie: true } si estás utilizando cookies para las sesiones
-const csrfProtection = csrf({ cookie: true }); 
+const csrfProtection = csrf();
 
 //Determinamos el tipo de almacenamiento de archivos con MULTER. En este caso se guardarán en 'images' y el nombre del archivo será la fecha y el nombre original
 const fileStorage = multer.diskStorage({
@@ -77,23 +77,15 @@ const authRoutes = require('./routes/auth');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-//! Middleware para conectar con Angular (CORS)
+// Middleware para CORS
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader(
-        'Access-Control-Allow-Headers', 
-        'Origin, X-Requested-With, Content-Type, Accept'
-    );
-    res.setHeader(
-        'Access-Control-Allow-Methods', 
-        'GET, POST, PATCH, DELETE, OPTIONS'
-    );
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200'); // Permite solo el origen especificado
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, X-CSRF-Token');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE, OPTIONS');
     res.setHeader('Access-Control-Allow-Credentials', 'true'); // Permite el uso de cookies y credenciales
     next();
 });
+
 
 
 // ISAUTHENTICATED DEBE IR ANTES DE QUE ENTRE EN JUEGO MULTER PARA EVITAR ERRORES
@@ -126,12 +118,12 @@ app.use(
       resave: false,
       saveUninitialized: false,
       store: store,
-
-      cookie: {   //! MANEJO DEL FRONTEND
-        secure: false, // Cambia a true si usas HTTPS
-        httpOnly: true, //evita que el token sea accesible desde el frontend
-        sameSite: 'None' // Permite el envío de cookies en solicitudes entre dominios
-    }
+    
+      //!POSIBLE GENERACIÓN DE CONFLICTO CUANDO DEJEMOS DE ESTAR CONFIGURANDO EN LOCAL
+      cookie: {
+        secure: false,   // Cambia a true si estás usando HTTPS
+        sameSite: 'None' // Permite el uso de cookies en solicitudes entre dominios
+      }
     })
   );
   app.use(csrfProtection); 
