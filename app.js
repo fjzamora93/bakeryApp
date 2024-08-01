@@ -17,6 +17,7 @@ const csrf = require('csurf');
 const flash = require('connect-flash');
 const cookieParser = require('cookie-parser'); //! Para Angular
 const csrfProtection = csrf(); //! Usa { cookie: true } si estás utilizando cookies para las sesiones
+const cors = require('cors');
 
 const MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${
   process.env.MONGO_PASSWORD
