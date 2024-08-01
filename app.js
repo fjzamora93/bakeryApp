@@ -74,7 +74,8 @@ app.use(express.urlencoded({ extended: true }));
 
 //! Middleware para CORS: MODIFICAR LOS HEADERS PARA PERMITIR OTROS DOMINIOS
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200'); //! Permite SOLO el origen especificado
+    const allowedOrigin = process.env.ALLOWED_ORIGIN || 'http://localhost:4200';
+    res.setHeader('Access-Control-Allow-Origin', allowedOrigin); //! Permite SOLO el origen especificado
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, X-CSRF-Token');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE, OPTIONS');
     res.setHeader('Access-Control-Allow-Credentials', 'true'); //! Permite el uso de cookies y credenciales
