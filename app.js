@@ -73,14 +73,25 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 //! Middleware para CORS: MODIFICAR LOS HEADERS PARA PERMITIR OTROS DOMINIOS
-app.use((req, res, next) => {
-    const allowedOrigin = process.env.ALLOWED_ORIGIN || 'http://localhost:4200';
-    res.setHeader('Access-Control-Allow-Origin', allowedOrigin); //! Permite SOLO el origen especificado
-    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, X-CSRF-Token');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE, OPTIONS');
-    res.setHeader('Access-Control-Allow-Credentials', 'true'); //! Permite el uso de cookies y credenciales
-    next();
-});
+const allowedOrigins = [
+    'https://fjzamora93.github.io',
+    'http://localhost:4200'
+  ];
+  
+  const corsOptions = {
+    origin: (origin, callback) => {
+      if (allowedOrigins.includes(origin) || !origin) { // Permite solicitudes sin origen (por ejemplo, desde Postman)
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    methods: 'GET, POST, PUT, DELETE, OPTIONS',
+    allowedHeaders: 'Content-Type, Authorization, X-Requested-With, X-CSRF-Token',
+    credentials: true // Permite cookies y encabezados de autenticación
+  };
+  
+  app.use(cors(corsOptions));
 
 
 
