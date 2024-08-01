@@ -130,7 +130,6 @@ app.use(session({
       //!POSIBLE GENERACIÓN DE CONFLICTO CUANDO DEJEMOS DE ESTAR CONFIGURANDO EN LOCAL
       cookie: {
         secure: process.env.NODE_ENV === 'production', // Cambiar a true si estás usando HTTPS
-        domain: process.env.NODE_ENV === 'production' ? 'fjzamora93.github.io' : undefined, // Configura el dominio en producción
         maxAge: 24 * 60 * 60 * 1000 // 1 día
       }
     })
