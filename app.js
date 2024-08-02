@@ -16,7 +16,7 @@ const MongoDBStore = require('connect-mongodb-session')(session);
 const csrf = require('csurf');
 const flash = require('connect-flash');
 const cookieParser = require('cookie-parser'); //! Para Angular
-const csrfProtection = csrf(); //! Usa { cookie: true } si estás utilizando cookies para las sesiones
+const csrfProtection = csrf({ cookie: process.env.NODE_ENV === 'production' }); //! Usa { cookie: true } si estás utilizando cookies para las sesiones
 const cors = require('cors');
 
 const MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${
@@ -120,7 +120,7 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 
 
 //PASO 1: CONFIGURACIÓN DEL MIDDLEWARE DE SESIÓN y COOKIES
-app.use(cookieParser()); // Asegúrate de usar cookie-parser para manejar cookies
+app.use(cookieParser()); 
 app.use(session({
       secret: 'my secret',
       resave: false,
@@ -130,12 +130,13 @@ app.use(session({
       //!POSIBLE GENERACIÓN DE CONFLICTO CUANDO DEJEMOS DE ESTAR CONFIGURANDO EN LOCAL
       cookie: {
         secure: process.env.NODE_ENV === 'production', // Cambiar a true si estás usando HTTPS
-        maxAge: 24 * 60 * 60 * 1000 // 1 día
+        maxAge: 24 * 60 * 60 * 1000,
+        sameSite: 'None' 
       }
     })
   );
-  app.use(csrfProtection); 
-  app.use(flash());
+app.use(csrfProtection); 
+app.use(flash());
 
   //! DEPURACIÓN  DEL FRONTEND
   app.use((req, res, next) => {
@@ -166,14 +167,14 @@ app.use(async (req, res, next) => {
   //! CONFIGURACIÓN DEL req.csrfToken() para proteger las rutas
   app.use((req, res, next) => {
     if (!req.session.csrfToken) {
-        console.log('Ahora resulta que nunca hay token')
         req.session.csrfToken = req.csrfToken();
+        console.log('Regeneración de token: ', req.session.csrfToken);
     }
     res.locals.isAuthenticated = req.session.isLoggedIn;
     res.locals.user = req.user; // Asegúrate de que solo se incluya la información necesaria y no sensible
     //Este es el token que le pasamos a las vistas -por eso se guarda en local.
     res.locals.csrfToken = req.session.csrfToken;
-    console.log("CSRF TOKEN DESDE EL BACKEND PASO 3", res.locals.csrfToken, req.session.csrfToken);
+    console.log("CSRF TOKEN DESDE EL BACKEND", res.locals.csrfToken, req.session.csrfToken);
     next();
   });
 
