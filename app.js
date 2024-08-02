@@ -19,10 +19,11 @@ const cookieParser = require('cookie-parser'); //! Para Angular
 const csrfProtection = csrf({ cookie: process.env.NODE_ENV === 'production' }); //! Usa { cookie: true } si estás utilizando cookies para las sesiones
 const cors = require('cors');
 
+
+//! MONGODB, Mongoose y STORE Session
 const MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${
   process.env.MONGO_PASSWORD
 }@rolgamesandstone.tqgnl5u.mongodb.net/bakery_app?retryWrites=true&w=majority&appName=RolgameSandstone`;
-
 
 
 const app = express();
@@ -31,6 +32,24 @@ const store = new MongoDBStore({
     collection: 'sessions'
 });
 
+// Manejo de errores para MongoDBStore
+store.on('error', function(error) {
+    console.error('Session store error:', error);
+  });
+
+//!Configuración de la sesión??
+app.use(require('express-session')({
+    secret: 'my secret',
+    cookie: {
+        maxAge: 1000 * 60 * 60 * 24 * 7 // 1 week
+    },
+    store: store,
+    // Boilerplate options, see:
+    // * https://www.npmjs.com/package/express-session#resave
+    // * https://www.npmjs.com/package/express-session#saveuninitialized
+    resave: true,
+    saveUninitialized: true
+}));
 
 
 //Determinamos el tipo de almacenamiento de archivos con MULTER. En este caso se guardarán en 'images' y el nombre del archivo será la fecha y el nombre original
@@ -166,14 +185,11 @@ app.use(async (req, res, next) => {
   // Paso 3: Establecemos variables locales que podrán ser accesibles desde las vistas
   //! CONFIGURACIÓN DEL req.csrfToken() para proteger las rutas
   app.use((req, res, next) => {
-    if (!req.session.csrfToken) {
-        req.session.csrfToken = req.csrfToken();
-        console.log('Regeneración de token: ', req.session.csrfToken);
-    }
+    
     res.locals.isAuthenticated = req.session.isLoggedIn;
     res.locals.user = req.user; // Asegúrate de que solo se incluya la información necesaria y no sensible
     //Este es el token que le pasamos a las vistas -por eso se guarda en local.
-    res.locals.csrfToken = req.session.csrfToken;
+    res.locals.csrfToken = req.csrfToken();
     console.log("CSRF TOKEN DESDE EL BACKEND", res.locals.csrfToken, req.session.csrfToken);
     next();
   });
@@ -188,8 +204,7 @@ app.use(authRoutes);
 app.get('/api/csrf-token', (req, res) => {
     //Cada vez que llamemos a req.csrfToken() se generará un token único y más reciente, de ahí que usemos el de la sesión
     try {
-        console.log("CSRF TOKEN ÚNICO DESDE api/CSRF-TOKEN", req.session.csrfToken);
-        res.status(201).json({ csrfToken: req.session.csrfToken });
+        res.status(200).json({ csrfToken: req.csrfToken() });
     } catch (error) {
         console.error('Error fetching CSRF token desde el backend:', error);
         res.status(500).json({ error: 'Error fetching CSRF token desde el backend' });
