@@ -189,8 +189,10 @@ app.use(async (req, res, next) => {
     res.locals.isAuthenticated = req.session.isLoggedIn;
     res.locals.user = req.user; // Asegúrate de que solo se incluya la información necesaria y no sensible
     //Este es el token que le pasamos a las vistas -por eso se guarda en local.
-    res.locals.csrfToken = req.csrfToken();
-    console.log("CSRF TOKEN DESDE EL BACKEND", res.locals.csrfToken, req.session.csrfToken);
+    if(!res.locals.csrfToken) {
+        res.locals.csrfToken = req.csrfToken();
+        console.log("CSRF TOKEN DESDE EL BACKEND", res.locals.csrfToken);
+    }
     next();
   });
 
@@ -204,7 +206,8 @@ app.use(authRoutes);
 app.get('/api/csrf-token', (req, res) => {
     //Cada vez que llamemos a req.csrfToken() se generará un token único y más reciente, de ahí que usemos el de la sesión
     try {
-        res.status(200).json({ csrfToken: req.csrfToken() });
+        console.log('api/csrf-token: ', res.locals.csrfToken)
+        res.status(200).json({ csrfToken: res.locals.csrfToken });
     } catch (error) {
         console.error('Error fetching CSRF token desde el backend:', error);
         res.status(500).json({ error: 'Error fetching CSRF token desde el backend' });
