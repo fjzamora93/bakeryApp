@@ -133,8 +133,7 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use(cookieParser()); // Asegúrate de usar cookie-parser para manejar cookies
 app.use(session({
       secret: 'my secret',
-      resave: false,
-      proxy:  process.env.NODE_ENV === 'production',
+      resave: true,
       saveUninitialized: true,
       store: store,
     
@@ -183,7 +182,6 @@ app.use((req, res, next) => {
     res.locals.isAuthenticated = req.session.isLoggedIn;
     res.locals.user = req.user; 
     res.locals.csrfToken = req.session.csrfToken;
-
     next();
 });
 
