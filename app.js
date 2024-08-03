@@ -203,7 +203,7 @@ app.use(authRoutes);
 //! ruta para obtener el token CSRF
 app.get('/api/csrf-token', (req, res) => {
     try {
-        console.log("CSRF TOKEN ÚNICO DESDE api/CSRF-TOKEN", req.session.csrfToken);
+        console.log("CSRF TOKEN ÚNICO DESDE api/CSRF-TOKEN", req.csrfToken());
         res.status(201).json({ csrfToken: req.session.csrfToken });
     } catch (error) {
         console.error('Error fetching CSRF token desde el backend:', error);
