@@ -165,6 +165,7 @@ app.use(async (req, res, next) => {
     try {
       const user = await User.findById(req.session.user._id);
       if (!user) {
+        console.log('No se ha encontrado el usuario Línea: 160');
         return next();
       }
       req.user = user;
@@ -176,14 +177,14 @@ app.use(async (req, res, next) => {
   
 // Paso 3: Establecemos variables locales que podrán ser accesibles desde las vistas
 app.use((req, res, next) => {
-if (!req.session.csrfToken) {
-    req.session.csrfToken = req.csrfToken();
-}
-res.locals.isAuthenticated = req.session.isLoggedIn;
-res.locals.user = req.user; 
-res.locals.csrfToken = req.session.csrfToken;
+    if (!req.session.csrfToken) {
+        req.session.csrfToken = req.csrfToken();
+    }
+    res.locals.isAuthenticated = req.session.isLoggedIn;
+    res.locals.user = req.user; 
+    res.locals.csrfToken = req.session.csrfToken;
 
-next();
+    next();
 });
 
 app.use((req, res, next) => {

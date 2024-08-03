@@ -9,8 +9,8 @@ exports.getIndex = async (req, res, next) => {
         const page = +req.query.page || 1;
         const usuario = req.user || null;
 
-        if (usuario){
-            console.log("USUARIO: ", usuario.name);
+        if (req.user){
+            console.log("USUARIO: ", req.user.name);
         } else {
             console.log("NO HAY USUARIO");
         }
@@ -22,7 +22,7 @@ exports.getIndex = async (req, res, next) => {
             .limit(ITEMS_PER_PAGE);
 
         res.render('index', {
-            usuario: usuario,
+            usuario: req.user,
             recetas: products,
             currentPage: page,
             hasNextPage: ITEMS_PER_PAGE * page < totalItems,
