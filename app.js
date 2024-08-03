@@ -134,6 +134,7 @@ app.use(cookieParser()); // Asegúrate de usar cookie-parser para manejar cookie
 app.use(session({
       secret: 'my secret',
       resave: true,
+      proxy:  process.env.NODE_ENV === 'production',
       saveUninitialized: true,
       store: store,
     
@@ -181,7 +182,7 @@ app.use((req, res, next) => {
     }
     res.locals.isAuthenticated = req.session.isLoggedIn;
     res.locals.user = req.user; 
-    res.locals.csrfToken = req.session.csrfToken;
+    res.locals.csrfToken = req.csrfToken();
     next();
 });
 
