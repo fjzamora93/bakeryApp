@@ -134,12 +134,13 @@ app.use(cookieParser()); // Asegúrate de usar cookie-parser para manejar cookie
 app.use(session({
       secret: 'my secret',
       resave: false,
-      saveUninitialized: false,
+      proxy:  process.env.NODE_ENV === 'production',
+      saveUninitialized: true,
       store: store,
     
       //!POSIBLE GENERACIÓN DE CONFLICTO CUANDO DEJEMOS DE ESTAR CONFIGURANDO EN LOCAL
       cookie: {
-        maxAge: 24 * 60 * 60 * 1000, 
+        maxAge: 48 * 60 * 60 * 1000, 
         secure: process.env.NODE_ENV === 'production', 
         sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
         domain: process.env.NODE_ENV === 'production' ? '.railway.app' : 'localhost'
@@ -161,7 +162,6 @@ app.use(async (req, res, next) => {
     if (!req.session.user) {
       return next();
     }
-    
     try {
       const user = await User.findById(req.session.user._id);
       if (!user) {
@@ -188,9 +188,11 @@ app.use((req, res, next) => {
 });
 
 app.use((req, res, next) => {
-    console.log('Sesión actual:', req.session);
+    console.log('Session ID:', req.sessionID);
+    console.log('Session Data:', req.session.cookie);
     next();
-});
+  });
+  
   
 
 //RUTAS
