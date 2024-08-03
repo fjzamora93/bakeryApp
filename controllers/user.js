@@ -8,7 +8,13 @@ exports.getIndex = async (req, res, next) => {
     try {
         const page = +req.query.page || 1;
         const usuario = req.user || null;
-        console.log("USUARIO", usuario);
+
+        if (usuario){
+            console.log("USUARIO: ", usuario.name);
+        } else {
+            console.log("NO HAY USUARIO");
+        }
+        
 
         const totalItems = await RecetaMdb.find().countDocuments();
         const products = await RecetaMdb.find()
@@ -36,17 +42,12 @@ exports.getIndex = async (req, res, next) => {
 exports.getSearch = async (req, res, next) => {
     try {
         const { search, categoria } = req.query;
-        console.log("Criterios de búsqueda", search, categoria);
-
         const page = +req.query.page || 1;
         const usuario = req.user || null;
-
         let filter = {};
-
         if (categoria && categoria !== "todas") {
             filter.categoria = categoria;
         }
-
         if (search) {
             filter.nombre = { $regex: search, $options: 'i' };
         }
@@ -59,7 +60,6 @@ exports.getSearch = async (req, res, next) => {
         res.render('index', {
             categoria: categoria,
             search: search,
-
             usuario: usuario,
             recetas: items,
             currentPage: page,
@@ -80,10 +80,8 @@ exports.getSearch = async (req, res, next) => {
 
 
 exports.getRecipeDetails = async (req, res, next) => {
-
     const recetaId = req.params.recetaId;
     const receta = await RecetaMdb.findById(recetaId);
-    console.log("receta CREATOR", receta.creator);
 
     //! POTENCIAL ERROR EN CASO DE QUE NO HAYA CREATOR
     let creator = await User.findById(receta.creator);
@@ -100,18 +98,13 @@ exports.getRecipeDetails = async (req, res, next) => {
         isCreator = req.user._id.toString() === receta.creator.toString() ? true : false;
     } 
 
-    console.log("ISCREATOR", isCreator);
-    console.log("CREATOR", creator);
-
     try {
-        console.log("CASTING", receta);
         res.render('recipe-details',{
             receta : receta,
             isCreator : isCreator,
             creator: creator
         })
     } catch (error) {   
-        console.log(err);
         res.status(500).render('500', {
 
     });
@@ -159,7 +152,6 @@ exports.getPosts = (req, res, next) => {
 
 exports.postPosts = (req, res, next) => {
     console.log('Received CSRF Token:', req.headers['x-csrf-token']); // Mostrar el token recibido en el encabezado
-    console.log('Expected CSRF Token:', req.csrfToken()); // Mostrar el token esperado
     console.log('Request Body:', req.body); // Verifica si el cuerpo de la solicitud está llegando
     const { title, content } = req.body;
     const newPost = { title, content };

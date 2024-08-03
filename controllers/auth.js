@@ -1,8 +1,5 @@
 const crypto = require('crypto');
-
 const bcrypt = require('bcryptjs');
-
-
 const User = require('../models/user');
 const { validationResult } = require('express-validator');
 
@@ -45,72 +42,81 @@ exports.getSignup = (req, res, next) => {
     });
   };
 
-  exports.postLogin = (req, res, next) => {
+exports.postLogin = async (req, res, next) => {
     const email = req.body.email.toLowerCase();
     const password = req.body.password;
-  
+
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(422).render('auth/login', {
+        return res.status(422).render('auth/login', {
         path: '/login',
         pageTitle: 'Login',
         errorMessage: errors.array()[0].msg,
         oldInput: {
-          email: email,
-          password: password
-        },
-        validationErrors: errors.array()
-      });
-    }
-    User.findOne({ $or: [{ email: email }, { name: email }] })
-    .then(user => {
-      if (!user) {
-        return res.status(422).render('auth/login', {
-          path: '/login',
-          pageTitle: 'Login',
-          errorMessage: 'Nombre de usuario, email o contraseñas incorrectas.',
-          oldInput: {
             email: email,
             password: password
-          },
-          validationErrors: []
+        },
+        validationErrors: errors.array()
         });
-      }
-      bcrypt
-        .compare(password, user.password)
-        .then(doMatch => {
-          if (doMatch) {
+    }
+
+    try {
+        const user = await User.findOne({ $or: [{ email: email }, { name: email }] });
+        if (!user) {
+        return res.status(422).render('auth/login', {
+            path: '/login',
+            pageTitle: 'Login',
+            errorMessage: 'Nombre de usuario, email o contraseñas incorrectas.',
+            oldInput: {
+            email: email,
+            password: password
+            },
+            validationErrors: []
+        });
+        }
+
+        // Compara la contraseña
+        const doMatch = await bcrypt.compare(password, user.password);
+        if (doMatch) {
             req.session.isLoggedIn = true;
             req.session.user = user;
-            return req.session.save(err => {
-              console.log(err);
-              res.redirect('/');
+            console.log('Usuario log: ', user.name, req.session.user.name)
+
+        // Guarda la sesión y redirige
+        await new Promise((resolve, reject) => {
+            req.session.save(err => {
+            if (err) {
+                console.log('Error al guardar la sesión:', err);
+                return reject(err);
+            }
+            resolve();
             });
-          }
-          return res.status(422).render('auth/login', {
+        });
+        return res.redirect('/');
+        }
+    
+        // Contraseña incorrecta
+        return res.status(422).render('auth/login', {
             path: '/login',
             pageTitle: 'Login',
             errorMessage: 'Invalid email or password.',
             oldInput: {
-              email: email,
-              password: password
+            email: email,
+            password: password
             },
             validationErrors: []
-          });
-        })
-        .catch(err => {
-          console.log(err);
-          res.redirect('/login');
         });
-    })
-    .catch(err => console.log(err));
-};
+    } catch (err) {
+        console.log('Error en el proceso de login:', err);
+        return res.redirect('/login');
+    }
+  };
+  
 
-exports.postSignup = (req, res, next) => {
+exports.postSignup = async (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
     const name = req.body.name;
-  
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       console.log(errors.array());
@@ -120,7 +126,7 @@ exports.postSignup = (req, res, next) => {
         errorMessage: errors.array()[0].msg,
         oldInput: {
           email: email,
-          name : name,
+          name: name,
           password: password,
           confirmPassword: req.body.confirmPassword
         },
@@ -128,24 +134,22 @@ exports.postSignup = (req, res, next) => {
       });
     }
   
-    bcrypt
-      .hash(password, 12)
-      .then(hashedPassword => {
-        const user = new User({
-          email: email,
-          name : name,
-          password: hashedPassword,
-          cart: { items: [] }
-        });
-        return user.save();
-      })
-      .then(result => {
-        res.redirect('/login');
-      })
-      .catch(err => {
-        console.log(err);
+    try {
+      const hashedPassword = await bcrypt.hash(password, 12);
+      const user = new User({
+        email: email,
+        name: name,
+        password: hashedPassword,
+        cart: { items: [] }
       });
+      await user.save();
+      return res.redirect('/login');
+    } catch (err) {
+      console.log('Error al registrar el usuario:', err);
+      return res.redirect('/signup');
+    }
   };
+  
 
 exports.postLogout = (req, res, next) => {
   req.session.destroy(err => {
