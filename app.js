@@ -9,26 +9,20 @@ const imgur = require('imgur');
 const express = require('express');
 require('dotenv').config();
 
-
-
-//MANEJO DE SESIONES (express-session + MongoDBsTORE + csrf + flash)
+//IMPORTACIÓN MANEJO SESIONES (Session + MongoDBsTORE + csrf + cookies + CORS)
+const app = express();
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const csrf = require('csurf');
 const csrfProtection = csrf({ cookie: process.env.NODE_ENV === 'production' });
 const flash = require('connect-flash');
 const cors = require('cors');
-
-//! MANEJO DEL FRONTEND
 const cookieParser = require('cookie-parser');
-
 
 const MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${
   process.env.MONGO_PASSWORD
 }@rolgamesandstone.tqgnl5u.mongodb.net/bakery_app?retryWrites=true&w=majority&appName=RolgameSandstone`;
 
-
-const app = express();
 const store = new MongoDBStore({
     uri: MONGODB_URI,
     collection: 'sessions'
@@ -37,7 +31,6 @@ const store = new MongoDBStore({
 store.on('error', function(error) {
     console.log('Error en el session store: ', error);
 });
-
 
 //Determinamos el tipo de almacenamiento de archivos con MULTER. En este caso se guardarán en 'images' y el nombre del archivo será la fecha y el nombre original
 const fileStorage = multer.diskStorage({
@@ -79,15 +72,13 @@ const authRoutes = require('./routes/auth');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-//! Middleware para CORS: MODIFICAR LOS HEADERS PARA PERMITIR OTROS DOMINIOS
-
+//CORS: PERMITE EL ACCESO A LA API DESDE DIFERENTES DOMINIOS
 const allowedOrigins = [
     'http://localhost:3000', 
     'http://localhost:4200',
     'https://fjzamora93.github.io',
     'https://web-production-90fa.up.railway.app/',
 ];
-
 const corsOptions = {
     origin: function (origin, callback) {
         if(!origin) return callback(null, true);
@@ -101,15 +92,11 @@ const corsOptions = {
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With' ,'X-CSRF-TOKEN'],
     credentials: true
 };
-
 app.use(cors(corsOptions));
-
 
 
 // ISAUTHENTICATED DEBE IR ANTES DE QUE ENTRE EN JUEGO MULTER PARA EVITAR ERRORES
 app.use((error, req, res, next) => {
-    // res.status(error.httpStatusCode).render(...);
-    // res.redirect('/500');
     res.status(500).render('500', {
       pageTitle: 'Error!',
       path: '/500',
@@ -118,27 +105,20 @@ app.use((error, req, res, next) => {
   });
 
 
-//Middleware para subir archivos
-app.use(
-    multer({ storage: fileStorage, fileFilter: fileFilter }).single('image')
-  );
-
-//Middleware para servir archivos estáticos (CSS, JS, IMÁGENES)
+//Middleware para subir archivos con Multer a nuestro HOST.
+app.use(multer({ storage: fileStorage, fileFilter: fileFilter }).single('image'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
 
-
 //PASO 1: CONFIGURACIÓN DEL MIDDLEWARE DE SESIÓN y COOKIES
-app.use(cookieParser()); // Asegúrate de usar cookie-parser para manejar cookies
+app.use(cookieParser()); 
 app.use(session({
       secret: 'my secret',
       resave: true,
       proxy:  process.env.NODE_ENV === 'production',
       saveUninitialized: true,
       store: store,
-    
-      //!POSIBLE GENERACIÓN DE CONFLICTO CUANDO DEJEMOS DE ESTAR CONFIGURANDO EN LOCAL
       cookie: {
         maxAge: 48 * 60 * 60 * 1000, 
         secure: process.env.NODE_ENV === 'production', 
@@ -150,14 +130,14 @@ app.use(session({
   app.use(csrfProtection); 
   app.use(flash());
 
-  //! DEPURACIÓN  DEL FRONTEND
+  //! Mensaje para verificar que el servidor está funcionando
   app.use((req, res, next) => {
     console.log('Received request:', req.method, req.path);
     next();
   });
 
 
-// Paso 2: Devolver al usuario autenticado en nuestro req (si no lo está, se aplica el next)
+// DEVOLVER USUARIO AUTENTIFICADO
 app.use(async (req, res, next) => {
     if (!req.session.user) {
       return next();
@@ -175,7 +155,7 @@ app.use(async (req, res, next) => {
     }
   });
   
-// Paso 3: Establecemos variables locales que podrán ser accesibles desde las vistas
+// VARIABLES LOCALES, CSRF Y AUTENTICACIÓN
 app.use((req, res, next) => {
     if (!req.session.csrfToken) {
         req.session.csrfToken = req.csrfToken();
@@ -186,30 +166,21 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use((req, res, next) => {
-    console.log('Session ID:', req.sessionID);
-    console.log('Session Data:', req.session.cookie);
-    next();
-  });
-  
-  
-
-//RUTAS
-app.use('/', recipeRoutes);
-app.use('/admin', adminRoutes);
-app.use(pdfRoutes);
-app.use(authRoutes);
-
-//! ruta para obtener el token CSRF
+// RUTA PARA OBTENER EL TOKEN CSRF EN LA API
 app.get('/api/csrf-token', (req, res) => {
     try {
-        console.log("CSRF TOKEN ÚNICO DESDE api/CSRF-TOKEN", req.csrfToken());
         res.status(201).json({ csrfToken: req.session.csrfToken });
     } catch (error) {
         console.error('Error fetching CSRF token desde el backend:', error);
         res.status(500).json({ error: 'Error fetching CSRF token desde el backend' });
     }
-  });
+});
+
+//RUTAS DE LA APLICACIÓN GENERALES
+app.use('/', recipeRoutes);
+app.use('/admin', adminRoutes);
+app.use(pdfRoutes);
+app.use(authRoutes);
 
 //ERROR HANDLING
 app.get('/500', errorController.get500);
@@ -217,7 +188,7 @@ app.use(errorController.get404);
 
 
 
-//Conexión a la base de datos
+//CONEXIÓN A LA BASE DE DATOS Y ARRANQUE DEL SERVIDOR
 mongoose
   .connect(MONGODB_URI)
   .then(result => {
