@@ -10,14 +10,17 @@ const express = require('express');
 require('dotenv').config();
 
 
+
 //MANEJO DE SESIONES (express-session + MongoDBsTORE + csrf + flash)
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const csrf = require('csurf');
+const csrfProtection = csrf({ cookie: process.env.NODE_ENV === 'production' });
 const flash = require('connect-flash');
-const cookieParser = require('cookie-parser'); //! Para Angular
-const csrfProtection = csrf({ cookie: process.env.NODE_ENV === 'production' }); //! Usa { cookie: true } si estás utilizando cookies para las sesiones
 const cors = require('cors');
+
+//! MANEJO DEL FRONTEND
+const cookieParser = require('cookie-parser');
 
 
 //! MONGODB, Mongoose y STORE Session
@@ -32,24 +35,9 @@ const store = new MongoDBStore({
     collection: 'sessions'
 });
 
-// Manejo de errores para MongoDBStore
 store.on('error', function(error) {
-    console.error('Session store error:', error);
-  });
-
-//!Configuración de la sesión??
-app.use(require('express-session')({
-    secret: 'my secret',
-    cookie: {
-        maxAge: 1000 * 60 * 60 * 24 * 7 // 1 week
-    },
-    store: store,
-    // Boilerplate options, see:
-    // * https://www.npmjs.com/package/express-session#resave
-    // * https://www.npmjs.com/package/express-session#saveuninitialized
-    resave: true,
-    saveUninitialized: true
-}));
+    console.log('Error en el session store: ', error);
+});
 
 
 //Determinamos el tipo de almacenamiento de archivos con MULTER. En este caso se guardarán en 'images' y el nombre del archivo será la fecha y el nombre original
@@ -93,25 +81,29 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 //! Middleware para CORS: MODIFICAR LOS HEADERS PARA PERMITIR OTROS DOMINIOS
+
 const allowedOrigins = [
+    'http://localhost:3000', 
+    'http://localhost:4200',
     'https://fjzamora93.github.io',
-    'http://localhost:4200'
-  ];
-  
-  const corsOptions = {
-    origin: (origin, callback) => {
-      if (allowedOrigins.includes(origin) || !origin) { // Permite solicitudes sin origen (por ejemplo, desde Postman)
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'));
+    'https://web-production-90fa.up.railway.app/',
+];
+
+const corsOptions = {
+    origin: function (origin, callback) {
+        if(!origin) return callback(null, true);
+        if(allowedOrigins.indexOf(origin) === -1 && !origin.includes('.railway.app')){
+            var msg = 'La política de CORS para este sitio no permite el acceso desde el origen especificado.';
+            return callback(new Error(msg), false);
       }
+      return callback(null, true);
     },
-    methods: 'GET, POST, PUT, DELETE, OPTIONS',
-    allowedHeaders: 'Content-Type, Authorization, X-Requested-With, X-CSRF-Token',
-    credentials: true // Permite cookies y encabezados de autenticación
-  };
-  
-  app.use(cors(corsOptions));
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With' ,'X-CSRF-TOKEN'],
+    credentials: true
+};
+
+app.use(cors(corsOptions));
 
 
 
@@ -142,15 +134,17 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use(cookieParser()); 
 app.use(session({
       secret: 'my secret',
-      resave: false,
-      saveUninitialized: false,
+      resave: true,
+      proxy:  process.env.NODE_ENV === 'production',
+      saveUninitialized: true,
       store: store,
     
       //!POSIBLE GENERACIÓN DE CONFLICTO CUANDO DEJEMOS DE ESTAR CONFIGURANDO EN LOCAL
       cookie: {
-        secure: process.env.NODE_ENV === 'production', // Cambiar a true si estás usando HTTPS
-        maxAge: 24 * 60 * 60 * 1000,
-        sameSite: 'None' 
+        maxAge: 48 * 60 * 60 * 1000, 
+        secure: process.env.NODE_ENV === 'production', 
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+        domain: process.env.NODE_ENV === 'production' ? '.railway.app' : 'localhost'
       }
     })
   );
@@ -169,10 +163,10 @@ app.use(async (req, res, next) => {
     if (!req.session.user) {
       return next();
     }
-    
     try {
       const user = await User.findById(req.session.user._id);
       if (!user) {
+        console.log('No se ha encontrado el usuario Línea: 160');
         return next();
       }
       req.user = user;
@@ -182,19 +176,24 @@ app.use(async (req, res, next) => {
     }
   });
   
-  // Paso 3: Establecemos variables locales que podrán ser accesibles desde las vistas
-  //! CONFIGURACIÓN DEL req.csrfToken() para proteger las rutas
-  app.use((req, res, next) => {
-    
-    res.locals.isAuthenticated = req.session.isLoggedIn;
-    res.locals.user = req.user; // Asegúrate de que solo se incluya la información necesaria y no sensible
-    //Este es el token que le pasamos a las vistas -por eso se guarda en local.
-    if(!res.locals.csrfToken) {
-        res.locals.csrfToken = req.csrfToken();
-        console.log("CSRF TOKEN DESDE EL BACKEND", res.locals.csrfToken);
+// Paso 3: Establecemos variables locales que podrán ser accesibles desde las vistas
+app.use((req, res, next) => {
+    if (!req.session.csrfToken) {
+        req.session.csrfToken = req.csrfToken();
     }
+    res.locals.isAuthenticated = req.session.isLoggedIn;
+    res.locals.user = req.user; 
+    res.locals.csrfToken = req.csrfToken();
+    next();
+});
+
+app.use((req, res, next) => {
+    console.log('Session ID:', req.sessionID);
+    console.log('Session Data:', req.session.cookie);
     next();
   });
+  
+  
 
 //RUTAS
 app.use('/', recipeRoutes);
@@ -204,10 +203,9 @@ app.use(authRoutes);
 
 //! ruta para obtener el token CSRF
 app.get('/api/csrf-token', (req, res) => {
-    //Cada vez que llamemos a req.csrfToken() se generará un token único y más reciente, de ahí que usemos el de la sesión
     try {
-        console.log('api/csrf-token: ', res.locals.csrfToken)
-        res.status(200).json({ csrfToken: res.locals.csrfToken });
+        console.log("CSRF TOKEN ÚNICO DESDE api/CSRF-TOKEN", req.csrfToken());
+        res.status(201).json({ csrfToken: req.session.csrfToken });
     } catch (error) {
         console.error('Error fetching CSRF token desde el backend:', error);
         res.status(500).json({ error: 'Error fetching CSRF token desde el backend' });
