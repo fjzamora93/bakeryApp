@@ -138,24 +138,3 @@ exports.postSaveBookmark = (req, res, next) =>{
 }
 
 
-//! TEST PARA CONECTAR CON EL FRONTEND
-
-let posts = [
-    { title: 'First Post', content: 'This is the first post content' },
-    { title: 'Second Post', content: 'This is the second post content' },
-    { title: 'Third Post', content: 'This is the third post content' }
-  ];
-
-exports.getPosts = (req, res, next) => {
-    res.json({ message: 'Posts fetched successfully con el GET del Servidor!', posts });
-      };
-
-exports.postPosts = (req, res, next) => {
-    console.log('Received CSRF Token:', req.headers['x-csrf-token']); // Mostrar el token recibido en el encabezado
-    console.log('Request Body:', req.body); // Verifica si el cuerpo de la solicitud está llegando
-    const { title, content } = req.body;
-    const newPost = { title, content };
-    posts.push(newPost);
-    console.log('Posts:', posts);
-    res.status(201).json({ message: 'Post added successfully!', post: newPost });
-}

@@ -145,7 +145,6 @@ app.use(async (req, res, next) => {
     try {
       const user = await User.findById(req.session.user._id);
       if (!user) {
-        console.log('No se ha encontrado el usuario Línea: 160');
         return next();
       }
       req.user = user;
@@ -185,7 +184,6 @@ app.use(authRoutes);
 //ERROR HANDLING
 app.get('/500', errorController.get500);
 app.use(errorController.get404);
-
 
 
 //CONEXIÓN A LA BASE DE DATOS Y ARRANQUE DEL SERVIDOR
