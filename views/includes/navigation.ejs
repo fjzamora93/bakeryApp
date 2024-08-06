@@ -8,43 +8,62 @@
     <link rel="stylesheet" href="/style/main.css">
     <link rel="stylesheet" href="/style/auth.css">
     <link rel="icon" href="/images/favicon.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 </head>
 
 
-    <header>
-        <h1>Recetas</h1>
-    </header>
+<header>
+    <h1>Marilo's Kitchen</h1>
+</header>
 
-    <nav>
-        <% if (!isAuthenticated) { %>
-            <div class="auth-message not-registered">
-                NO REGISTRADO
-            </div>
-        <% } else { %>
-            <a href="/admin/profile/<%= user._id %>">
-                <div class="auth-message registered">
-                    Hola, <%= user.name.charAt(0).toUpperCase() + user.name.slice(1) %>
-                </div>
+<nav>
+    <% if (!isAuthenticated) { %>
+        <div class="auth-message not-registered">
+            <a href="/login" class="auth-button">
+                <i class="fas fa-sign-in-alt"></i> Iniciar sesión
             </a>
+            <a href="/signup" class="auth-button">
+                <i class="fas fa-user-plus"></i> Nuevo usuario
+            </a>
+        </div>
+    <% } else { %>
+     
+        <div class="auth-message registered">
+            <i class="fas fa-user profile-icon"></i>
+            <h3>Hola, <%= user.name.charAt(0).toUpperCase() + user.name.slice(1) %></h3>
+            <i class="fas fa-caret-down menu-icon"></i>
+
+            <div class="dropdown-menu">
+                <a href="/admin/add-recipe">Añadir receta</a>
+                <a href="/admin/profile/<%= user._id %>">Mi perfil</a>
+               
+                <form action="/logout" method="post">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <button type="submit">  Cerrar sesión  </button>
+                </form>
+        
+            </div>
+        </div>
+    
+    <% } %>
+
+    <ul>
+        <h3><li><a href="/">Inicio</a></li></h3>
+        
+
+        <% if (isAuthenticated) { %>
+            <h3><li><a href="/bookmark"><i class="fas fa-heart favorites-icon"></i>Favoritos</a></li></h3>
         <% } %>
 
-        <ul>
-            <li><a href="/">Inicio</a></li>
-            <% if (isAuthenticated) { %>
-                <li><a href="/admin/add-recipe">Añadir receta</a></li>
-            <% } %>
-            <li><a href="/bookmark">Recetas archivadas</a></li>
-            <li><a href="#">Contacto</a></li>
-            <% if (!isAuthenticated) { %>
-                <li class="main-header__item"><a href="/login">Login</a></li>
-                <li class="main-header__item"><a href="/signup">Signup</a></li>
-            <% } else { %>
-                <li class="main-header__item">
-                    <form action="/logout" method="post">
-                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                        <button type="submit">Logout</button>
-                    </form>
-                </li>
-            <% } %>
-        </ul>
-    </nav>
+        <% if (!isAuthenticated) { %>
+            
+            
+            
+        <% } else { %>
+            
+
+        <% } %>
+    </ul>
+</nav>

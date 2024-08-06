@@ -1,7 +1,7 @@
 const RecetaMdb = require('../models/recipeMdb'); 
 const User = require('../models/user');
 const { ObjectId } = require('mongodb');
-const ITEMS_PER_PAGE = 5;
+const ITEMS_PER_PAGE = 15;
 
 
 exports.getIndex = async (req, res, next) => {
@@ -15,11 +15,11 @@ exports.getIndex = async (req, res, next) => {
             console.log("NO HAY USUARIO");
         }
         
-
         const totalItems = await RecetaMdb.find().countDocuments();
         const products = await RecetaMdb.find()
             .skip((page - 1) * ITEMS_PER_PAGE)
-            .limit(ITEMS_PER_PAGE);
+            .limit(ITEMS_PER_PAGE)
+            .sort({ nombre: 1 });
 
         res.render('index', {
             usuario: req.user,
@@ -51,6 +51,7 @@ exports.getSearch = async (req, res, next) => {
         if (search) {
             filter.nombre = { $regex: search, $options: 'i' };
         }
+        console.log('Valor del filtro: ', filter);
 
         const totalItems = await RecetaMdb.find(filter).countDocuments();
         const items = await RecetaMdb.find(filter)
@@ -138,3 +139,16 @@ exports.postSaveBookmark = (req, res, next) =>{
 }
 
 
+exports.postDeleteBookmark = async (req, res, next) => {
+    const recetaId = req.body.idReceta;
+    try {
+        const user = await User.findById(req.user._id);
+        const listaAux = await user.bookmark.filter(id => id.toString() !== recetaId.toString());
+        user.bookmark = listaAux;
+        await user.save();
+        res.redirect('/bookmark');
+    }
+    catch (err) {
+        console.log(err);
+    }
+}

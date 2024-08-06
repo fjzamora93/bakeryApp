@@ -34,7 +34,7 @@
     <div class="container" id="main">
         <% for (let receta of recetas) { %>
             <div class="recipe-summary">
-                <a href="/recipe-details/<%= receta._id %>">
+                <a href="/recipe-details/<%= receta._id %>" class="img-miniatura">
                     <img src="<%= receta.image %>" alt="<%= receta.image %>">
                 </a>
                 <h2>

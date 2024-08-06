@@ -42,6 +42,11 @@ form {
     display: inline;
 }
 
+
+h3{
+    margin-right: 10px;
+}
+
 button {
     background-color: #e74c3c;
     border: none;
@@ -55,6 +60,99 @@ button {
 button:hover {
     background-color: #c0392b;
 }
+
+/* Estilo para el div de auth-message */
+.auth-message {
+    display: flex;
+    align-items: center;
+    color: #fff;
+    width: 200px;
+}
+
+.auth-message .profile-icon {
+    font-size: 40px; 
+    margin-right: 10px;
+    margin-left: 10px; 
+    color: #fff; 
+}
+
+/* Estilo para el icono del menú desplegable */
+.auth-message .menu-icon {
+    font-size: 20px; /* Tamaño del icono del menú desplegable */
+}
+
+/* Menú desplegable para auth-message registrado */
+.auth-message.registered {
+    position: relative;
+}
+
+.auth-message.registered:hover {
+    position: relative;
+    background-color: rgb(63, 107, 18);
+}
+
+.auth-message.registered:hover .dropdown-menu {
+    font-size: 40px;
+    display: block;
+}
+
+.auth-message.not-registered {
+    display: flex;
+    align-items: center;
+    gap: 30px; /* Espacio entre los botones */
+}
+
+.auth-button {
+    background-color: #e74c3c; /* Color de fondo del botón */
+    color: #fff; /* Color del texto */
+    padding: 10px 20px; /* Espaciado interno */
+    text-decoration: none; /* Quitar subrayado */
+    border-radius: 5px; /* Bordes redondeados */
+    font-size: 16px; /* Tamaño de la fuente */
+    cursor: pointer; /* Cursor de mano */
+    transition: background-color 0.3s; /* Transición para el hover */
+}
+
+
+.auth-button:hover {
+    background-color: #c0392b; /* Color de fondo en hover */
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #333;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    z-index: 10;
+}
+
+.dropdown-menu a {
+    color: #fff;
+    padding: 8px 12px;
+    display: block;
+    font-size: 20px;
+}
+
+.dropdown-menu a:hover {
+    background-color: #555;
+}
+
+/* Icono de menú desplegable */
+.dropdown-menu .menu-icon {
+    font-size: 20px;
+    margin-left: 10px;
+}
+
+/* Icono de corazón para favoritos */
+.favorites-icon {
+    font-size: 18px;
+    margin-right: 5px;
+}
+
 
 /* Menú desplegable en dispositivos móviles */
 @media (max-width: 768px) {
