@@ -32,6 +32,10 @@ nav {
     margin-bottom: 50px;
 }
 
+nav i {
+    font-size: 20px;
+}
+
 /* Estilo para los elementos del menú */
 .main-header__item {
     display: inline-block;
@@ -103,6 +107,7 @@ button:hover {
 }
 
 .auth-button {
+    display: inline-block;
     background-color: #e74c3c; /* Color de fondo del botón */
     color: #fff; /* Color del texto */
     padding: 10px 20px; /* Espaciado interno */
@@ -111,6 +116,7 @@ button:hover {
     font-size: 16px; /* Tamaño de la fuente */
     cursor: pointer; /* Cursor de mano */
     transition: background-color 0.3s; /* Transición para el hover */
+    margin-left: 20px;
 }
 
 
@@ -152,6 +158,7 @@ button:hover {
     font-size: 18px;
     margin-right: 5px;
 }
+
 
 
 /* Menú desplegable en dispositivos móviles */
