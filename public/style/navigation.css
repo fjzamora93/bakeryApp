@@ -1,54 +1,47 @@
-/* Archivo: styles.css */
-
 /* Reset y Estilo Básico del Menú */
 ul {
     list-style: none;
     padding: 0;
     margin: 0;
-    display: flex;
-    flex-wrap: wrap;
 }
 
 li {
     margin: 0;
+    display: inline-block;
 }
 
 a {
     text-decoration: none;
-    color: #333;
+    color: #fff;
+    display: inline-block;
+    align-items: center;
     padding: 10px 15px;
-    display: block;
 }
 
 /* Estilo para el contenedor del menú */
 nav {
     background-color: #414141;
     border-bottom: 1px solid #ddd;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
     padding: 10px 20px;
     margin-bottom: 50px;
+    min-height: 100px;
 }
 
+/* Estilo para el ícono en el menú */
 nav i {
     font-size: 20px;
+    margin-right: 8px;
 }
 
-/* Estilo para los elementos del menú */
-.main-header__item {
-    display: inline-block;
+.auth-button {
+    background-color: #e74c3c;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background-color 0.3s;
 }
 
-/* Botón de Logout */
-form {
-    display: inline;
-}
-
-
-h3{
-    margin-right: 10px;
+.auth-button:hover {
+    background-color: #c0392b;
 }
 
 button {
@@ -65,151 +58,112 @@ button:hover {
     background-color: #c0392b;
 }
 
-/* Estilo para el div de auth-message */
 .auth-message {
-    display: flex;
-    align-items: center;
-    color: #fff;
-    width: 200px;
-}
-
-.auth-message .profile-icon {
-    font-size: 40px; 
-    margin-right: 10px;
-    margin-left: 10px; 
-    color: #fff; 
-}
-
-/* Estilo para el icono del menú desplegable */
-.auth-message .menu-icon {
-    font-size: 20px; /* Tamaño del icono del menú desplegable */
-}
-
-/* Menú desplegable para auth-message registrado */
-.auth-message.registered {
-    position: relative;
-}
-
-.auth-message.registered:hover {
-    position: relative;
-    background-color: rgb(63, 107, 18);
-}
-
-.auth-message.registered:hover .dropdown-menu {
-    font-size: 40px;
-    display: block;
-}
-
-.auth-message.not-registered {
-    display: flex;
-    align-items: center;
-    gap: 30px; /* Espacio entre los botones */
-}
-
-.auth-button {
     display: inline-block;
-    background-color: #e74c3c; /* Color de fondo del botón */
-    color: #fff; /* Color del texto */
-    padding: 10px 20px; /* Espaciado interno */
-    text-decoration: none; /* Quitar subrayado */
-    border-radius: 5px; /* Bordes redondeados */
-    font-size: 16px; /* Tamaño de la fuente */
-    cursor: pointer; /* Cursor de mano */
-    transition: background-color 0.3s; /* Transición para el hover */
-    margin-left: 20px;
-}
-
-
-.auth-button:hover {
-    background-color: #c0392b; /* Color de fondo en hover */
-}
-
-.dropdown-menu {
-    display: none;
-    position: absolute;
-    top: 100%;
-    right: 0;
-    background-color: #333;
-    border: 1px solid #ddd;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 10px;
-    z-index: 10;
-}
-
-.dropdown-menu a {
+    align-items: center;
     color: #fff;
-    padding: 8px 12px;
-    display: block;
-    font-size: 20px;
 }
 
-.dropdown-menu a:hover {
-    background-color: #555;
+.profile-icon {
+    font-size: 40px;
+    margin-right: 10px;
 }
 
-/* Icono de menú desplegable */
-.dropdown-menu .menu-icon {
-    font-size: 20px;
-    margin-left: 10px;
-}
-
-/* Icono de corazón para favoritos */
 .favorites-icon {
     font-size: 18px;
     margin-right: 5px;
 }
 
 
-
-/* Menú desplegable en dispositivos móviles */
-@media (max-width: 768px) {
-    /* Mostrar el menú desplegable de navegación */
-    .dropdown-menu {
-        display: block; /* Asegúrate de que esté siempre visible */
-        position: static; /* Cambiar la posición a estática para el flujo normal del documento */
-        box-shadow: none; /* Opcional: Elimina la sombra para un diseño más sencillo */
-        background-color: #414141; /* Color de fondo del menú desplegable para que coincida con el menú principal */
-        border: none; /* Opcional: Elimina el borde para un diseño más limpio */
-        padding: 0; /* Opcional: Elimina el espaciado interno para que el menú se ajuste al contenido */
-    }
-
-    .dropdown-menu a {
-        font-size: 18px; /* Tamaño del texto en el menú desplegable */
-        padding: 10px 15px; /* Espaciado interno de los enlaces del menú */
-        border-bottom: 1px solid #555; /* Línea divisoria entre elementos del menú */
-    }
-
-    .dropdown-menu a:last-child {
-        border-bottom: none; /* Elimina la línea divisoria para el último elemento */
-    }
-
-    .auth-message.not-registered {
-        flex-direction: column; /* Alineación vertical para los botones */
-        align-items: flex-start; /* Alineación de los botones a la izquierda */
-    }
-
-    .auth-button {
-        width: 100%; /* Botones ocupan todo el ancho disponible */
-        text-align: center; /* Centrar el texto en los botones */
-        margin-bottom: 10px; /* Espacio entre los botones */
-    }
-
-    .auth-button:last-child {
-        margin-bottom: 0; /* Elimina el margen inferior en el último botón */
-    }
+.menu-bar, .menu-bar form{
+    max-width: 200px;
+    margin: 20px;
+    display: inline;
+    padding: 20px;
+    transition: background-color 0.3s, transform 0.3s;
 }
 
-/* Estilo del menú en pantallas grandes */
-/* Estilo del menú en pantallas grandes */
-@media (min-width: 769px) {
+.menu-bar:hover, .menu-bar form:hover {
+    background-color: #b7b7b8;
+    color: rgb(53, 50, 50);
+    transform: scale(1.05);
+}
+
+
+/* Contenedor general para los mensajes de autenticación */
+.auth-message {
+    padding: 10px;
+    border-radius: 5px;
+    color: #fff;
+    text-align: center;
+    max-width: 300px;
+    font-size: 16px;
+    display: inline;
+    margin: 30px;
+}
+
+
+/* Estilo para el mensaje de no registrado */
+.auth-message.not-registered {
+    background-color: #e74c3c; /* Rojo */
+    border: 1px solid #c0392b; /* Rojo oscuro */
+}
+
+/* Estilo para el mensaje de usuario registrado */
+.auth-message.registered {
+    background-color: #189410; /* Verde */
+    border: 1px solid #148710; /* Verde oscuro */
+}
+
+
+.auth-message.registered:hover {
+    background-color: #e6c12d; /* Verde */
+    border: 1px solid #c1ab2f; /* Verde oscuro */
+}
+
+
+/* Estilos para pantallas menores a 600px */
+@media (max-width: 600px) {
+    .auth-message {
+        display: block;
+    }
+    
+    nav {
+        display: block;
+    }
+
     ul {
-        display: flex;
-        justify-content: space-around;
+        display: block;
+    }
+
+    li {
+        display: block;
         width: 100%;
     }
 
-    /* Ocultar el menú desplegable en pantallas grandes */
-    .dropdown-menu {
-        display: none;
+    a {
+        display: block;
+    }
+
+
+    .auth-button {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .auth-button:last-child {
+        margin-bottom: 0;
+    }
+
+    nav ul li {
+        display: block!important;
+    }
+
+    .menu-bar, .menu-bar form{
+        max-width: 200px;
+        display: block;
+        margin: auto;
     }
 }
+

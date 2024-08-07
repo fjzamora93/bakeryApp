@@ -4,31 +4,3 @@
   margin: auto;
   display: block;
 }
-
-/* Contenedor general para los mensajes de autenticación */
-.auth-message {
-    padding: 10px;
-    border-radius: 5px;
-    color: #fff;
-    text-align: center;
-    margin: 0 auto;
-    max-width: 300px;
-    font-size: 16px;
-    float: left;
-    margin: 20px;
-
-}
-
-/* Estilo para el mensaje de no registrado */
-.auth-message.not-registered {
-    background-color: #e74c3c; /* Rojo */
-    border: 1px solid #c0392b; /* Rojo oscuro */
-}
-
-/* Estilo para el mensaje de usuario registrado */
-.auth-message.registered {
-    background-color: #2ecc71; /* Verde */
-    border: 1px solid #27ae60; /* Verde oscuro */
-}
-
-
