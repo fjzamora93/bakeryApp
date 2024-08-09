@@ -1,7 +1,6 @@
 
-
-<link rel="stylesheet" href="/style/index.css">
 <link rel="stylesheet" href="/style/profile.css">
+<link rel="stylesheet" href="/style/main.css">
 
 <body>
     <%- include('../includes/navigation.ejs') %>
@@ -19,47 +18,53 @@
 
             </div>
             <div class="profile-recipes">
-                <h3>Mis recetas</h3>
-                <div class="recipe-summary">
-
-                    <% for (let receta of creator.recipes) { %>
+                <h2>Mis recetas</h2>
+                
+                <% for (let receta of creator.recipes) { %>
+                    <a href="/recipe-details/<%= receta._id %>">
                         <div class="recipe-summary">
-                            <a href="/recipe-details/<%= receta._id %>">
-                                <img src="<%= receta.image %>" alt="<%= receta.image %>">
-                            </a>
-                            <h2>
-                                <a href="/recipe-details/<%= receta._id %>">
-                                    <%= receta.nombre %>
-                                </a>
+                            
+                            <img src="<%= receta.image %>" alt="<%= receta.image %>"  >
+                          
+                            <h2 id="title-recipe"> 
+                                <% if (isAuthenticated) { %>
+                                    <form method="post" action="/add-bookmark" class="favoritos">
+                                        <input type="hidden" name="idReceta" value = "<%= receta._id %>">
+                                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                        <button type="submit" class="bakery-button">
+                                            <i class="fas fa-heart"></i> 
+                                        </button>
+                                    </form>
+                                <% } %>
+                                <%= receta.nombre %> 
                             </h2>
+                          
                             <p><b>Descripción:</b> <%= receta.descripcion %></p>
                             <p><b>Tiempo:</b> <%= receta.tiempo %></p>
                             <p><b>Dificultad:</b> <%= receta.dificultad %></p>
-            
+        
+                     
 
                             <% if(isOwner) { %>
-                                <form method="post" action="/admin/delete/<%= receta._id %>">
+                                <form method="post" action="/admin/delete/<%= receta._id %>" class="bakery-button">
                                     <input type="hidden" name="idReceta" value = "<%= receta._id %>">
                                     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                                    <input type="submit" value="Eliminar" class="bakery-button">
+                                    <input type="submit" value="Eliminar" >
                                 </form>
-
-                                <form method="get" action="/admin/edit-recipe/<%= receta._id %>">
+    
+                                <form method="get" action="/admin/edit-recipe/<%= receta._id %>"  class="bakery-button">
                                     <input type="hidden" name="idReceta" value = "<%= receta._id %>">
                                     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                                    <input type="submit" value="Editar" class="bakery-button">
+                                    <input type="submit" value="Editar" >
                                 </form>
                             <% } %>
-                            
-                        </div>
-                    <% } %>
 
-                </div>
-                
+                        </div>
+                    </a>
+                <% } %>
             </div>
         </div>
     </div>
- 
 </body>
 
 <%- include('../includes/footer') %>

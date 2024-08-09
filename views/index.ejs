@@ -18,7 +18,7 @@
     
             <div class="search-container">
                 <label for="search">Buscar:</label>
-                <input type="text" id="search" name="search" placeholder="Introduce tu búsqueda" 
+              
                 <input type="text" id="search" name="search" placeholder="Introduce tu búsqueda" 
                     value="<%= typeof search !== 'undefined' ? search : '' %>">
                 <span class="search-icon">
@@ -33,26 +33,32 @@
 
     <div class="container" id="main">
         <% for (let receta of recetas) { %>
-            <div class="recipe-summary">
-                <a href="/recipe-details/<%= receta._id %>" class="img-miniatura">
-                    <img src="<%= receta.image %>" alt="<%= receta.image %>">
-                </a>
-                <h2>
-                    <a href="/recipe-details/<%= receta._id %>">
-                        <%= receta.nombre %>
-                    </a>
-                </h2>
-                <p><b>Descripción:</b> <%= receta.descripcion %></p>
-                <p><b>Tiempo:</b> <%= receta.tiempo %></p>
-                <p><b>Dificultad:</b> <%= receta.dificultad %></p>
-
-                    <form method="post" action="/add-bookmark">
-                        <input type="hidden" name="idReceta" value = "<%= receta._id %>">
-                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                        <input type="submit" value="Favoritos" class="bakery-button">
-                    </form>
+            <a href="/recipe-details/<%= receta._id %>">
+                <div class="recipe-summary">
                 
-            </div>
+                    <img src="<%= receta.image %>" alt="<%= receta.image %>">
+
+                    
+
+                    <h2> 
+                        <% if (isAuthenticated) { %>
+                            <form method="post" action="/add-bookmark" class="favoritos">
+                                <input type="hidden" name="idReceta" value = "<%= receta._id %>">
+                                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                <button type="submit" class="bakery-button">
+                                    <i class="fas fa-heart"></i> 
+                                </button>
+                            </form>
+                        <% } %>
+                        <%= receta.nombre %> 
+                    </h2>
+                    <p><b>Descripción:</b> <%= receta.descripcion %></p>
+                    <p><b>Tiempo:</b> <%= receta.tiempo %></p>
+                    <p><b>Dificultad:</b> <%= receta.dificultad %></p>
+
+                    
+                </div>
+            </a>
         <% } %>
     </div>
 

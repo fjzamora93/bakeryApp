@@ -75,7 +75,7 @@ button:hover {
 }
 
 
-.menu-bar, .menu-bar form{
+.menu-bar{
     max-width: 200px;
     margin: 20px;
     display: inline;
@@ -83,12 +83,15 @@ button:hover {
     transition: background-color 0.3s, transform 0.3s;
 }
 
-.menu-bar:hover, .menu-bar form:hover {
+.menu-bar:hover a{
     background-color: #b7b7b8;
     color: rgb(53, 50, 50);
-    transform: scale(1.05);
+    transform: scale(1.25);
 }
 
+.menu-bar form{
+    display: inline;
+}
 
 /* Contenedor general para los mensajes de autenticación */
 .auth-message {

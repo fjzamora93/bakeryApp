@@ -57,12 +57,18 @@ body {
     background: linear-gradient(to right, #ff3700, #a70909);
 }
 
+.favoritos{
+    display: inline;
+}
+
 header {
     background-color: #f8b400;
     color: white;
     padding: 10px 0;
     text-align: center;
 }
+
+
 
 nav {
     background-color: #333;
@@ -104,10 +110,13 @@ nav ul li a:hover {
     border-radius: 5px;
     padding: 15px;
     margin: 10px 0;
+    width: 800px;
+    max-width: 90%;
+    text-align: left;
 }
 
 
-.recipe-summary a img {
+.recipe-summary img {
     float: left;
     margin-right: 15px;
     margin-bottom : 10px;
@@ -124,10 +133,6 @@ nav ul li a:hover {
 .recipe-summary h2, .recipe-summary p {
     color: #333;
     text-decoration: none;
-}
-
-.recipe-summary h2 a:hover {
-    text-decoration: underline;
 }
 
 footer {
@@ -192,4 +197,16 @@ footer {
   .button-add, .button-delete{
     max-width: 50px;
   }
+
+
+  .recipe-summary {
+    width: 90%;
+}
+
+.recipe-summary img {
+    max-width: 90%;
+    max-height:90%;
+}
+
+
 }
