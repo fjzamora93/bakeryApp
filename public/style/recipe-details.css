@@ -16,6 +16,55 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+/* Recetas similares */
+
+.container-recetas-relacionadas {
+    text-align: center; /* Centra el título de la sección */
+    margin-bottom: 40px; /* Añade margen inferior para separar de otros contenidos */
+}
+
+.container-recetas-relacionadas h2 {
+    font-size: 2em; /* Tamaño de fuente del título */
+    margin-bottom: 20px; /* Espacio debajo del título */
+    color: #333; /* Color del texto del título */
+}
+
+.receta-similar {
+    display: inline-block;
+    margin: 10px;
+    text-align: center;
+    width: 200px;
+    border: 1px solid #ddd; /* Añade un borde alrededor de la receta */
+    border-radius: 8px; /* Esquinas redondeadas */
+    overflow: hidden; /* Asegura que la imagen no se desborde */
+    background-color: #fff; /* Fondo blanco para mejorar contraste */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transiciones suaves para hover */
+}
+
+.receta-similar:hover {
+    transform: scale(1.05); /* Escala ligeramente al pasar el ratón */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Aumenta la sombra en hover */
+}
+
+.receta-similar a {
+    text-decoration: none;
+    color: #333; /* Color del texto */
+}
+
+.receta-similar img {
+    width: 100%;
+    height: auto;
+    border-bottom: 1px solid #ddd; /* Borde inferior para separar la imagen del texto */
+}
+
+.receta-similar h3 {
+    margin: 10px 0;
+    font-size: 1.1em; /* Tamaño de fuente del título */
+    color: #555; /* Color del texto */
+}
+
+
 /* Recipe Details */
 .recipe-details h2 {
     color: #f8b400;
@@ -81,17 +130,7 @@ body {
     background-color: #d19400;
 }
 
-/* Footer */
-footer {
-    background-color: #333;
-    color: white;
-    text-align: center;
-    padding: 10px 0;
-    width: 100%;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-}
+
 
 /* Media Queries for Responsiveness */
 @media (max-width: 768px) {

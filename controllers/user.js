@@ -99,11 +99,15 @@ exports.getRecipeDetails = async (req, res, next) => {
         isCreator = req.user._id.toString() === receta.creator.toString() ? true : false;
     } 
 
+    //Buscamos recetas similares
+    recetasSimilares = await obtenerSimilarRecipes(recetaId);
+
     try {
         res.render('recipe-details',{
             receta : receta,
             isCreator : isCreator,
-            creator: creator
+            creator: creator,
+            recetasSimilares: recetasSimilares,
         })
     } catch (error) {   
         res.status(500).render('500', {
@@ -111,6 +115,25 @@ exports.getRecipeDetails = async (req, res, next) => {
     });
     }
 };
+
+
+async function obtenerSimilarRecipes(recetaId) {
+    const receta = await RecetaMdb.findById(recetaId);
+    const arrayTitulo = receta.nombre.split(" ");
+    const tituloLimpio = arrayTitulo.filter(palabra => palabra.length > 3);
+    let recetasSimilares = [];
+    for (let palabra of tituloLimpio) {
+        recetasMongoose = await RecetaMdb.find({
+            nombre: { $regex: palabra, $options: 'i' }
+        });
+        recetasSimilares.push(...recetasMongoose);
+    }
+
+    recetasSimilares = recetasSimilares.filter(receta => receta._id.toString() !== recetaId.toString());
+    recetasSimilares = [...new Set(recetasSimilares)];
+    
+    return recetasSimilares;
+}
 
 
 exports.getBookmark = (req, res, next) => {
