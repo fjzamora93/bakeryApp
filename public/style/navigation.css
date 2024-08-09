@@ -74,6 +74,34 @@ button:hover {
     margin-right: 5px;
 }
 
+header {
+    background: linear-gradient(135deg, #f8b400, #f5a623); /* Degradado de color de fondo */
+    color: white;
+    padding: 20px 0; /* Más espacio arriba y abajo */
+    text-align: center;
+    font-family: 'Arial', sans-serif; /* Fuente principal */
+    border-bottom: 5px solid #f57f17; /* Borde decorativo inferior */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra sutil */
+}
+
+header h1 {
+    font-family: 'Pacifico', cursive; /* Fuente estilizada para el título */
+    font-size: 2.5em; /* Tamaño del texto del título */
+    margin: 0;
+    letter-spacing: 1px; /* Espaciado entre letras */
+}
+
+header::before {
+    content: url('path-to-your-cooking-icon.svg'); /* Icono decorativo */
+    display: block;
+    margin: 0 auto 10px; /* Centra el icono y añade espacio abajo */
+    width: 50px; /* Ajusta el tamaño del icono */
+    height: auto;
+}
+
+/* Fuente externa para más estilo (opcional) */
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
 
 .menu-bar{
     max-width: 200px;
