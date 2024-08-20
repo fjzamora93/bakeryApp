@@ -18,7 +18,5 @@ router.get('/search', userController.getSearch);
 
 //! TEST CONEXION FRONTEND
 
-router.get('/api/posts', apiController.getPosts);
-router.post('/api/posts', apiController.postPosts);
 
 module.exports = router;

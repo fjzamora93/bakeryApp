@@ -101,10 +101,13 @@ exports.getRecipeDetails = async (req, res, next) => {
 
     //Buscamos recetas similares
     recetasSimilares = await obtenerSimilarRecipes(recetaId);
+    descripcionFormateada = receta.descripcion.split("\n");
+
 
     try {
         res.render('recipe-details',{
             receta : receta,
+            descripcionFormateada: descripcionFormateada,
             isCreator : isCreator,
             creator: creator,
             recetasSimilares: recetasSimilares,

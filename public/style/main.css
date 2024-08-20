@@ -1,5 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
+p {
+    white-space: pre-wrap; /* Respeta los saltos de línea y los espacios */
+    word-wrap: break-word; /* Permite el ajuste de palabras si son demasiado largas */
+}
+
+
+
 body {
     font-family: 'Roboto', sans-serif;
     margin: 0;

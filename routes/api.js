@@ -16,8 +16,13 @@ router.get('/csrf-token', (req, res) => {
 });
 
 //! RUTAS DE LA API, REORDENAR SEGÚN SE NECESITE
-router.get('/api/posts', apiController.getPosts);
-router.post('/api/posts', apiController.postPosts);
+router.get('/posts', apiController.getPosts);
+router.post('/posts', apiController.postPosts);
+router.delete('/posts/:postId', apiController.deletePost);
+router.put('/posts/:postId', apiController.putPost);
+
+router.get('/posts/:postId', apiController.getPostDetails);
+
 
 
 module.exports = router;

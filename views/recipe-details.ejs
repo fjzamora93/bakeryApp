@@ -17,13 +17,14 @@
                 <img src="<%= receta.image %>" alt="<%= receta.image %>">
             </div>
 
-            <p>
-                <%= receta.descripcion %>
-            </p>
+            <% for (let parrafo of descripcionFormateada){ %>
+                <p> <%= parrafo %> </p>
+            <% } %>
+            
 
 
             <h3>Ingredientes</h3>
-            <ul class="listado-details">
+            <ul class="listado-details" >
                 <% for (let ingrediente of receta.ingredientes) { %>
                     <li> <%= ingrediente %> </li>
                 <% } %>

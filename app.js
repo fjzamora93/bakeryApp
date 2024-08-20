@@ -63,6 +63,7 @@ app.set('views', 'views');
 
 
 //IMPORTACIÓN DE LAS RUTAS
+const apiRoutes = require('./routes/api');
 const adminRoutes = require('./routes/admin')
 const recipeRoutes = require('./routes/user')
 const authRoutes = require('./routes/auth');
@@ -178,6 +179,7 @@ app.get('/api/csrf-token', (req, res) => {
 //RUTAS DE LA APLICACIÓN GENERALES
 app.use('/', recipeRoutes);
 app.use('/admin', adminRoutes);
+app.use('/api', apiRoutes);
 app.use(pdfRoutes);
 app.use(authRoutes);
 
