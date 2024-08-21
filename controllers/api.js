@@ -1,13 +1,7 @@
-const postModel = require('../models/post');
+const postModel = require('../models/recipeMdb');
 const recipe = require('../models/recipeMdb');
 
 
-//! TEST PARA CONECTAR CON EL FRONTEND
-let posts = [
-    { title: 'First Post', content: 'This is the first post content' },
-    { title: 'Second Post', content: 'This is the second post content' },
-    { title: 'Third Post', content: 'This is the third post content' }
-  ];
 
 
 exports.getPosts = async (req, res, next) => {
@@ -37,17 +31,17 @@ exports.postPosts = async (req, res, next) => {
         }
         console.log('Received CSRF Token:', csrfToken);
 
-        // Verifica si el cuerpo de la solicitud contiene 'title' y 'content'
-        if (!req.body || !req.body.title || !req.body.content) {
-            return res.status(400).json({ error: 'Title and content are required' });
+        // Verifica si el cuerpo de la solicitud contiene 'nombre' y 'descripcion'
+        if (!req.body || !req.body.nombre || !req.body.descripcion) {
+            return res.status(400).json({ error: 'Nombre y descripcion are required' });
         }
 
         console.log('Request Body:', req.body);
-        const { title, content } = req.body;
+        const { nombre, descripcion } = req.body;
 
 
         // Crea un nuevo post y lo agrega a la lista de posts
-        const newPost = new postModel({ title, content });
+        const newPost = new postModel({ nombre, descripcion });
         newPost.save();
         res.status(201).json({ message: 'Post added successfully!', post: newPost });
 
@@ -76,13 +70,13 @@ exports.deletePost = async (req, res, next) => {
 exports.putPost = async (req, res, next) => {
     console.log('ACTUALIZANDO EN EL BACKEND:', req.params.postId);
     try {
-        if (!req.body || !req.body.title || !req.body.content) {
-            return res.status(400).json({ error: 'Title and content are required' });
+        if (!req.body || !req.body.nombre || !req.body.descripcion) {
+            return res.status(400).json({ error: 'Nombre and descripcion are required' });
         }
         
         let updatedData = { 
-            title: req.body.title, 
-            content: req.body.content 
+            nombre: req.body.nombre, 
+            descripcion: req.body.descripcion 
         };
 
         const updatedPost = await postModel.findByIdAndUpdate(req.params.postId, updatedData, { new: true });

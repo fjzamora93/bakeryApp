@@ -12,19 +12,19 @@ const recipeSchema = mongoose.Schema({
     },
     ingredientes: {
         type: [String],
-        required: true,
+        // required: true,
     },
     instrucciones: {
         type: [String],
-        required:true,
+        // required:true,
     },
     tiempo:{
         type: String,
-        required: true,
+        // required: true,
     },
     dificultad:{
         type:String,
-        required: true,
+        // required: true,
     },
     categoria:{
         type:String,
@@ -35,7 +35,7 @@ const recipeSchema = mongoose.Schema({
     creator:{
         type: Schema.Types.ObjectId,
         ref: 'User',
-        required: true
+        // required: true
     }
 });
 
