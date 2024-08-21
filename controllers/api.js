@@ -1,12 +1,17 @@
-const postModel = require('../models/recipeMdb');
+const postModel = require('../models/post');
 const recipe = require('../models/recipeMdb');
 
 
 
 
 exports.getPosts = async (req, res, next) => {
-    const posts = await recipe.find();
-    res.json({ message: 'Posts fetched successfully!', posts });
+    try{
+        const posts = await postModel.find();
+        res.json({ message: 'Posts fetched successfully!', posts });
+    }
+    catch {
+        res.status(500).json({ error: 'An internal server error occurred' });
+    }
 };
 
 exports.getPostDetails = async (req, res, next) => {
@@ -31,17 +36,17 @@ exports.postPosts = async (req, res, next) => {
         }
         console.log('Received CSRF Token:', csrfToken);
 
-        // Verifica si el cuerpo de la solicitud contiene 'nombre' y 'descripcion'
-        if (!req.body || !req.body.nombre || !req.body.descripcion) {
-            return res.status(400).json({ error: 'Nombre y descripcion are required' });
+        // Verifica si el cuerpo de la solicitud contiene 'title' y 'description'
+        if (!req.body || !req.body.title || !req.body.description) {
+            return res.status(400).json({ error: 'title y description are required' });
         }
 
         console.log('Request Body:', req.body);
-        const { nombre, descripcion } = req.body;
+        const { title, description } = req.body;
 
 
         // Crea un nuevo post y lo agrega a la lista de posts
-        const newPost = new postModel({ nombre, descripcion });
+        const newPost = new postModel({ title, description });
         newPost.save();
         res.status(201).json({ message: 'Post added successfully!', post: newPost });
 
@@ -70,13 +75,13 @@ exports.deletePost = async (req, res, next) => {
 exports.putPost = async (req, res, next) => {
     console.log('ACTUALIZANDO EN EL BACKEND:', req.params.postId);
     try {
-        if (!req.body || !req.body.nombre || !req.body.descripcion) {
-            return res.status(400).json({ error: 'Nombre and descripcion are required' });
+        if (!req.body || !req.body.title || !req.body.description) {
+            return res.status(400).json({ error: 'title and description are required' });
         }
         
         let updatedData = { 
-            nombre: req.body.nombre, 
-            descripcion: req.body.descripcion 
+            title: req.body.title, 
+            description: req.body.description 
         };
 
         const updatedPost = await postModel.findByIdAndUpdate(req.params.postId, updatedData, { new: true });

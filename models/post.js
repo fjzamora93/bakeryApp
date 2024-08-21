@@ -6,35 +6,29 @@ const postSchema = mongoose.Schema({
         type: String,
         required: true,
     },
-    subtitle: {
-        type: String,
-        required: false,
-    },
+    subtitle: {type: String,},
+    description: {type: String},
     content : {
         type: String,
-        required: true,
     },
-    list: {
-        type: String,
-        required: false,
-    },
-    imgUrl: {  
-        type: String,
-        required: false,
-    },
-    attachedFile: {
-        type: String,
-        required: false,
-    },
-    category: {
-        type: String,
-        required: false,
-    },
-    creator:{
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-        required: false
-    }
+    items: { type: [String] },
+    steps: { type: [String] },
+    tags: { type: [String] },
+    url: { type: String },
+    imgUrl: { type: String},
+    attachedFile: { type: String },
+    category: { type: String },
+    date: { type: String },
+    price: { type: Number },
+    
+
+    //Campos del post relacionados con la visita
+    status: { type: String },
+    views: { type: Number, default: 0 },
+    likes: { type: Number, default: 0 },
+    comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
+    author:{type: Schema.Types.ObjectId, ref: 'author'},
+
 });
 
 module.exports = mongoose.model('Post', postSchema);
