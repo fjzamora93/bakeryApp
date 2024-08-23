@@ -1,7 +1,7 @@
 const postModel = require('../models/post');
 const recipe = require('../models/recipeMdb');
-
-
+const { uploadImageToImgur } = require('../util/file');
+const fileHelper = require('../util/file');
 
 
 exports.getPosts = async (req, res, next) => {
@@ -28,6 +28,8 @@ exports.getPostDetails = async (req, res, next) => {
 }
 
 exports.postPosts = async (req, res, next) => {
+
+    
     try {
         // Verifica si el CSRF Token está presente
         const csrfToken = req.headers['x-csrf-token'];
@@ -72,13 +74,17 @@ exports.deletePost = async (req, res, next) => {
     }
 };
 
+
+
+
 exports.putPost = async (req, res, next) => {
     console.log('ACTUALIZANDO EN EL BACKEND:', req.params.postId);
+    
     try {
         if (!req.body || !req.body.title || !req.body.description) {
             return res.status(400).json({ error: 'title and description are required' });
         }
-        
+        console.log("Request Body PRIMERO PASO:", req.body);
         let updatedData = { 
             title: req.body.title, 
             description: req.body.description,
@@ -91,10 +97,22 @@ exports.putPost = async (req, res, next) => {
             imgUrl: req.body.imgUrl,
         };
 
+        //!Subida de imágenes al servidor
+        const oldPost = await postModel.findById(req.params.postId);
+        if (req.file) {
+            const imgurLink = await uploadImageToImgur(req.file.path);
+            console.log('Este es al antiguo post recuperado con req.params.postid:', oldPost.imgUrl, imgurLink);
+            fileHelper.deleteFile(oldPost.imgUrl);
+            updatedData.imgUrl = imgurLink;
+        }
+       
+        //Resto del código que funcionaba bien
         const updatedPost = await postModel.findByIdAndUpdate(req.params.postId, updatedData, { new: true });
-        console.log('Updated Post:', updatedPost);
+        console.log('Updated SEGUNDO PASO Post:', updatedPost);
         res.status(200).json({ message: 'Post updated successfully!',updatedPost });
     } catch (error) {
         console.error('An error occurred:', error);
         res.status(500).json({ error: 'An internal server error occurred' });
 }};
+
+

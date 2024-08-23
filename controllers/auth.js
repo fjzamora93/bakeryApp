@@ -42,37 +42,35 @@ exports.getSignup = (req, res, next) => {
     });
   };
 
-exports.postLogin = async (req, res, next) => {
+  exports.postLogin = async (req, res, next) => {
     const email = req.body.email.toLowerCase();
     const password = req.body.password;
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(422).render('auth/login', {
-        path: '/login',
-        pageTitle: 'Login',
-        errorMessage: errors.array()[0].msg,
-        oldInput: {
-            email: email,
-            password: password
-        },
-        validationErrors: errors.array()
+        return res.status(422).json({
+            success: false,
+            message: errors.array()[0].msg,
+            oldInput: {
+                email: email,
+                password: password
+            },
+            validationErrors: errors.array()
         });
     }
 
     try {
         const user = await User.findOne({ $or: [{ email: email }, { name: email }] });
         if (!user) {
-        return res.status(422).render('auth/login', {
-            path: '/login',
-            pageTitle: 'Login',
-            errorMessage: 'Nombre de usuario, email o contraseñas incorrectas.',
-            oldInput: {
-            email: email,
-            password: password
-            },
-            validationErrors: []
-        });
+            return res.status(422).json({
+                success: false,
+                message: 'Nombre de usuario, email o contraseñas incorrectas.',
+                oldInput: {
+                    email: email,
+                    password: password
+                },
+                validationErrors: []
+            });
         }
 
         // Compara la contraseña
@@ -80,37 +78,48 @@ exports.postLogin = async (req, res, next) => {
         if (doMatch) {
             req.session.isLoggedIn = true;
             req.session.user = user;
-            console.log('Usuario log: ', user.name, req.session.user.name)
 
-        // Guarda la sesión y redirige
-        await new Promise((resolve, reject) => {
-            req.session.save(err => {
-            if (err) {
-                console.log('Error al guardar la sesión:', err);
-                return reject(err);
-            }
-            resolve();
+            // Guarda la sesión
+            await new Promise((resolve, reject) => {
+                req.session.save(err => {
+                    if (err) {
+                        console.log('Error al guardar la sesión:', err);
+                        return reject(err);
+                    }
+                    resolve();
+                });
             });
-        });
-        return res.redirect('/');
+
+            // Enviar respuesta JSON al frontend
+            return res.status(200).json({
+                success: true,
+                message: 'Login successful!',
+                user: {
+                    id: user._id,
+                    name: user.name,
+                    email: user.email
+                }
+            });
+        } else {
+            return res.status(422).json({
+                success: false,
+                message: 'Nombre de usuario, email o contraseñas incorrectas.',
+                oldInput: {
+                    email: email,
+                    password: password
+                },
+                validationErrors: []
+            });
         }
-    
-        // Contraseña incorrecta
-        return res.status(422).render('auth/login', {
-            path: '/login',
-            pageTitle: 'Login',
-            errorMessage: 'Invalid email or password.',
-            oldInput: {
-            email: email,
-            password: password
-            },
-            validationErrors: []
-        });
     } catch (err) {
         console.log('Error en el proceso de login:', err);
-        return res.redirect('/login');
+        return res.status(500).json({
+            success: false,
+            message: 'An internal server error occurred'
+        });
     }
-  };
+};
+
   
 
 exports.postSignup = async (req, res, next) => {

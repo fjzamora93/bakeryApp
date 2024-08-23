@@ -143,6 +143,7 @@ exports.postDeleteRecipe = async (req, res, next) => {
 }
 
 exports.postEditRecipe = async (req, res, next) => {
+   
     const { nombre, descripcion, ingredientes, instrucciones, tiempo, dificultad, categoria, idReceta } = req.body;
     const id = idReceta.trim();
     const creator = req.session.user._id;
