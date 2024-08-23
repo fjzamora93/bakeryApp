@@ -81,7 +81,14 @@ exports.putPost = async (req, res, next) => {
         
         let updatedData = { 
             title: req.body.title, 
-            description: req.body.description 
+            description: req.body.description,
+            content: req.body.content,
+            items: req.body.items,
+            steps: req.body.steps,
+            category: req.body.category,
+            status: req.body.status,
+            date: req.body.date,
+            imgUrl: req.body.imgUrl,
         };
 
         const updatedPost = await postModel.findByIdAndUpdate(req.params.postId, updatedData, { new: true });
