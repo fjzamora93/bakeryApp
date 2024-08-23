@@ -106,8 +106,12 @@ app.use((error, req, res, next) => {
   });
 
 
+
+
 //Middleware para subir archivos con Multer a nuestro HOST.
-app.use(multer({ storage: fileStorage, fileFilter: fileFilter }).single('image'));
+app.use(multer({ storage: fileStorage, fileFilter: fileFilter }).single('file')); //! 'file' es el nombre del campo en el formulario
+//!Aunque podrías haber definido cualquier otro nombre en lugar de file, y en el front tendrías que usarlo.
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
