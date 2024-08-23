@@ -84,6 +84,7 @@ exports.putPost = async (req, res, next) => {
         if (!req.body || !req.body.title || !req.body.description) {
             return res.status(400).json({ error: 'title and description are required' });
         }
+        
         console.log("Request Body PRIMERO PASO:", req.body);
         let updatedData = { 
             title: req.body.title, 
@@ -93,26 +94,24 @@ exports.putPost = async (req, res, next) => {
             steps: req.body.steps,
             category: req.body.category,
             status: req.body.status,
-            date: req.body.date,
-            imgUrl: req.body.imgUrl,
+            date: req.body.date
         };
 
-        //!Subida de imágenes al servidor
+        //! Subida de imágenes al servidor
         const oldPost = await postModel.findById(req.params.postId);
         if (req.file) {
             const imgurLink = await uploadImageToImgur(req.file.path);
-            console.log('Este es al antiguo post recuperado con req.params.postid:', oldPost.imgUrl, imgurLink);
-            fileHelper.deleteFile(oldPost.imgUrl);
+            console.log('Este es el antiguo post recuperado con req.params.postid:', oldPost.imgUrl, imgurLink);
             updatedData.imgUrl = imgurLink;
         }
-       
-        //Resto del código que funcionaba bien
+
         const updatedPost = await postModel.findByIdAndUpdate(req.params.postId, updatedData, { new: true });
         console.log('Updated SEGUNDO PASO Post:', updatedPost);
-        res.status(200).json({ message: 'Post updated successfully!',updatedPost });
+        res.status(200).json({ message: 'Post updated successfully!', updatedPost });
     } catch (error) {
         console.error('An error occurred:', error);
         res.status(500).json({ error: 'An internal server error occurred' });
-}};
+    }
+};
 
 

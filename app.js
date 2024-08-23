@@ -89,7 +89,7 @@ const corsOptions = {
       }
       return callback(null, true);
     },
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', , 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With' ,'X-CSRF-TOKEN'],
     credentials: true
 };
@@ -110,6 +110,7 @@ app.use((error, req, res, next) => {
 app.use(multer({ storage: fileStorage, fileFilter: fileFilter }).single('image'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/images', express.static(path.join(__dirname, 'images')));
+
 
 
 //PASO 1: CONFIGURACIÓN DEL MIDDLEWARE DE SESIÓN y COOKIES
