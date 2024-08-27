@@ -82,7 +82,6 @@ exports.putPost = async (req, res, next) => {
         if (!req.body || !req.body.title || !req.body.description) {
             return res.status(400).json({ error: 'title and description are required' });
         }
-        
         let updatedData = { 
             title: req.body.title, 
             description: req.body.description,
@@ -107,4 +106,71 @@ exports.putPost = async (req, res, next) => {
     }
 };
 
+//!AUTHENTITICATION
+exports.postLogin =  (req, res, next) => {
+    console.log('Received request de login:', req.body);
+    let fetchedUser;
+    User.findOne({ email: req.body.email })
+      .then(user => {
+        if (!user) {
+          return res.status(401).json({
+            message: "Auth failed"
+          });
+        }
+        fetchedUser = user;
+        return bcrypt.compare(req.body.password, user.password);
+      })
+      .then(result => {
+        if (!result) {
+          return res.status(401).json({
+            message: "Auth failed"
+          });
+        }
+        const token = jwt.sign(
+          { email: fetchedUser.email, userId: fetchedUser._id },
+          "secret_this_should_be_longer",
+          { expiresIn: "1h" }
+        );
+        res.status(200).json({
+          token: token,
+          expiresIn: 3600
+        });
+      })
+      .catch(err => {
+        return res.status(401).json({
+          message: "Auth failed"
+        });
+      });
+  };
 
+
+exports.postSignup = (req, res, next) => {
+    console.log('Received request de SIGNUP:', req.body);
+    bcrypt.hash(req.body.password, 10).then(hash => {
+      const user = new User({
+        email: req.body.email,
+        password: hash
+      });
+      user
+        .save()
+        .then(result => {
+          res.status(201).json({
+            message: "User created!",
+            result: result
+          });
+        })
+        .catch(err => {
+          res.status(500).json({
+            error: err
+          });
+        });
+    });
+  };
+  
+
+exports.postLogout = (req, res, next) => {
+  req.session.destroy(err => {
+    console.log(err);
+    res.redirect('/');
+  });
+};

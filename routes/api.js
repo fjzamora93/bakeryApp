@@ -24,6 +24,16 @@ router.put('/posts/:postId', apiController.putPost);
 router.get('/posts/:postId', apiController.getPostDetails);
 
 
+//!Autentificación
+router.post('/user/login', apiController.postLogin);
+router.post('/user/logout', apiController.postLogout);
+router.post('/user/signup', apiController.postSignup);
+
+
+
+router.get('/user/login', (req, res) => {
+    res.json({ message: 'Petición recibida correctamente!' });
+});
 
 
 module.exports = router;
