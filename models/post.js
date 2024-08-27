@@ -17,7 +17,7 @@ const postSchema = mongoose.Schema({
     url: { type: String },
     imgUrl: { type: String},
     attachedFile: { type: String },
-    category: { type: String },
+    category: { type: [String] },
     date: { type: String },
     price: { type: Number },
     

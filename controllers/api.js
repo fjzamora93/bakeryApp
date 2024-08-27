@@ -78,14 +78,11 @@ exports.deletePost = async (req, res, next) => {
 
 
 exports.putPost = async (req, res, next) => {
-    console.log('ACTUALIZANDO EN EL BACKEND:', req.params.postId);
-    
     try {
         if (!req.body || !req.body.title || !req.body.description) {
             return res.status(400).json({ error: 'title and description are required' });
         }
         
-        console.log("Request Body PRIMERO PASO:", req.body);
         let updatedData = { 
             title: req.body.title, 
             description: req.body.description,
@@ -97,16 +94,12 @@ exports.putPost = async (req, res, next) => {
             date: req.body.date
         };
 
-        //! Subida de imágenes al servidor
+        // Subida de imágenes al servidor
         const oldPost = await postModel.findById(req.params.postId);
         if (req.file) {
-            const imgurLink = await uploadImageToImgur(req.file.path);
-            console.log('Este es el antiguo post recuperado con req.params.postid:', oldPost.imgUrl, imgurLink);
-            updatedData.imgUrl = imgurLink;
+            updatedData.imgUrl = await uploadImageToImgur(req.file.path);
         }
-
         const updatedPost = await postModel.findByIdAndUpdate(req.params.postId, updatedData, { new: true });
-        console.log('Updated SEGUNDO PASO Post:', updatedPost);
         res.status(200).json({ message: 'Post updated successfully!', updatedPost });
     } catch (error) {
         console.error('An error occurred:', error);
