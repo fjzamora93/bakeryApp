@@ -135,7 +135,7 @@ app.use(session({
       }
     })
   );
-  app.use(csrfProtection); 
+//   app.use(csrfProtection); 
   app.use(flash());
 
   //! Mensaje para verificar que el servidor está funcionando
