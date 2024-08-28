@@ -79,7 +79,8 @@ const allowedOrigins = [
     'http://localhost:4200',
     'https://fjzamora93.github.io',
     'https://web-production-90fa.up.railway.app',
-    'https://bakeryappfront-production.up.railway.app'
+    'https://bakeryappfront-production.up.railway.app',
+    'https://fjzamora93.github.io/BakeryAppFront/'
 ];
 const corsOptions = {
     origin: function (origin, callback) {
@@ -130,7 +131,7 @@ app.use(session({
         maxAge: 48 * 60 * 60 * 1000, 
         secure: process.env.NODE_ENV === 'production', 
         sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-        domain: process.env.NODE_ENV === 'production' ? '.railway.app' : 'localhost'
+        domain: process.env.NODE_ENV === 'production' ? '.github.io' : 'localhost'
       }
     })
   );
