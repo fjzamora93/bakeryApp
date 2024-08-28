@@ -131,13 +131,14 @@ app.use(session({
         maxAge: 48 * 60 * 60 * 1000, 
         secure: process.env.NODE_ENV === 'production', 
         sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-        domain: process.env.NODE_ENV === 'production' ? '.github.io' : 'localhost'
+        domain: undefined // No necesitas un dominio específico para cross-origin.
       }
     })
   );
-  app.use(csrfProtection); 
 
-  // Manejo de errores de CSRF
+app.use(csrfProtection); 
+
+// Manejo de errores de CSRF
 app.use((err, req, res, next) => {
     if (err.code === 'EBADCSRFTOKEN') {
       res.status(403).json({ error: 'Token CSRF no válido, está interceptando' });
