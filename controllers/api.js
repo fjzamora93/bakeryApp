@@ -2,7 +2,10 @@ const postModel = require('../models/post');
 const recipe = require('../models/recipeMdb');
 const { uploadImageToImgur } = require('../util/file');
 const fileHelper = require('../util/file');
-
+const { validationResult } = require('express-validator');
+const User = require('../models/user');
+const crypto = require('crypto');
+const bcrypt = require('bcryptjs');
 
 exports.getPosts = async (req, res, next) => {
     try{
@@ -107,41 +110,83 @@ exports.putPost = async (req, res, next) => {
 };
 
 //!AUTHENTITICATION
-exports.postLogin =  (req, res, next) => {
-    console.log('Received request de login:', req.body);
-    let fetchedUser;
-    User.findOne({ email: req.body.email })
-      .then(user => {
+exports.postLogin =  async (req, res, next) => {
+    const email = req.body.email.toLowerCase();
+    const password = req.body.password;
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422).json({
+            success: false,
+            message: errors.array()[0].msg,
+            oldInput: {
+                email: email,
+                password: password
+            },
+            validationErrors: errors.array()
+        });
+    }
+
+    try {
+        const user = await User.findOne({ $or: [{ email: email }, { name: email }] });
         if (!user) {
-          return res.status(401).json({
-            message: "Auth failed"
-          });
+            return res.status(422).json({
+                success: false,
+                message: 'Nombre de usuario, email o contraseñas incorrectas.',
+                oldInput: {
+                    email: email,
+                    password: password
+                },
+                validationErrors: []
+            });
         }
-        fetchedUser = user;
-        return bcrypt.compare(req.body.password, user.password);
-      })
-      .then(result => {
-        if (!result) {
-          return res.status(401).json({
-            message: "Auth failed"
-          });
+
+        // Compara la contraseña
+        const doMatch = await bcrypt.compare(password, user.password);
+        if (doMatch) {
+            req.session.isLoggedIn = true;
+            req.session.user = user;
+
+            // Guarda la sesión
+            await new Promise((resolve, reject) => {
+                req.session.save(err => {
+                    if (err) {
+                        console.log('Error al guardar la sesión:', err);
+                        return reject(err);
+                    }
+                    resolve();
+                });
+            });
+
+            // Enviar respuesta JSON al frontend
+            return res.status(200).json({
+                success: true,
+                message: 'Login successful!',
+                user: {
+                    id: user._id,
+                    name: user.name,
+                    email: user.email
+                }
+            });
+        } else {
+            return res.status(422).json({
+                success: false,
+                message: 'Nombre de usuario, email o contraseñas incorrectas.',
+                oldInput: {
+                    email: email,
+                    password: password
+                },
+                validationErrors: []
+            });
         }
-        const token = jwt.sign(
-          { email: fetchedUser.email, userId: fetchedUser._id },
-          "secret_this_should_be_longer",
-          { expiresIn: "1h" }
-        );
-        res.status(200).json({
-          token: token,
-          expiresIn: 3600
+    } catch (err) {
+        console.log('Error en el proceso de login:', err);
+        return res.status(500).json({
+            success: false,
+            message: 'An internal server error occurred'
         });
-      })
-      .catch(err => {
-        return res.status(401).json({
-          message: "Auth failed"
-        });
-      });
-  };
+    }
+};
 
 
 exports.postSignup = (req, res, next) => {
