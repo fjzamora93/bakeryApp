@@ -147,6 +147,7 @@ app.use(session({
 
 // DEVOLVER USUARIO AUTENTIFICADO
 app.use(async (req, res, next) => {
+    console.log('Autentificando usuario...');
     if (!req.session.user) {
       return next();
     }
@@ -167,6 +168,7 @@ app.use((req, res, next) => {
     if (!req.session.csrfToken) {
         req.session.csrfToken = req.csrfToken();
     }
+    console.log('CSRF Token 166:', req.session.csrfToken);
     res.locals.isAuthenticated = req.session.isLoggedIn;
     res.locals.user = req.user; 
     res.locals.csrfToken = req.csrfToken();
@@ -175,6 +177,7 @@ app.use((req, res, next) => {
 
 // RUTA PARA OBTENER EL TOKEN CSRF EN LA API
 app.get('/api/csrf-token', (req, res) => {
+    console.log('CSRF Token fetched from the backend:', req.session.csrfToken);
     try {
         res.status(201).json({ csrfToken: req.session.csrfToken });
     } catch (error) {
