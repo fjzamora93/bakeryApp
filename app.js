@@ -78,7 +78,8 @@ const allowedOrigins = [
     'http://localhost:3000', 
     'http://localhost:4200',
     'https://fjzamora93.github.io',
-    'https://web-production-90fa.up.railway.app/',
+    'https://web-production-90fa.up.railway.app',
+    'https://bakeryappfront-production.up.railway.app'
 ];
 const corsOptions = {
     origin: function (origin, callback) {
@@ -89,7 +90,7 @@ const corsOptions = {
       }
       return callback(null, true);
     },
-    methods: ['GET', 'POST', 'PUT', 'DELETE', , 'OPTIONS'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With' ,'X-CSRF-TOKEN'],
     credentials: true
 };
