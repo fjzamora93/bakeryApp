@@ -8,6 +8,7 @@ const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 
 exports.getPosts = async (req, res, next) => {
+    console.log('GET request received en la API! ->', req.query);
     try{
         const posts = await postModel.find();
         res.json({ message: 'Posts fetched successfully!', posts });
@@ -31,8 +32,6 @@ exports.getPostDetails = async (req, res, next) => {
 }
 
 exports.postPosts = async (req, res, next) => {
-
-    
     try {
         // Verifica si el CSRF Token está presente
         const csrfToken = req.headers['x-csrf-token'];
@@ -47,11 +46,11 @@ exports.postPosts = async (req, res, next) => {
         }
 
         console.log('Request Body:', req.body);
-        const { title, description } = req.body;
+        const { title, description, content, items, steps, category, date } = req.body;
 
 
         // Crea un nuevo post y lo agrega a la lista de posts
-        const newPost = new postModel({ title, description });
+        const newPost = new postModel({ title, description, content, items, steps, category, date });
         newPost.save();
         res.status(201).json({ message: 'Post added successfully!', post: newPost });
 
