@@ -46,11 +46,18 @@ exports.postPosts = async (req, res, next) => {
         }
 
         console.log('Request Body:', req.body);
-        const { title, description, content, items, steps, category, date } = req.body;
-
+        const { title, description, content, items, steps, category, date, status } = req.body;
 
         // Crea un nuevo post y lo agrega a la lista de posts
-        const newPost = new postModel({ title, description, content, items, steps, category, date });
+        const newPost = new postModel({ title, description, content, items, steps, category, date, status });
+
+        if (req.file) {
+            newPost.imgUrl = await uploadImageToImgur(req.file.path);
+            console.log('Imagen subida:', newPost.imgUrl);
+        } else {
+            console.log('No se subió ninguna imagen');
+        }
+
         newPost.save();
         res.status(201).json({ message: 'Post added successfully!', post: newPost });
 
@@ -59,25 +66,6 @@ exports.postPosts = async (req, res, next) => {
         res.status(500).json({ error: 'An internal server error occurred' });
     }
 }
-
-
-exports.deletePost = async (req, res, next) => {
-    console.log('DELETE request received for postId en la API:', req.params.postId);
-    try {
-        const postId = req.params.postId;
-        const deletedPost = await postModel.findByIdAndDelete(postId);
-        if (!deletedPost) {
-            return res.status(404).json({ error: 'Post not found' });
-        }
-        res.status(200).json({ message: `Post ${postId} deleted successfully!` });
-    } catch (error) {
-        console.error('An error occurred:', error);
-        res.status(500).json({ error: 'An internal server error occurred' });
-    }
-};
-
-
-
 
 exports.putPost = async (req, res, next) => {
     try {
@@ -102,6 +90,21 @@ exports.putPost = async (req, res, next) => {
         }
         const updatedPost = await postModel.findByIdAndUpdate(req.params.postId, updatedData, { new: true });
         res.status(200).json({ message: 'Post updated successfully!', updatedPost });
+    } catch (error) {
+        console.error('An error occurred:', error);
+        res.status(500).json({ error: 'An internal server error occurred' });
+    }
+};
+
+exports.deletePost = async (req, res, next) => {
+    console.log('DELETE request received for postId en la API:', req.params.postId);
+    try {
+        const postId = req.params.postId;
+        const deletedPost = await postModel.findByIdAndDelete(postId);
+        if (!deletedPost) {
+            return res.status(404).json({ error: 'Post not found' });
+        }
+        res.status(200).json({ message: `Post ${postId} deleted successfully!` });
     } catch (error) {
         console.error('An error occurred:', error);
         res.status(500).json({ error: 'An internal server error occurred' });
