@@ -131,7 +131,7 @@ app.use(session({
         maxAge: 48 * 60 * 60 * 1000, 
         secure: process.env.NODE_ENV === 'production', 
         sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-        domain: undefined // No necesitas un dominio específico para cross-origin.
+        domain: undefined //! para cross origin asegurarte que es Undefined o se bloquearán las cookies
       }
     })
   );
