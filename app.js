@@ -128,7 +128,8 @@ app.use(session({
       saveUninitialized: true,
       store: store,
       cookie: {
-        maxAge: 48 * 60 * 60 * 1000, 
+        maxAge: 60 * 60 * 1000, //!Una hora de cookie, ampliar más adelante
+        httpOnly: true, 
         secure: process.env.NODE_ENV === 'production', 
         sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
         domain: undefined //! para cross origin asegurarte que es Undefined o se bloquearán las cookies
