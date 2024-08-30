@@ -128,7 +128,7 @@ app.use(session({
       saveUninitialized: true,
       store: store,
       cookie: {
-        maxAge: 60 * 60 * 1000, //!Una hora de cookie, ampliar más adelante
+        maxAge: 24* 60 * 60 * 1000, 
         httpOnly: true, 
         secure: process.env.NODE_ENV === 'production', 
         sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
@@ -147,6 +147,8 @@ app.use((err, req, res, next) => {
       next(err);
     }
   });
+
+
 
   app.use(flash());
 
@@ -180,22 +182,18 @@ app.use((req, res, next) => {
     if (!req.session.csrfToken) {
         req.session.csrfToken = req.csrfToken();
     }
+    console.log('Cookies: ', req.cookies);
     console.log('CSRF Token 166:', req.session.csrfToken);
     res.locals.isAuthenticated = req.session.isLoggedIn;
     res.locals.user = req.user; 
-    res.locals.csrfToken = req.csrfToken();
+    res.locals.csrfToken = req.session.csrfToken;
     next();
 });
 
 // RUTA PARA OBTENER EL TOKEN CSRF EN LA API
 app.get('/api/csrf-token', (req, res) => {
     console.log('CSRF Token fetched from the backend:', req.session.csrfToken);
-    try {
-        res.status(201).json({ csrfToken: req.session.csrfToken });
-    } catch (error) {
-        console.error('Error fetching CSRF token desde el backend:', error);
-        res.status(500).json({ error: 'Error fetching CSRF token desde el backend' });
-    }
+    res.status(201).json({ csrfToken: req.session.csrfToken });
 });
 
 //RUTAS DE LA APLICACIÓN GENERALES
