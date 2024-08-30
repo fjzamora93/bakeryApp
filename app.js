@@ -14,7 +14,14 @@ const app = express();
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const csrf = require('csurf');
-const csrfProtection = csrf({ cookie: process.env.NODE_ENV === 'production' });
+//! Configuramos también la cookie para que sea segura en producción
+const csrfProtection = csrf({
+    cookie: {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
+        }
+    });
 const flash = require('connect-flash');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
