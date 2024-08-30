@@ -15,9 +15,9 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
-  recipes: [{
+  posts: [{
     type: Schema.Types.ObjectId,
-    ref: 'Recipe',
+    ref: 'Post',
   }],
 
   cart: {
@@ -34,7 +34,7 @@ const userSchema = new Schema({
   },
   bookmark: [{
     type: Schema.Types.ObjectId,
-    ref: 'Recipe',
+    ref: 'Post',
   }]
 });
 

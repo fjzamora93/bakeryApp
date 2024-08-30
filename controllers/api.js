@@ -165,9 +165,11 @@ exports.postLogin =  async (req, res, next) => {
                 success: true,
                 message: 'Login successful!',
                 user: {
-                    id: user._id,
+                    _id: user._id,
                     name: user.name,
-                    email: user.email
+                    email: user.email,
+                    posts: user.posts,
+                    bookmark: user.bookmark
                 }
             });
         } else {
