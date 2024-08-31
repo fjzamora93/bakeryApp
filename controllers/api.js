@@ -10,7 +10,7 @@ const bcrypt = require('bcryptjs');
 exports.getPosts = async (req, res, next) => {
     console.log('GET request received en la API! ->', req.query);
     try{
-        const posts = await postModel.find();
+        const posts = await postModel.find().sort({ title: 1 });
         res.json({ message: 'Posts fetched successfully!', posts });
     }
     catch {
@@ -217,9 +217,13 @@ exports.postSignup = (req, res, next) => {
   };
   
 
-exports.postLogout = (req, res, next) => {
-  req.session.destroy(err => {
-    console.log(err);
-    res.redirect('/');
-  });
-};
+  exports.postLogout = (req, res, next) => {
+    req.session.destroy(err => {
+      if (err) {
+        console.log(err);
+        return next(err);  
+      }
+      res.clearCookie('csrfToken');  
+      res.redirect('/');  
+    });
+  };

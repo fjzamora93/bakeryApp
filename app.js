@@ -19,7 +19,9 @@ const csrfProtection = csrf({
     cookie: {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      maxAge: 1000 * 60 * 60,
+      domain: undefined 
         }
     });
 const flash = require('connect-flash');
@@ -135,7 +137,7 @@ app.use(session({
       saveUninitialized: true,
       store: store,
       cookie: {
-        maxAge: 24* 60 * 60 * 1000, 
+        maxAge: 60 * 60 * 1000, 
         httpOnly: true, 
         secure: process.env.NODE_ENV === 'production', 
         sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
