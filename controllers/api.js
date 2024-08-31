@@ -38,18 +38,16 @@ exports.postPosts = async (req, res, next) => {
         if (!csrfToken) {
             return res.status(400).json({ error: 'CSRF Token is missing' });
         }
-        console.log('Received CSRF Token:', csrfToken);
 
         // Verifica si el cuerpo de la solicitud contiene 'title' y 'description'
         if (!req.body || !req.body.title || !req.body.description) {
             return res.status(400).json({ error: 'title y description are required' });
         }
 
-        console.log('Request Body:', req.body);
-        const { title, description, content, items, steps, category, date, status } = req.body;
+        const { title, description, content, items, steps, category, date, status, author } = req.body;
 
         // Crea un nuevo post y lo agrega a la lista de posts
-        const newPost = new postModel({ title, description, content, items, steps, category, date, status });
+        const newPost = new postModel({ title, description, content, items, steps, category, date, status, author });
 
         if (req.file) {
             newPost.imgUrl = await uploadImageToImgur(req.file.path);
