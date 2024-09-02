@@ -191,27 +191,46 @@ exports.postLogin =  async (req, res, next) => {
 };
 
 
-exports.postSignup = (req, res, next) => {
-    console.log('Received request de SIGNUP:', req.body);
-    bcrypt.hash(req.body.password, 10).then(hash => {
-      const user = new User({
-        email: req.body.email,
-        password: hash
+exports.postSignup = async (req, res, next) => {
+    console.log('Received SIGNUP request:', req.body);
+  
+    // Extraer los datos del cuerpo de la solicitud
+    const { user, password } = req.body;
+  
+    try {
+      // Hash de la contraseña usando bcrypt
+      const hash = await bcrypt.hash(password, 10);
+  
+      // Crear un nuevo usuario con el email y la contraseña hasheada
+      const newUser = new User({
+        email: user.email,
+        name: user.name, 
+        password: hash,
+        posts: user.posts || [], 
+        bookmark: user.bookmark || []
       });
-      user
-        .save()
-        .then(result => {
-          res.status(201).json({
-            message: "User created!",
-            result: result
-          });
-        })
-        .catch(err => {
-          res.status(500).json({
-            error: err
-          });
+      
+      const existingUser = await User.findOne({ email: user.email });
+      if (existingUser) {
+        return res.status(409).json({
+          error: 'User already exists'
         });
-    });
+      }
+
+      // Guardar el nuevo usuario en la base de datos
+      const result = await newUser.save();
+  
+      // Responder con éxito
+      res.status(201).json({
+        message: 'User created!',
+        result: result
+      });
+    } catch (err) {
+      console.error('Error during user signup:', err);
+      res.status(500).json({
+        error: err.message || 'Internal server error'
+      });
+    }
   };
   
 
