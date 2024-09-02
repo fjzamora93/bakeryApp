@@ -16,6 +16,7 @@ router.get('/csrf-token', (req, res) => {
 });
 
 //! RUTAS DE LA API, REORDENAR SEGÚN SE NECESITE
+
 router.get('/posts', apiController.getPosts);
 router.post('/posts', apiController.postPosts);
 router.delete('/posts/:postId', apiController.deletePost);
@@ -28,7 +29,7 @@ router.get('/posts/:postId', apiController.getPostDetails);
 router.post('/user/login', apiController.postLogin);
 router.post('/user/logout', apiController.postLogout);
 router.post('/user/signup', apiController.postSignup);
-
+router.post('/user/bookmark', apiController.putBookmark);
 
 
 router.get('/user/login', (req, res) => {

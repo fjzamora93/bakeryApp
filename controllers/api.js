@@ -244,3 +244,27 @@ exports.postSignup = async (req, res, next) => {
       res.redirect('/');  
     });
   };
+
+  //! COMPROBAR SI FUNCIONA
+exports.putBookmark = async (req, res, next) => {
+    console.log('PUT request received en la API! Añadiendo a favoritos->', req.body);
+    const postId = req.body.postId;
+    const userId = req.body.userId;
+    try {
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        if (user.bookmark.includes(postId)) {
+            return res.status(409).json({ error: 'Post already bookmarked' });
+        }
+
+        user.bookmark.push(postId);
+        await user.save();
+        res.status(200).json({ message: 'Bookmark added successfully!', user });
+    } catch (error) {
+        console.error('An error occurred:', error);
+        res.status(500).json({ error: 'An internal server error occurred' });
+    }
+}
