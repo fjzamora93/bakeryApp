@@ -257,7 +257,9 @@ exports.putBookmark = async (req, res, next) => {
         }
 
         if (user.bookmark.includes(postId)) {
-            return res.status(409).json({ error: 'Post already bookmarked' });
+            user.bookmark.pull(postId);
+            await user.save();
+            return res.status(200).json({ message: 'Bookmark eliminado correctamente!' });
         }
 
         user.bookmark.push(postId);
